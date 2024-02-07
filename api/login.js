@@ -1,13 +1,38 @@
+//login de usuarios
 const express = require('express')
 const router = express.Router()
-const User = require('./models/userModel')
+const { findOneUsersWhitEmail,findOneUsersWhitEmailAndPassword } = require('../db/controllers')
+/* const userLevel = require('../services/userLevels.json') */
 
-router.get('/', async (req, res) => {
+router.post('/login', async (req, res) => {
+
     try {
-        const response = await User.find()
-        res.json({ message: 'success', status: true, body: response })
+        const { email, password } = req.body
+
+        if (!email || !password) {
+            res.status(500).json({ message: 'Se espera un correo y una contraseña' })
+            return
+        }
+
+
+        const userFinded = await findOneUsersWhitEmail(email)
+
+        if (!userFinded) {
+            res.status(500).json({ message: "Usuario no registrado" })
+            return
+        }
+
+        const response = await findOneUsersWhitEmailAndPassword(email,password)
+        
+        if (response) {
+            res.status(200).json({ message: "success", response })
+        } else {
+            res.status(500).json({ message: "Usuario o contraseña incorrecta" })
+        }
+
     } catch (error) {
-        res.json({ message: 'Ocurrio un error de comunicacion con la base de datos', status: false })
+        console.log(error)
+        res.end(error)
     }
 })
 

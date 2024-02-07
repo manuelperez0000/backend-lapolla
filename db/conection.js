@@ -1,10 +1,11 @@
 const mongoose = require('mongoose')
+const connectionURI = 'mongodb+srv://manuelperez0000:U5Qd8RTZdNY6KKHQ@quinielascluster.zfud8vr.mongodb.net/'
 const dbConnect = async () => {
     try {
-        await mongoose.connect('mongodb+srv://manuel:BNWJ4EqX7glnl1cq@cluster0.8qhzw.mongodb.net/caamano');
-        console.log('DB connected');
+        await mongoose.connect(connectionURI)
+        console.log('DB connected')
     } catch (error) {
-        console.log('DB error', error);
+        console.log('DB error', error)
     }
 }
 

@@ -25,10 +25,9 @@ const User = new Schema({
         require:true,
         default:0
     },
-    token:{
-        type:String,
-        require:false,
-        default:""
+    date: { 
+        type: Date,
+         default: Date.now 
     }
 })
 
