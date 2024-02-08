@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
-const connectionURI = 'mongodb+srv://manuelperez0000:U5Qd8RTZdNY6KKHQ@quinielascluster.zfud8vr.mongodb.net/'
+const DB_URI = process.env.DB_URI
 const dbConnect = async () => {
     try {
-        await mongoose.connect(connectionURI)
+        await mongoose.connect(DB_URI)
         console.log('DB connected')
     } catch (error) {
         console.log('DB error', error)
