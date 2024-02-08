@@ -10,12 +10,8 @@ app.use(cors())
 app.use(express.json())
 dbConnect()
 
-app.get('/', (req, res) => {
-    res.send("Welcome")
-})
+app.get('/', (req, res) => res.send("Welcome"))
 
 router(app)
 
-app.listen(PORT, () => {
-    console.log(`Servidor escuchando en el puerto ${PORT}`)
-})
+app.listen(PORT, () => console.log(`Servidor escuchando en el puerto ${PORT}`))
