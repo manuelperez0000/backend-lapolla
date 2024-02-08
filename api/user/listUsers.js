@@ -1,7 +1,7 @@
 //listar todos los usuarios
 const express = require('express')
 const router = express.Router()
-const { findUsers } = require('../db/controllers')
+const { findUsers } = require('../../db/controllers')
 
 router.get('/', async (req, res) => {
     try {

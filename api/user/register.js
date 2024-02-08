@@ -1,7 +1,7 @@
 //registro de usuarios
 const express = require('express')
 const router = express.Router()
-const { saveUser,findOneUsersWhitEmail } = require('../db/controllers')
+const { saveUser,findOneUsersWhitEmail } = require('../../db/controllers')
 
 router.post('/', async (req, res) => {
     const user = req.body

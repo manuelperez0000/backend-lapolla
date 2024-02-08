@@ -1,7 +1,7 @@
 //login de usuarios
 const express = require('express')
 const router = express.Router()
-const { findOneUsersWhitEmail,findOneUsersWhitEmailAndPassword } = require('../db/controllers')
+const { findOneUsersWhitEmail,findOneUsersWhitEmailAndPassword } = require('../../db/controllers')
 
 router.post('/', async (req, res) => {
 
