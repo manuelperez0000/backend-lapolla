@@ -2,9 +2,8 @@
 const express = require('express')
 const router = express.Router()
 const { findOneUsersWhitEmail,findOneUsersWhitEmailAndPassword } = require('../db/controllers')
-/* const userLevel = require('../services/userLevels.json') */
 
-router.post('/login', async (req, res) => {
+router.post('/', async (req, res) => {
 
     try {
         const { email, password } = req.body
@@ -13,7 +12,6 @@ router.post('/login', async (req, res) => {
             res.status(500).json({ message: 'Se espera un correo y una contraseña' })
             return
         }
-
 
         const userFinded = await findOneUsersWhitEmail(email)
 
@@ -26,6 +24,7 @@ router.post('/login', async (req, res) => {
         
         if (response) {
             res.status(200).json({ message: "success", response })
+            return
         } else {
             res.status(500).json({ message: "Usuario o contraseña incorrecta" })
         }

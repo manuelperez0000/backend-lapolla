@@ -3,7 +3,7 @@ const express = require('express')
 const router = express.Router()
 const { saveUser,findOneUsersWhitEmail } = require('../db/controllers')
 
-router.post('/register', async (req, res) => {
+router.post('/', async (req, res) => {
     const user = req.body
 
     const userToRegister = {

@@ -10,7 +10,7 @@ app.use(cors())
 app.use(express.json())
 dbConnect()
 
-app.get('/', (req, res) => res.send("Welcome"))
+app.get('/', (req, res) => res.send("Welcome 2"))
 
 router(app)
 
