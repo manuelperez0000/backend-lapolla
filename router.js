@@ -1,8 +1,8 @@
 const express = require('express')
-const login = require('./api/login')
+const login = require('./api/user/login')
 const welcome = require('./api/welcome')
-const register = require('./api/register')
-const listUsers = require('./api/listUsers')
+const register = require('./api/user/register')
+const listUsers = require('./api/user/listUsers')
 const createBank = require('./api/bank/createBank')
 
 const router = (app) => {

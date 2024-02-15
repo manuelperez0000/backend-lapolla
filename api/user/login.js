@@ -1,9 +1,11 @@
 //login de usuarios
 const express = require('express')
 const router = express.Router()
-const { findOneUsersWhitEmail,findOneUsersWhitEmailAndPassword } = require('../../db/controllers')
-
-router.post('/', async (req, res) => {
+const cors = require('cors')
+const jwt = require('jsonwebtoken');
+const { findOneUsersWhitEmail, findOneUsersWhitEmailAndPassword } = require('../../db/controllers')
+const dataToken = process.env.DATA_TOKEN
+router.post('/', cors(), async (req, res) => {
 
     try {
         const { email, password } = req.body
@@ -20,10 +22,12 @@ router.post('/', async (req, res) => {
             return
         }
 
-        const response = await findOneUsersWhitEmailAndPassword(email,password)
-        
+        const response = await findOneUsersWhitEmailAndPassword(email, password)
+
         if (response) {
-            res.status(200).json({ message: "success", response })
+
+            const userData = jwt.sign({response}, dataToken, { expiresIn: '10d' });
+            res.status(200).json({ message: "success", userData })
             return
         } else {
             res.status(500).json({ message: "Usuario o contraseña incorrecta" })
