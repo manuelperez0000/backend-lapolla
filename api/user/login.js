@@ -3,8 +3,8 @@ const express = require('express')
 const router = express.Router()
 const cors = require('cors')
 const jwt = require('jsonwebtoken');
+const { DATA_TOKEN } = require('../../services/temporalEnv')
 const { findOneUsersWhitEmail, findOneUsersWhitEmailAndPassword } = require('../../db/controllers')
-const dataToken = process.env.DATA_TOKEN
 router.post('/', cors(), async (req, res) => {
 
     try {
@@ -26,7 +26,7 @@ router.post('/', cors(), async (req, res) => {
 
         if (response) {
 
-            const userData = jwt.sign({response}, dataToken, { expiresIn: '10d' });
+            const userData = jwt.sign({ response }, DATA_TOKEN, { expiresIn: '10d' });
             res.status(200).json({ message: "success", userData })
             return
         } else {

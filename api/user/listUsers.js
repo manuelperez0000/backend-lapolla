@@ -3,27 +3,13 @@ const express = require('express')
 const router = express.Router()
 const jwt = require('jsonwebtoken')
 const { findUsers } = require('../../db/controllers')
+const { DATA_TOKEN } = require('../../services/temporalEnv')
 
-const validateToken = (req) => {
-    const authorization = req.headers.authorization || ''
-    const token = authorization.slice(7)
-    try {
-        jwt.verify(token, process.env.DATA_TOKEN, (err) => {
-            if (err) {
-                res.status(500).json({ message: 'No Aunthorization token' })
-                return
-            }
-        })
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({ message: 'Error en la autorizacion' })
-
-    }
-}
+//const validateToken = require('../../midelwares/validateToken')
 
 router.get('/', async (req, res) => {
 
-    validateToken(req)
+    //validateToken(req, res)
 
     try {
         const response = await findUsers()

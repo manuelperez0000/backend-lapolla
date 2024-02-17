@@ -1,5 +1,6 @@
+const environment = require('../services/temporalEnv')
 const mongoose = require('mongoose')
-const DB_URI = process.env.DB_URI
+const DB_URI = environment.DB_URI
 const dbConnect = async () => {
     try {
         await mongoose.connect(DB_URI)
