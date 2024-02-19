@@ -12,8 +12,9 @@ const router = (app) => {
 
     app.use(cors())
     app.use('/api/v1', route)
-    route.get('/', welcome)
+    route.use('/', welcome)
     route.use('/login', login)
+    
     route.use('/register', register)
     route.use('/users', listUsers)
     route.use('/createBank', createBank)
