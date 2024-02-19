@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
 
 
     if (registeredUser) {
-        res.status(500).json({ message: "Este correo ya se encuentra registrado" })
+        res.status(400).json({ message: "Este correo ya se encuentra registrado" })
         return
     }
 
@@ -41,14 +41,14 @@ router.post('/', async (req, res) => {
     } */
 
     /* if (Object(response, Uinterface)) {
-        res.status(500).json({ message: "Ocurrio un error en la peticion" })
+        res.status(400).json({ message: "Ocurrio un error en la peticion" })
         return
     } */
 
     if (response) {
         res.status(200).json({ message: "success", response })
     } else {
-        res.status(500).json({ message: "Error al registrar", response })
+        res.status(400).json({ message: "Error al registrar", response })
     }
 })
 

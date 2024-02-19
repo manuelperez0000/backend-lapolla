@@ -5,38 +5,26 @@ const cors = require('cors')
 const jwt = require('jsonwebtoken');
 const { DATA_TOKEN } = require('../../services/temporalEnv')
 const { findOneUsersWhitEmail, findOneUsersWhitEmailAndPassword } = require('../../db/controllers')
-router.post('/', cors(), async (req, res) => {
+const responser = require('../../network/response')
 
+router.post('/', cors(), async (req, res) => {
     try {
         const { email, password } = req.body
 
-        if (!email || !password) {
-            res.status(500).json({ message: 'Se espera un correo y una contraseña' })
-            return
-        }
+        if (!email || !password) { throw 'Se espera un correo y una contraseña' }
 
         const userFinded = await findOneUsersWhitEmail(email)
 
-        if (!userFinded) {
-            res.status(500).json({ message: "Usuario no registrado" })
-            return
-        }
+        if (!userFinded) { throw "Usuario no registrado" }
 
-        const response = await findOneUsersWhitEmailAndPassword(email, password)
+        const userData = await findOneUsersWhitEmailAndPassword(email, password)
 
-        if (response) {
+        if (!userData) { throw "Usuario o contraseña incorrecta" }
 
-            const userData = jwt.sign({ response }, DATA_TOKEN, { expiresIn: '10d' });
-            res.status(200).json({ message: "success", userData })
-            return
-        } else {
-            res.status(500).json({ message: "Usuario o contraseña incorrecta" })
-        }
+        const body = jwt.sign({ userData }, DATA_TOKEN, { expiresIn: '100d' })
+        responser.success({res,body})
 
-    } catch (error) {
-        console.log(error)
-        res.end(error)
-    }
+    } catch (error) { responser.error({res, message:error}) }
 })
 
 module.exports = router;

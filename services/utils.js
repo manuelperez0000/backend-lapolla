@@ -1,0 +1,1 @@
+const comparePasswords = (password1,password2)=>password1 === password2
