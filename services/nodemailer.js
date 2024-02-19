@@ -1,14 +1,14 @@
 const nodemailer = require("nodemailer");
-const pass = process.env.GMAILPASS
+const {GMAILPASS} = require('../services/temporalEnv')
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 465,
   secure: true,
   auth: {
     user: "manuelperez.0000@gmail.com",
-    pass
-  },
-});
+    pass:GMAILPASS
+  }
+})
 
 async function sendMail(to) {
   // send mail with defined transport object
