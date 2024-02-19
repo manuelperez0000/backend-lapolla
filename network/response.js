@@ -5,7 +5,7 @@ exports.success = ({res, message = 'success',body}) => {
     })
 }
 
-exports.error = ({res, message = 'Internal Error',body}) => {
+exports.error = ({res, message = 'Internal Error 1',body}) => {
     res.status(500).json({
         body,
         message
