@@ -1,5 +1,7 @@
 //mongodb controllers
-const User = require('../api/models/userModel')
+
+const User = require('./models/userModel')
+const temporalPassModel = require('./models/temporalPassModel')
 
 //buscar usuarios
 const findUsers = async () => {
@@ -25,12 +27,36 @@ const findOneUsersWhitEmailAndPassword = async (email, password) => {
     return response
 }
 
+const saveTemporalPass = async (email, password) => {
+    const response = await temporalPassModel({ email, password }).save()
+    return response
+}
+
+const findTemporalPass = async (email, password) => {
+    const response = await temporalPassModel.findOne({ email, password })
+    return response
+}
+const deleteTemporalPass = async (email, password) => {
+    const response = await temporalPassModel.delete({ email, password })
+    return response
+}
+
+//update only password in user account
+const changeUserPasswor = async (email, password) => {
+    const response = await temporalPassModel.findOneAndUpdate({ email }, { password })
+    return response
+}
+
 //aqui deben ir todos los controladores de la db
 const controllers = {
     findUsers,
     saveUser,
     findOneUsersWhitEmail,
-    findOneUsersWhitEmailAndPassword
+    findOneUsersWhitEmailAndPassword,
+    saveTemporalPass,
+    findTemporalPass,
+    deleteTemporalPass,
+    changeUserPasswor
 }
 
 module.exports = controllers;

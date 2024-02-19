@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
     if (response) {
         res.status(200).json({ message: "success", response })
     } else {
-        res.status(500).json({ message: "Error al crear un banco", response })
+        res.status(400).json({ message: "Error al crear un banco", response })
     }
 })
 
