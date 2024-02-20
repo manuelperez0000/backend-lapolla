@@ -7,7 +7,7 @@ const temporalPassModel = new Schema({
         type:String,
         required:true
     },
-    password:{
+    temporalPass:{
         type:String,
         required:true
     },

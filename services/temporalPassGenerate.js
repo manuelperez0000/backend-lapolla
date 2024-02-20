@@ -1,6 +1,6 @@
 const items = 'ABCDEFGH23456789' //32
 
-const temporalpass = () => {
+const getTemporalPass = () => {
     const max = items.length;
     const getRandonNumber = ()=>{
         return  Math.floor(Math.random() * max)
@@ -12,4 +12,4 @@ const temporalpass = () => {
     return pass
 }
 
-module.exports = temporalpass
+module.exports = getTemporalPass

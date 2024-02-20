@@ -27,26 +27,27 @@ const findOneUsersWhitEmailAndPassword = async (email, password) => {
     return response
 }
 
-const saveTemporalPass = async (email, password) => {
-    const response = await temporalPassModel({ email, password }).save()
+//reset password users
+const saveTemporalPass = async ({ email, temporalPass }) => {
+    const response = await temporalPassModel({ email, temporalPass }).save()
     return response
 }
 
-const findTemporalPass = async (email, password) => {
-    const response = await temporalPassModel.findOne({ email, password })
+const findTemporalPass = async ({ email, temporalPass }) => {
+    const response = await temporalPassModel.findOne({ email, temporalPass })
     return response
 }
-const deleteTemporalPass = async (email, temporalPass) => {
+const deleteTemporalPass = async ({ email, temporalPass }) => {
     const response = await temporalPassModel.deleteOne({ email, temporalPass })
     return response
 }
 
 //update only password in user account
-const changeUserPassword = async (email, password) => {
-    const response = await temporalPassModel.findOneAndUpdate({ email }, { password })
+const changeUserPassword = async ({ email, password }) => {
+    const response = await User.findOneAndUpdate({ email }, { $set: { password } })
     return response
 }
-const findAllTemporalPasswords = async (email) =>{
+const findAllTemporalPasswords = async () => {
     const response = await temporalPassModel.find()
     return response
 }
