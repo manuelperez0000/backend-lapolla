@@ -36,17 +36,20 @@ const findTemporalPass = async (email, password) => {
     const response = await temporalPassModel.findOne({ email, password })
     return response
 }
-const deleteTemporalPass = async (email, password) => {
-    const response = await temporalPassModel.delete({ email, password })
+const deleteTemporalPass = async (email, temporalPass) => {
+    const response = await temporalPassModel.deleteOne({ email, temporalPass })
     return response
 }
 
 //update only password in user account
-const changeUserPasswor = async (email, password) => {
+const changeUserPassword = async (email, password) => {
     const response = await temporalPassModel.findOneAndUpdate({ email }, { password })
     return response
 }
-
+const findAllTemporalPasswords = async (email) =>{
+    const response = await temporalPassModel.find()
+    return response
+}
 //aqui deben ir todos los controladores de la db
 const controllers = {
     findUsers,
@@ -56,7 +59,8 @@ const controllers = {
     saveTemporalPass,
     findTemporalPass,
     deleteTemporalPass,
-    changeUserPasswor
+    changeUserPassword,
+    findAllTemporalPasswords
 }
 
 module.exports = controllers;

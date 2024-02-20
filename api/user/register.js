@@ -2,54 +2,32 @@
 const express = require('express')
 const router = express.Router()
 const { saveUser, findOneUsersWhitEmail } = require('../../db/controllers')
-/* import Object from '../../services/objInterfece' */
+const responser = require('../../network/response')
 
 router.post('/', async (req, res) => {
     const user = req.body
 
-    const userToRegister = {
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        password: user.password,
-        level: 4
-    }
+    try {
+        const userToRegister = {
+            name: user.name,
+            email: user.email,
+            phone: user.phone,
+            password: user.password,
+            level: 4
+        }
 
-    //comprobar que no exista otro usuario con el mismo correo
+        const registeredUser = await findOneUsersWhitEmail(userToRegister.email)
 
-    const registeredUser = await findOneUsersWhitEmail(userToRegister.email)
+        if (registeredUser) throw "Este correo ya se encuentra registrado"
 
+        const userSaved = await saveUser(userToRegister)
 
+        if (!userSaved) throw "Error al registrar"
 
-    if (registeredUser) {
-        res.status(400).json({ message: "Este correo ya se encuentra registrado" })
-        return
-    }
+        responser.success({ res, message: error, body: userSaved })
 
-    const response = await saveUser(userToRegister)
+    } catch (error) { responser.error({ res, message: error }) }
 
-    ////tipar salida de data//////-------------
-
-    /* const Uinterface = {
-        _id,
-        name,
-        email,
-        phone,
-        password,
-        level,
-        date
-    } */
-
-    /* if (Object(response, Uinterface)) {
-        res.status(400).json({ message: "Ocurrio un error en la peticion" })
-        return
-    } */
-
-    if (response) {
-        res.status(200).json({ message: "success", response })
-    } else {
-        res.status(400).json({ message: "Error al registrar", response })
-    }
 })
 
 module.exports = router;
