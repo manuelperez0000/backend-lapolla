@@ -47,10 +47,7 @@ const changeUserPassword = async ({ email, password }) => {
     const response = await User.findOneAndUpdate({ email }, { $set: { password } })
     return response
 }
-const findAllTemporalPasswords = async () => {
-    const response = await temporalPassModel.find()
-    return response
-}
+
 //aqui deben ir todos los controladores de la db
 const controllers = {
     findUsers,
@@ -60,8 +57,7 @@ const controllers = {
     saveTemporalPass,
     findTemporalPass,
     deleteTemporalPass,
-    changeUserPassword,
-    findAllTemporalPasswords
+    changeUserPassword
 }
 
 module.exports = controllers;
