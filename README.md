@@ -80,4 +80,42 @@ https://backend-lapolla.vercel.app/api/v1/reset/setnewpassword
 'Error, no se a podido actualizar su clave'
 ```
 
-
+# Registro de usuarios
+```bash
+https://backend-lapolla.vercel.app/api/v1/reister
+```
+### body
+```js
+{
+    "name":"your name",
+    "email":"example0000@example.com",
+    "phone":"04140000000",
+    "password":"xxxxxx"
+}
+```
+### Response
+```js
+{
+  "message": "success",
+  "body": "<data>"
+}
+```
+### Errors
+```js
+'El nombre es requerido'
+'El email es requerido'
+'El telefono es requerido'
+'La contraseña es requerida'
+'La contraseña debe tener un minimo de 6 caracteres'
+"Este correo ya se encuentra registrado"
+"Error al registrar el usuario"
+```
+# Tipos de usuarios
+nombre del campo (level)
+### tipos
+```js
+'1 Clientes'
+'2 Loterias'
+'3 Administradores'
+'4 Master'
+```
