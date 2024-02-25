@@ -5,6 +5,7 @@ const register = require('./api/user/register')
 const listUsers = require('./api/user/listUsers')
 const createBank = require('./api/bank/createBank')
 const reset = require('./api/user/reset')
+const deleteuser = require('./api/user/deleteuser')
 const errors = require('./network/errors')
 const route = express.Router()
 const cors = require('cors')
@@ -19,6 +20,7 @@ const router = (app) => {
     route.use('/users', listUsers)
     route.use('/createBank', createBank)
     route.use('/reset', reset)
+    route.use('/admin/deleteuser', deleteuser)
     route.use(errors)
 }
 

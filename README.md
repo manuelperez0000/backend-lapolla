@@ -119,3 +119,26 @@ nombre del campo (level)
 '3 Administradores'
 '4 Master'
 ```
+# Eliminar usuarios
+```bash
+https://backend-lapolla.vercel.app/api/v1/admin/deleteuser
+```
+### body
+```js
+{
+    "_id":"_id_del_usuario",
+}
+```
+### Response
+```js
+{
+  "message": "success",
+  "body": "<data>"
+}
+```
+### Errors
+```js
+'Debe indicar el _id del usuario'
+"Usuario no encontrado"
+```
+
