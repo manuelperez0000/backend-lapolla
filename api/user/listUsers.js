@@ -3,18 +3,18 @@ const express = require('express')
 const router = express.Router()
 const { findUsers } = require('../../db/controllers')
 const validateToken = require('../../midelwares/validateToken')
-
+const responser = require('../../network/response')
 router.get('/', validateToken, async (req, res) => {
 
     try {
-        const response = await findUsers()
-        
-        if (!response) { throw 'Usuarios no encontrado' }
+        const body = await findUsers()
 
-        res.status(200).json({ message: 'success', response })
+        if (!body) throw 'Usuarios no encontrado'
+
+        responser.success({ res, message: 'success', body })
 
     } catch (error) {
-        throw 'Ocurrio un error de comunicacion con la base de datos'
+        responser.error({ res, message: 'Ocurrio un error de comunicacion con la base de datos'})
     }
 })
 
