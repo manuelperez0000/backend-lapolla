@@ -5,7 +5,7 @@ const { saveUser, findOneUsersWhitEmail } = require('../../db/controllers')
 const responser = require('../../network/response')
 
 router.post('/', async (req, res) => {
-    const { name, email, phone, password,ci } = req.body
+    const { name, email, phone, password,ci,level } = req.body
     try {
         if (!name) throw 'El nombre es requerido'
         if (!ci) throw 'La cedula es requerido'
@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
             email,
             phone,
             password,
-            level: 4,
+            level,
             ci
         }
 
