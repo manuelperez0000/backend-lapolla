@@ -4,7 +4,8 @@ const router = express.Router()
 const { findUsers } = require('../../db/controllers')
 const validateToken = require('../../midelwares/validateToken')
 const responser = require('../../network/response')
-router.get('/', validateToken, async (req, res) => {
+const cors = require('cors')
+router.get('/', cors(), validateToken, async (req, res) => {
 
     try {
         const body = await findUsers()
@@ -14,7 +15,7 @@ router.get('/', validateToken, async (req, res) => {
         responser.success({ res, message: 'success', body })
 
     } catch (error) {
-        responser.error({ res, message: 'Ocurrio un error de comunicacion con la base de datos'})
+        responser.error({ res, message: 'Ocurrio un error de comunicacion con la base de datos' })
     }
 })
 
