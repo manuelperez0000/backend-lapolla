@@ -8,6 +8,11 @@ const User = new Schema({
         required: true,
         default:""
     },
+    ci: {
+        type:String,
+        required: true,
+        default:""
+    },
     email:{
         type:String,
         required:true
@@ -27,7 +32,7 @@ const User = new Schema({
     },
     date: { 
         type: Date,
-         default: Date.now 
+         default: Date.now
     }
 })
 
