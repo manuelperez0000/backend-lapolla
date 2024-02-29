@@ -50,6 +50,10 @@ const changeUserPassword = async ({ email, password }) => {
 
 const deleteUser = async (_id) => await User.deleteOne({ _id })
 
+const updateUser = async (user) => {
+    const response = await User.findOneAndUpdate({ _id: user._id }, { $set: user })
+    return response
+}
 
 //aqui deben ir todos los controladores de la db
 const controllers = {
@@ -61,7 +65,8 @@ const controllers = {
     findTemporalPass,
     deleteTemporalPass,
     changeUserPassword,
-    deleteUser
+    deleteUser,
+    updateUser
 }
 
 module.exports = controllers;
