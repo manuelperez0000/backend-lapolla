@@ -2,6 +2,7 @@
 
 const User = require('./models/userModel')
 const temporalPassModel = require('./models/temporalPassModel')
+const Method = require('./models/methodsModel')
 
 //buscar usuarios
 const findUsers = async () => {
@@ -55,6 +56,21 @@ const updateUser = async (user) => {
     return response
 }
 
+const saveMethod = async (method) => {
+    const response = await Method(method).save()
+    return response
+}
+
+const getMethods = async () => {
+    const response = await Method.find()
+    return response
+}
+
+const deleteMethod = async (_id) => {
+    const response = await Method.deleteOne({ _id })
+    return response
+}
+
 //aqui deben ir todos los controladores de la db
 const controllers = {
     findUsers,
@@ -66,7 +82,10 @@ const controllers = {
     deleteTemporalPass,
     changeUserPassword,
     deleteUser,
-    updateUser
+    updateUser,
+    saveMethod,
+    getMethods,
+    deleteMethod
 }
 
 module.exports = controllers;
