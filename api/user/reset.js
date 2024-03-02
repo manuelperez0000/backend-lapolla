@@ -19,7 +19,9 @@ router.post('/gettemporalpass', async (req, res) => {
         const temporalPass = getTemporalPass()
         const userExist = await findOneUsersWhitEmail(email)
         if (!userExist) throw 'Este correo no se encuentra registrado'
+
         const body = await saveTemporalPass({ email, temporalPass })
+
         if (!body) throw 'Error al intentar guardar su clave temporal'
         await sendMail({ email, temporalPass })
         responser.success({ res, message: 'Clave temporal enviada a su correo', body })
@@ -35,15 +37,16 @@ router.post('/setnewpassword', async (req, res) => {
         if (!temporalPass) throw 'Debe proporcionar una Clave temporal'
 
         //comprobar que la clave se encuentra registrada
-        const findTemporal = await findTemporalPass({email, temporalPass})
+        const findTemporal = await findTemporalPass({ email, temporalPass })
         if (!findTemporal) throw "Clave temporal expirada"
 
         //borrar la clave temporal
-        await deleteTemporalPass({email, temporalPass})
+        await deleteTemporalPass({ email, temporalPass })
 
         //cambiar la contrasena del usuario
-        const body = await changeUserPassword({email, password})
-        if(!body) throw 'Error, no se a podido actualizar su clave'
+        const body = await changeUserPassword({ email, password })
+
+        if (!body) throw 'Error, no se a podido actualizar su clave'
 
         responser.success({ res, message: 'Clave cambiada con exito', body })
 
