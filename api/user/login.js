@@ -22,7 +22,7 @@ router.post('/', cors(), async (req, res) => {
         if (!userData) { throw "Usuario o contraseña incorrecta" }
 
         const body = jwt.sign({ userData }, DATA_TOKEN, { expiresIn: '100d' })
-        responser.success({ res, body })
+        responser.success({ res, message: "Success", body })
 
     } catch (error) { responser.error({ res, message: error }) }
 })

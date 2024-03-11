@@ -3,8 +3,6 @@ const pollabot = require('./services/pollabot')
 const express = require('express')
 const cors = require('cors')
 const PORT = process.env.PORT || 5000;
-
-
 const app = express();
 app.use(cors())
 pollabot()
@@ -19,7 +17,8 @@ app.use(express.json())
 dbConnect()
 
 
-app.get('/', (req, res) => res.send("Welcome 3"))
+/* app.get('/', (req, res) => res.send("Welcome 34")) */
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/dist')))
 
 router(app)
 
