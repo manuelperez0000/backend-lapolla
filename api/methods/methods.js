@@ -1,7 +1,7 @@
 //creacion de un banco
 const express = require('express')
 const router = express.Router()
-const { saveMethod, getMethods, deleteMethod } = require('../../db/controllers')
+const { saveMethod, getMethods, deleteMethod } = require('../../db/controllers/methodController')
 const responser = require('../../network/response')
 
 router.post('/addMethod', async (req, res) => {

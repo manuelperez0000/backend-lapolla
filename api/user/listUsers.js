@@ -1,7 +1,7 @@
 //listar todos los usuarios
 const express = require('express')
 const router = express.Router()
-const { findUsers } = require('../../db/controllers')
+const { findUsers } = require('../../db/controllers/userController')
 const validateToken = require('../../midelwares/validateToken')
 const responser = require('../../network/response')
 const cors = require('cors')

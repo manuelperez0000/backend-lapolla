@@ -1,7 +1,7 @@
 //creacion de un banco
 const express = require('express')
 const router = express.Router()
-const { saveBank } = require('../../db/controllers')
+const { saveBank } = require('../../db/controllers/userController')
 
 router.post('/', async (req, res) => {
     const bank = req.body
@@ -11,7 +11,7 @@ router.post('/', async (req, res) => {
         email: bank.email,
         phone: bank.phone,
         password: bank.password,
-        level:4
+        level: 4
     }
 
     const response = await saveBank(bankToCreate)

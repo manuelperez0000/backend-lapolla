@@ -1,11 +1,11 @@
 //registro de usuarios
 const express = require('express')
 const router = express.Router()
-const { saveUser, findOneUsersWhitEmail } = require('../../db/controllers')
+const { saveUser, findOneUsersWhitEmail } = require('../../db/controllers/userController')
 const responser = require('../../network/response')
 
 router.post('/', async (req, res) => {
-    const { name, email, phone, password,ci,level } = req.body
+    const { name, email, phone, password, ci, level } = req.body
     try {
         if (!name) throw 'El nombre es requerido'
         if (!ci) throw 'La cedula es requerido'
@@ -13,7 +13,7 @@ router.post('/', async (req, res) => {
         if (!phone) throw 'El telefono es requerido'
         if (!password) throw 'La contraseña es requerida'
         if (password.length < 6) throw 'La contraseña debe tener un minimo de 6 caracteres'
-        
+
         const userToRegister = {
             name,
             email,

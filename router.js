@@ -11,6 +11,7 @@ const reset = require('./api/user/reset')
 const deleteuser = require('./api/user/deleteuser')
 const updateuser = require('./api/user/update')
 const methods = require('./api/methods/methods')
+const tickets = require('./api/tickets/tickets')
 
 const router = (app) => {
 
@@ -20,6 +21,9 @@ const router = (app) => {
     route.use('/login', login)
 
     route.use('/register', register)
+    route.use('/saveTicket', tickets)
+
+
     route.use('/users', listUsers)
     route.use('/createBank', createBank)
     route.use('/reset', reset)

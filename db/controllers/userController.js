@@ -24,11 +24,27 @@ const findOneUsersWhitEmailAndPassword = async (email, password) => {
     return response
 }
 
+const deleteUser = async (_id) => await User.deleteOne({ _id })
+
+const updateUser = async (user) => {
+    const response = await User.findOneAndUpdate({ _id: user._id }, { $set: user })
+    return response
+}
+
+//update only password in user account
+const changeUserPassword = async ({ email, password }) => {
+    const response = await User.findOneAndUpdate({ email }, { $set: { password } })
+    return response
+}
+
 const userControllers = {
     findUsers,
     saveUser,
     findOneUsersWhitEmail,
-    findOneUsersWhitEmailAndPassword
+    findOneUsersWhitEmailAndPassword,
+    deleteUser,
+    updateUser,
+    changeUserPassword
 }
 
 module.exports = userControllers;

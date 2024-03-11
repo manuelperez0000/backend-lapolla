@@ -5,11 +5,11 @@ const getTemporalPass = require('../../services/temporalPassGenerate')
 const sendMail = require('../../services/nodemailer')
 const {
     findOneUsersWhitEmail,
-    saveTemporalPass,
-    findTemporalPass,
-    deleteTemporalPass,
     changeUserPassword
-} = require('../../db/controllers')
+} = require('../../db/controllers/userController')
+const { saveTemporalPass,
+    findTemporalPass,
+    deleteTemporalPass, } = require('../../db/controllers/passController')
 const responser = require('../../network/response')
 
 router.post('/gettemporalpass', async (req, res) => {

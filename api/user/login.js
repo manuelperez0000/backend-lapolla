@@ -4,7 +4,7 @@ const router = express.Router()
 const cors = require('cors')
 const jwt = require('jsonwebtoken');
 const { DATA_TOKEN } = require('../../services/temporalEnv')
-const { findOneUsersWhitEmail, findOneUsersWhitEmailAndPassword } = require('../../db/controllers')
+const { findOneUsersWhitEmail, findOneUsersWhitEmailAndPassword } = require('../../db/controllers/userController')
 const responser = require('../../network/response')
 
 router.post('/', cors(), async (req, res) => {
@@ -22,9 +22,9 @@ router.post('/', cors(), async (req, res) => {
         if (!userData) { throw "Usuario o contraseña incorrecta" }
 
         const body = jwt.sign({ userData }, DATA_TOKEN, { expiresIn: '100d' })
-        responser.success({res,body})
+        responser.success({ res, body })
 
-    } catch (error) { responser.error({res, message:error}) }
+    } catch (error) { responser.error({ res, message: error }) }
 })
 
 module.exports = router;
