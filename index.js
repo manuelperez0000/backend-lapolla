@@ -16,9 +16,8 @@ app.use(morgan('dev'))
 app.use(express.json())
 dbConnect()
 
-
-/* app.get('/', (req, res) => res.send("Welcome 34")) */
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/dist')))
+app.get('/', (req, res) => res.send("Welcome 34"))
+/* app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'dist/index.html'))) */
 
 router(app)
 

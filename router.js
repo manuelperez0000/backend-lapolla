@@ -12,6 +12,7 @@ const deleteuser = require('./api/user/deleteuser')
 const updateuser = require('./api/user/update')
 const methods = require('./api/methods/methods')
 const tickets = require('./api/tickets/tickets')
+const reportes = require('./api/reportes/reportes')
 
 const router = (app) => {
 
@@ -22,6 +23,7 @@ const router = (app) => {
 
     route.use('/register', register)
     route.use('/saveTicket', tickets)
+    route.use('/reportes', reportes)
 
 
     route.use('/users', listUsers)

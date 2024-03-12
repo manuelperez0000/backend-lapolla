@@ -7,11 +7,22 @@ const { saveTicket } = require('../../db/controllers/ticketController')
 router.post('/', async (req, res) => {
 
     const { animals, user, type } = req.body
+    const actualDate = new Date()
+    const dia = actualDate.getDate()
+    const mes = actualDate.getMonth() + 1
+    const anio = actualDate.getFullYear()
+    const hour = actualDate.getHours()
+    const minute = actualDate.getMinutes()
+    const second = actualDate.getSeconds()
+    const hora = `${hour}:${minute}:${second}`
+    const date = `${dia}-${mes}-${anio}`;
 
     const ticket = {
         user,
         quinielaType: type,
-        animals
+        animals,
+        date,
+        hora
     }
 
     try {

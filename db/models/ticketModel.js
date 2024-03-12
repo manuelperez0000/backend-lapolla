@@ -15,9 +15,13 @@ const TicketsModel = new Schema({
         type: Array,
         required: true
     },
+    hora: {
+        type: String,
+        required: true
+    },
     date: {
-        type: Date,
-        default: Date()
+        type: String,
+        required: true
     }
 })
 
