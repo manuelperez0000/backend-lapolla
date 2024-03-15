@@ -3,7 +3,7 @@ const express = require('express')
 const router = express.Router()
 const responser = require('../../network/response')
 
-router.get('/plays', async (req, res) => {
+router.get('/tickets', async (req, res) => {
 
     const date = Date()
     console.log(date)

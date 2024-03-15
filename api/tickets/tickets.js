@@ -2,7 +2,7 @@
 const express = require('express')
 const router = express.Router()
 const responser = require('../../network/response')
-const { saveTicket } = require('../../db/controllers/ticketController')
+const { saveTicket, getTickets } = require('../../db/controllers/ticketController')
 
 router.post('/', async (req, res) => {
 
@@ -33,8 +33,13 @@ router.post('/', async (req, res) => {
 
     } catch (error) {
         console.log(error)
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error })
     }
+})
+
+router.get('/', async (req, res) => {
+    const body = await getTickets()
+    responser.success({ res, message: "success", body })
 })
 
 

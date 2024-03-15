@@ -13,10 +13,7 @@ const saveUser = async (userToRegister) => {
 }
 
 //buscar un usuario con el email
-const findOneUsersWhitEmail = async (email) => {
-    const response = await User.findOne({ email })
-    return response
-}
+const findOneUsersWhitEmail = async (email) => await User.findOne({ email })
 
 //buscar un usuario con el email y password
 const findOneUsersWhitEmailAndPassword = async (email, password) => {
@@ -37,6 +34,8 @@ const changeUserPassword = async ({ email, password }) => {
     return response
 }
 
+const findOneUser = async (userData) => await User.findOne(userData)
+
 const userControllers = {
     findUsers,
     saveUser,
@@ -44,7 +43,8 @@ const userControllers = {
     findOneUsersWhitEmailAndPassword,
     deleteUser,
     updateUser,
-    changeUserPassword
+    changeUserPassword,
+    findOneUser
 }
 
 module.exports = userControllers;

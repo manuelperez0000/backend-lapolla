@@ -1,11 +1,11 @@
 //registro de usuarios
 const express = require('express')
 const router = express.Router()
-const { saveUser, findOneUsersWhitEmail } = require('../../db/controllers/userController')
+const { saveUser, findOneUser } = require('../../db/controllers/userController')
 const responser = require('../../network/response')
 
 router.post('/', async (req, res) => {
-    const { name, email, phone, password, ci, level } = req.body
+    const { name, email, phone, password, ci, level, admin, grupero, percent } = req.body
     try {
         if (!name) throw 'El nombre es requerido'
         if (!ci) throw 'La cedula es requerido'
@@ -13,6 +13,7 @@ router.post('/', async (req, res) => {
         if (!phone) throw 'El telefono es requerido'
         if (!password) throw 'La contraseña es requerida'
         if (password.length < 6) throw 'La contraseña debe tener un minimo de 6 caracteres'
+        if (level > 5) throw 'Debe indicar un tipo de usuario'
 
         const userToRegister = {
             name,
@@ -20,12 +21,34 @@ router.post('/', async (req, res) => {
             phone,
             password,
             level,
-            ci
+            ci,
+            admin,
+            grupero,
+            percent
         }
 
-        const registeredUser = await findOneUsersWhitEmail(email)
 
+        /* const registeredUser = await findOneUser({ email })
         if (registeredUser) throw "Este correo ya se encuentra registrado"
+        
+        const registeredCI = await findOneUser({ ci })
+        if (registeredCI) throw "Esta cedula ya se encuentra registrado" */
+
+        const registeredUser = new Promise(async (resolve, reject) => {
+            const res = await findOneUser({ email })
+            if (res) reject("Este correo ya se encuentra registrado")
+            resolve()
+        })
+
+        const registeredCI = new Promise(async (resolve, reject) => {
+            const res = await findOneUser({ ci })
+            if (res) reject("Esta cedula ya se encuentra registrada")
+            resolve()
+        })
+
+        await Promise.all([registeredUser, registeredCI])
+
+        console.log("userSaved")
 
         const userSaved = await saveUser(userToRegister)
 
@@ -34,6 +57,7 @@ router.post('/', async (req, res) => {
         responser.success({ res, message: 'success', body: userSaved })
 
     } catch (error) {
+        console.log(error)
         responser.error({ res, message: error })
     }
 

@@ -6,9 +6,12 @@ const getReportes = async ({ _id }) => {
     return response
 }
 
+const getTickets = async () => await TicketsModel.find()
+
 const ticketController = {
     saveTicket,
-    getReportes
+    getReportes,
+    getTickets
 }
 
 module.exports = ticketController

@@ -13,6 +13,7 @@ const updateuser = require('./api/user/update')
 const methods = require('./api/methods/methods')
 const tickets = require('./api/tickets/tickets')
 const reportes = require('./api/reportes/reportes')
+const animals = require('./api/animals/animals')
 
 const router = (app) => {
 
@@ -20,9 +21,10 @@ const router = (app) => {
     app.use('/api/v1', route)
     route.use('/', welcome)
     route.use('/login', login)
+    route.use('/animals', animals)
 
     route.use('/register', register)
-    route.use('/saveTicket', tickets)
+    route.use('/tickets', tickets)
     route.use('/reportes', reportes)
 
 

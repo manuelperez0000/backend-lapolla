@@ -4,35 +4,50 @@ const { Schema } = mongoose;
 
 const User = new Schema({
     name: {
-        type:String,
+        type: String,
         required: true,
-        default:""
+        default: ""
     },
     ci: {
-        type:String,
+        type: String,
+        unique: true,
         required: true,
-        default:""
+        default: ""
     },
-    email:{
-        type:String,
-        required:true
+    email: {
+        type: String,
+        unique: true,
+        required: true
     },
-    phone:{
-        type:String,
-        required:true
+    phone: {
+        type: String,
+        required: true
     },
-    password:{
-        type:String,
-        required:true
+    password: {
+        type: String,
+        required: true
     },
-    level:{
-        type:Number,
-        require:true,
-        default:0
+    level: {
+        type: Number,
+        require: true
     },
-    date: { 
+    date: {
         type: Date,
-         default: Date.now
+        require: true
+    },
+    grupero: {
+        type: String,
+        required: false
+    },
+    admin: {
+        type: String,
+        required: true,
+        default: ''
+    },
+    percent: {
+        type: Number,
+        required: true,
+        default: 50
     }
 })
 
