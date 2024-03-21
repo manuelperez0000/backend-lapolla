@@ -25,7 +25,7 @@ router.post('/', async (req, res) => {
         /* console.log(userToUpdate) */
 
         const userSaved = await updateUser(userToUpdate)
-        console.log('response:', userSaved)
+        /* console.log('response:', userSaved) */
         res.end()
         return
 

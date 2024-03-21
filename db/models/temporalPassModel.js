@@ -3,17 +3,17 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const temporalPassModel = new Schema({
-    email:{
-        type:String,
-        required:true
+    email: {
+        type: String,
+        required: true
     },
-    temporalPass:{
-        type:String,
-        required:true
+    temporalPass: {
+        type: String,
+        required: true
     },
-    date: { 
+    date: {
         type: Date,
-         default: Date.now 
+        default: Date.now
     }
 })
 

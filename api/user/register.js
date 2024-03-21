@@ -27,13 +27,6 @@ router.post('/', async (req, res) => {
             percent
         }
 
-
-        /* const registeredUser = await findOneUser({ email })
-        if (registeredUser) throw "Este correo ya se encuentra registrado"
-        
-        const registeredCI = await findOneUser({ ci })
-        if (registeredCI) throw "Esta cedula ya se encuentra registrado" */
-
         const registeredUser = new Promise(async (resolve, reject) => {
             const res = await findOneUser({ email })
             if (res) reject("Este correo ya se encuentra registrado")
@@ -47,8 +40,6 @@ router.post('/', async (req, res) => {
         })
 
         await Promise.all([registeredUser, registeredCI])
-
-        console.log("userSaved")
 
         const userSaved = await saveUser(userToRegister)
 

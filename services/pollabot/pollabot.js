@@ -1,9 +1,9 @@
 const { periodic } = require('robbi')
 
-const tarea1 = require('./tareas/tarea1')
+const granQuinielaWinners = require('./tareas/granQuinielaWinners')
 
 const pollabot = () => {
-    periodic({ s: 50 }, () => tarea1())
+    periodic({ s: 10 }, () => granQuinielaWinners())
 }
 
 module.exports = pollabot

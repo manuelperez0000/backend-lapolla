@@ -34,7 +34,7 @@ const changeUserPassword = async ({ email, password }) => {
     return response
 }
 
-const findOneUser = async (userData) => await User.findOne(userData)
+const findOneUser = async (userData) => await User.findOne(userData).sort({ $natural: -1 })
 
 const userControllers = {
     findUsers,

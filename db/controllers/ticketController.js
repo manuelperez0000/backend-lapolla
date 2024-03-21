@@ -2,11 +2,11 @@ const TicketsModel = require('../models/ticketModel')
 const saveTicket = async (ticket) => await TicketsModel(ticket).save()
 
 const getReportes = async ({ _id }) => {
-    const response = await TicketsModel.find({ 'user._id': _id })
+    const response = await TicketsModel.find({ 'user._id': _id }).sort({ $natural: -1 })
     return response
 }
 
-const getTickets = async () => await TicketsModel.find()
+const getTickets = async ({ from, to }) => await TicketsModel.find({ date: { "$gte": from, "$lt": to } }).sort({ $natural: -1 })
 
 const ticketController = {
     saveTicket,

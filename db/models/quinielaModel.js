@@ -48,6 +48,10 @@ const User = new Schema({
         type: Array,
         required: false,
         defaultValue: []
+    },
+    date: {
+        type: Date,
+        default: Date.now
     }
 })
 

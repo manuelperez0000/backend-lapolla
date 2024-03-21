@@ -6,7 +6,6 @@ const responser = require('../../network/response')
 router.get('/tickets', async (req, res) => {
 
     const date = Date()
-    console.log(date)
 
     try {
         responser.success({ res, message: "success", body: "response" })

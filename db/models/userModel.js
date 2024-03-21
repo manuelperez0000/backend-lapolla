@@ -33,7 +33,7 @@ const User = new Schema({
     },
     date: {
         type: Date,
-        require: true
+        default: Date.now
     },
     grupero: {
         type: String,
