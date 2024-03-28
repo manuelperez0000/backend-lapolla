@@ -2,11 +2,11 @@
 const express = require('express')
 const router = express.Router()
 const responser = require('../../network/response')
-const { saveTicket, getTickets } = require('../../db/controllers/ticketController')
+const { saveTicket, getTickets, getTicket } = require('../../db/controllers/ticketController')
 
 router.post('/', async (req, res) => {
     process.env.TZ = "America/Caracas"
-    const { animals, user, type } = req.body
+    const { animals, user, type, code } = req.body
     const actualDate = new Date()
     const hour = actualDate.getHours()
     const minute = actualDate.getMinutes()
@@ -17,7 +17,8 @@ router.post('/', async (req, res) => {
         user,
         quinielaType: type,
         animals,
-        hora
+        hora,
+        code
     }
 
     try {
@@ -32,13 +33,25 @@ router.post('/', async (req, res) => {
     }
 })
 
+router.get('/find/one/:code', async (req, res) => {
+    const { code } = req.params
+    console.log(code)
+    try {
+        if (code.length !== 5) throw "Ticket invalido er.1"
+        const body = await getTicket({ code })
+        if (!body) throw "Ticket invalido err.2"
+        responser.success({ res, message: "success", body })
+    } catch (error) {
+        console.log(error)
+        responser.error({ res, message: error })
+    }
+})
+
 router.get('/:from/:to', async (req, res) => {
     const { from, to } = req.params
 
     const newFrom = from + "T00:00:00.000+00:00";
     const newTo = to + "T23:59:59.000+00:00";
-    const dateFrom = new Date(newFrom)
-    const dateTo = new Date(newTo)
 
     try {
 
@@ -51,6 +64,8 @@ router.get('/:from/:to', async (req, res) => {
     }
 
 })
+
+
 
 
 

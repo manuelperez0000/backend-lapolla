@@ -8,10 +8,13 @@ const getReportes = async ({ _id }) => {
 
 const getTickets = async ({ from, to }) => await TicketsModel.find({ date: { "$gte": from, "$lt": to } }).sort({ $natural: -1 })
 
+const getTicket = async ({ code }) => await TicketsModel.findOne({ code })
+
 const ticketController = {
     saveTicket,
     getReportes,
-    getTickets
+    getTickets,
+    getTicket
 }
 
 module.exports = ticketController
