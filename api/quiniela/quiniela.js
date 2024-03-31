@@ -5,8 +5,6 @@ const responser = require('../../network/response')
 
 router.get('/tickets', async (req, res) => {
 
-    const date = Date()
-
     try {
         responser.success({ res, message: "success", body: "response" })
     } catch (error) {

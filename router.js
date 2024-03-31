@@ -14,6 +14,7 @@ const methods = require('./api/methods/methods')
 const tickets = require('./api/tickets/tickets')
 const reportes = require('./api/reportes/reportes')
 const animals = require('./api/animals/animals')
+const config = require('./api/config/config')
 
 const router = (app) => {
 
@@ -26,6 +27,7 @@ const router = (app) => {
     route.use('/register', register)
     route.use('/tickets', tickets)
     route.use('/reportes', reportes)
+    route.use('/config', config)
 
 
     route.use('/users', listUsers)

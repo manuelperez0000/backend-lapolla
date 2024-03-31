@@ -1,5 +1,5 @@
 require('dotenv').config({ path: '.env' })
-const pollabot = require('./services/pollabot/pollabot')
+const pollabot = require('./pollabot/pollabot')
 const express = require('express')
 const cors = require('cors')
 const PORT = process.env.PORT || 5000;

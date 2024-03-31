@@ -36,18 +36,13 @@ const User = new Schema({
         default: Date.now
     },
     grupero: {
-        type: String,
-        required: false
+        type: String
     },
     admin: {
-        type: String,
-        required: true,
-        default: ''
+        type: String
     },
     percent: {
-        type: Number,
-        required: true,
-        default: 50
+        type: Number
     }
 })
 
