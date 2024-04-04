@@ -29,20 +29,27 @@ const User = new Schema({
     },
     level: {
         type: Number,
-        require: true
+        default: 5
     },
     date: {
         type: Date,
         default: Date.now
     },
     grupero: {
-        type: String
+        type: String,
+        default: ""
     },
     admin: {
-        type: String
+        type: String,
+        default: ""
     },
     percent: {
-        type: Number
+        type: Number,
+        default: 0
+    },
+    balance: {
+        type: Number,
+        default: 0
     }
 })
 

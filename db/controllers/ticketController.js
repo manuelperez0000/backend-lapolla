@@ -7,7 +7,6 @@ const getReportes = async ({ _id }) => {
 }
 
 const getTickets = async ({ from, to }) => {
-    console.log("dates:", from, to)
     return await TicketsModel.find({ date: { "$gte": from, "$lt": to } }).sort({ $natural: -1 })
 }
 

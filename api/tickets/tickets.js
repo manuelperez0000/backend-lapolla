@@ -14,7 +14,7 @@ router.post('/', async (req, res) => {
     const hora = `${hour}:${minute}:${second}`
 
     const ticket = {
-        user,
+        user: { _id: user._id, percent: user.percent, name: user.name, level: user.level, phone: user.phone, ci: user.ci, email: user.email },
         quinielaType: type,
         animals,
         hora,
@@ -53,9 +53,12 @@ router.get('/:from/:to', async (req, res) => {
     const newFrom = from + "T00:00:00.000+00:00";
     const newTo = to + "T23:59:59.000+00:00";
 
+    console.log(from, to)
+
     try {
 
         const body = await getTickets({ from: newFrom, to: newTo })
+        console.log(body)
 
         responser.success({ res, message: "success", body })
     } catch (error) {
