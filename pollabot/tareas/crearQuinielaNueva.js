@@ -1,7 +1,8 @@
 const { getTickets } = require('../../db/controllers/ticketController')
 const { getConfig } = require('../../db/controllers/configController')
+const { saveQuiniela } = require('../../db/controllers/quinielaController')
+
 const { getAyerYhoy, granQuiniela, filterDate } = require('../utils')
-const percent = (monto, porcentaje) => monto * porcentaje / 100
 
 const getTicketsFromDate = async (fechaHoy, fechaAyer, horaGranQuiniela) => {
     const newFrom = fechaAyer + "T00:00:00.000+00:00"
@@ -22,7 +23,8 @@ const getTicketsFromDate = async (fechaHoy, fechaAyer, horaGranQuiniela) => {
 
 }
 
-const granQuinielaWinners = async () => {
+const crearQuinielaNueva = async () => {
+    console.log("Nueva quiniela creada")
 
     try {
         const { fechaHoy, fechaAyer } = getAyerYhoy()
@@ -33,26 +35,20 @@ const granQuinielaWinners = async () => {
 
         if (tickets.length === 0) throw 'No se encontraron tickets'
 
-        const ticketsPercent = await tickets.map(item => percent(precioGranQuiniela, item.user.percent))
-        const montoVendedores = ticketsPercent.reduce((a, b) => a + b)
-
-        const totalAcumulado = tickets.length * precioGranQuiniela
-        const getMontoPremios = () => percent(totalAcumulado, premioCasa)
-
-        //sumar todos tickets.user.percent
         const resultados = {
-            fechaQuiniela: fechaHoy,
-            tickets: tickets,
-            porcentajePremio: premioCasa,
             precioQuiniela: precioGranQuiniela,
-            tipoQuiniela: 1,
             horaDeLanzamiento: horaGranQuiniela,
-            totalAcumulado,
-            montoPremios: getMontoPremios(),
-            montoVendedores, //sumar total gruperos, admin, agencias
+            tipoQuiniela: 1,
+            porcentajePremio: premioCasa,
+            fechaQuiniela: fechaHoy,
         }
 
-        console.log(resultados)
+        //guardar en quinielas
+
+        const quiniela = await saveQuiniela(resultados)
+
+        console.log("resultados:", resultados, quiniela)
+        console.log("Quniela save", quiniela)
 
     } catch (error) {
         console.log("Ocurrio un error:", error)
@@ -65,4 +61,4 @@ const granQuinielaWinners = async () => {
 }
 
 
-module.exports = granQuinielaWinners
+module.exports = crearQuinielaNueva

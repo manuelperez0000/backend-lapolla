@@ -4,9 +4,12 @@ const saveAnimal = async (animal) => await animalsModel(animal).save()
 
 const getAnimals = async () => await animalsModel.find()
 
-const ticketController = {
+const getFilteredAnimals = async ({ from, to }) => await animalsModel.find({ date: { "$gte": from, "$lt": to } }).sort({ $natural: -1 })
+
+const animalsController = {
     saveAnimal,
-    getAnimals
+    getAnimals,
+    getFilteredAnimals
 }
 
-module.exports = ticketController
+module.exports = animalsController

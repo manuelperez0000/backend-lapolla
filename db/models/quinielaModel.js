@@ -2,57 +2,63 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
-const User = new Schema({
-    price: {
+const QuinielaModel = new Schema({
+    precioQuiniela: {
         type: Number,
         required: true
     },
-    type: {
+    horaDeLanzamiento: {
+        type: Number,
+        required: true
+    },
+    tipoQuiniela: {
         type: String,
-        require: true
+        required: true
     },
-    pool: {
+    porcentajePremio: {
         type: Number,
         required: true
     },
-    successes5: {
+    acumulado: {
         type: Number,
-        required: true
+        default: 0
     },
-    successes6: {
+    ganadores5Asiertos: {
         type: Number,
-        required: true,
+        default: 0
     },
-    startDate: {
-        type: Date,
-        required: true
-    },
-    endDate: {
-        type: Date,
-        required: true
-    },
-    profitPercent: {
+    ganadores6Asiertos: {
         type: Number,
-        required: true
+        default: 0
     },
-    totalProfit: {
+    gananciasCasa: {
         type: Number,
-        required: true
+        default: 0
     },
     winers: {
         type: Array,
-        required: false,
         defaultValue: []
     },
     loosers: {
         type: Array,
-        required: false,
         defaultValue: []
     },
-    date: {
+    animalitos: {
+        type: Array,
+        defaultValue: []
+    },
+    fechaQuiniela: {
         type: Date,
         default: Date.now
+    },
+    montoVendedores: {
+        type: Number,
+        default: 0
+    },
+    status: {
+        type: Boolean,
+        default: false
     }
 })
 
-module.exports = mongoose.model('User', User);
+module.exports = mongoose.model('quinielaModel', QuinielaModel);

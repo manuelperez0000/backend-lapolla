@@ -18,7 +18,6 @@ router.post('/', cors(), async (req, res) => {
 
         if (!userFinded) { throw "Usuario no registrado" }
 
-        const inicio = performance.now();
 
         const _userData = findOneUsersWhitEmailAndPassword(email, password)
         const _config = getConfig()
@@ -26,16 +25,11 @@ router.post('/', cors(), async (req, res) => {
 
         const [userData, config, payMethods] = await Promise.all([_userData, _config, _payMethods])
 
-        const fin = performance.now();
-
-        const tiempo_transcurrido = fin - inicio;
-
-        console.log(`Tiempo de ejecución: ${tiempo_transcurrido.toFixed(6)} milisegundos`);
-
         if (!userData) { throw "Usuario o contraseña incorrecta" }
 
-        const body = jwt.sign({ userData, config, payMethods }, DATA_TOKEN, { expiresIn: '100d' })
-        responser.success({ res, message: "Success", body })
+        const token = jwt.sign({ userData }, DATA_TOKEN, { expiresIn: '100d' })
+        const data = { userData, config, payMethods }
+        responser.success({ res, message: "Success", body: { token, data } })
 
     } catch (error) { responser.error({ res, message: error }) }
 })

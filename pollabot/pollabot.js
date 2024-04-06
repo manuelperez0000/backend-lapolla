@@ -1,7 +1,20 @@
-const { periodic, spesific } = require('robbi')
-const granQuinielaWinners = require('./tareas/granQuinielaWinners')
+/* const { spesific } = require('robbi')
+const lanzarJugada = require('./tareas/lanzarJugada')
+const crearQuinielaNueva = require('./tareas/crearQuinielaNueva')
 
-const pollabot = () => { spesific({ h: 9 }, () => granQuinielaWinners()) }
-/* const pollabot = () => { periodic({ s: 10 }, () => granQuinielaWinners()) } */
+const pollabot = () => {
+    spesific({ h: 9 }, () => crearQuinielaNueva())
+    spesific({ h: 9 }, () => lanzarJugada())
+}
 
-module.exports = pollabot
+module.exports = pollabot */
+const lanzarJugada = require('./tareas/lanzarJugada')
+const { periodic } = require('robbi')
+const crearQuinielaNueva = require('./tareas/crearQuinielaNueva')
+
+const pollabot = () => {
+    /* periodic({ s: 15 }, () => crearQuinielaNueva()) */
+    periodic({ s: 4 }, () => lanzarJugada())
+}
+
+module.exports = pollabot 
