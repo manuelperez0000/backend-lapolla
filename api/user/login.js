@@ -18,9 +18,9 @@ router.post('/', cors(), async (req, res) => {
 
         if (!userFinded) { throw "Usuario no registrado" }
 
-
         const _userData = findOneUsersWhitEmailAndPassword(email, password)
-        const _config = getConfig()
+        const _config = await getConfig()
+
         const _payMethods = getMethods()
 
         const [userData, config, payMethods] = await Promise.all([_userData, _config, _payMethods])

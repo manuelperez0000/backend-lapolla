@@ -26,8 +26,8 @@ const granQuinielaWinners = async () => {
 
     try {
         const { fechaHoy, fechaAyer } = getAyerYhoy()
-        const _id = '6605c4d1f867d9fa9e7d161b'
-        const { premioCasa, horaGranQuiniela, precioGranQuiniela } = await getConfig(_id)
+
+        const { premioCasa, horaGranQuiniela, precioGranQuiniela } = await getConfig()
 
         const tickets = await getTicketsFromDate(fechaHoy, fechaAyer, horaGranQuiniela)
 

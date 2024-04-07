@@ -14,7 +14,7 @@ const crearQuinielaNueva = require('./tareas/crearQuinielaNueva')
 
 const pollabot = () => {
     /* periodic({ s: 15 }, () => crearQuinielaNueva()) */
-    periodic({ s: 4 }, () => lanzarJugada())
+    /*     periodic({ s: 4 }, () => lanzarJugada()) */
 }
 
 module.exports = pollabot 
