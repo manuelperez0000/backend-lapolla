@@ -34,6 +34,8 @@ const changeUserPassword = async ({ email, password }) => {
     return response
 }
 
+const getUser = async (_id) => await User.findOne({ _id })
+
 const findOneUser = async (userData) => await User.findOne(userData).sort({ $natural: -1 })
 
 const userControllers = {
@@ -44,7 +46,8 @@ const userControllers = {
     deleteUser,
     updateUser,
     changeUserPassword,
-    findOneUser
+    findOneUser,
+    getUser
 }
 
 module.exports = userControllers;

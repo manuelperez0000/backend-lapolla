@@ -10,6 +10,8 @@ const createBank = require('./api/bank/createBank')
 const reset = require('./api/user/reset')
 const deleteuser = require('./api/user/deleteuser')
 const updateuser = require('./api/user/update')
+const getUser = require('./api/user/getUser')
+
 const methods = require('./api/methods/methods')
 const tickets = require('./api/tickets/tickets')
 const reportes = require('./api/reportes/reportes')
@@ -30,6 +32,7 @@ const router = (app) => {
     route.use('/config', config)
 
 
+    route.use('/user', getUser)
     route.use('/users', listUsers)
     route.use('/createBank', createBank)
     route.use('/reset', reset)
