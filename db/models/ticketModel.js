@@ -24,8 +24,8 @@ const TicketsModel = new Schema({
         required: true
     },
     status: {
-        type: Boolean,
-        default: false
+        type: Number,
+        default: 1 //1 proceso, 2 perderdor, 3 ganador y 4 anulado
     },
     date: {
         type: Date,

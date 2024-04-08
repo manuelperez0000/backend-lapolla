@@ -2,7 +2,7 @@
 const express = require('express')
 const router = express.Router()
 const responser = require('../../network/response')
-const { saveTicket, getTickets, getTicket } = require('../../db/controllers/ticketController')
+const { saveTicket, getMyTickets, getTickets, getTicket } = require('../../db/controllers/ticketController')
 
 router.post('/', async (req, res) => {
     process.env.TZ = "America/Caracas"
@@ -53,20 +53,16 @@ router.get('/:from/:to', async (req, res) => {
     const newFrom = from + "T00:00:00.000+00:00";
     const newTo = to + "T23:59:59.000+00:00";
 
-    console.log(from, to)
-
     try {
-
         const body = await getTickets({ from: newFrom, to: newTo })
-        console.log(body)
-
         responser.success({ res, message: "success", body })
     } catch (error) {
         console.log(error)
         responser.error({ res, message: error })
     }
-
 })
+
+
 
 
 
