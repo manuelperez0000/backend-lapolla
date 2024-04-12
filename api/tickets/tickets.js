@@ -2,16 +2,13 @@
 const express = require('express')
 const router = express.Router()
 const responser = require('../../network/response')
-const { saveTicket, getMyTickets, getTickets, getTicket } = require('../../db/controllers/ticketController')
+const { saveTicket, getTickets, getTicket } = require('../../db/controllers/ticketController')
 
 router.post('/', async (req, res) => {
     process.env.TZ = "America/Caracas"
     const { animals, user, type, code } = req.body
-    const actualDate = new Date()
-    const hour = actualDate.getHours()
-    const minute = actualDate.getMinutes()
-    const second = actualDate.getSeconds()
-    const hora = `${hour}:${minute}:${second}`
+
+    const hora = (new Date()).getHours()
 
     const ticket = {
         user: { _id: user._id, percent: user.percent, name: user.name, level: user.level, phone: user.phone, ci: user.ci, email: user.email },
@@ -61,11 +58,5 @@ router.get('/:from/:to', async (req, res) => {
         responser.error({ res, message: error })
     }
 })
-
-
-
-
-
-
 
 module.exports = router;

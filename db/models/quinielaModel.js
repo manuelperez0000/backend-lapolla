@@ -35,15 +35,15 @@ const QuinielaModel = new Schema({
         type: Number,
         default: 0
     },
-    winers: {
+    winners: {
         type: Array,
         defaultValue: []
     },
-    loosers: {
+    losers: {
         type: Array,
         defaultValue: []
     },
-    animalitos: {
+    resultAnimals: {
         type: Array,
         defaultValue: []
     },

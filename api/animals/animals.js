@@ -5,15 +5,17 @@ const responser = require('../../network/response')
 const validateToken = require('../../midelwares/validateToken')
 
 router.post('/', validateToken, async (req, res) => {
-    const { body } = req
+    const { name, animalId, owner, hora, fecha, roulet } = req.body
     const animal = {
-        name: body.name,
-        animalId: body.animalId,
-        date: body.date,
-        owner: body.owner,
-        hora: body.hora,
-        roulet: body.roulet,
+        name,
+        animalId,
+        owner,
+        hora,
+        fecha,
+        roulet
     }
+
+    console.log(fecha)
 
     try {
         const response = await saveAnimal(animal)

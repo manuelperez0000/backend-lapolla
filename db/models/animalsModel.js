@@ -13,7 +13,7 @@ const Animals = new Schema({
     },
     date: {
         type: Date,
-        required: true
+        default: Date.now
     },
     owner: {
         type: String,
@@ -21,6 +21,10 @@ const Animals = new Schema({
     },
     hora: {
         type: Number,
+        required: true
+    },
+    fecha: {
+        type: Date,
         required: true
     },
     roulet: {

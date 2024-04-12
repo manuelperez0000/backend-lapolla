@@ -1,12 +1,14 @@
-//creacion de una quiniela
 const express = require('express')
 const router = express.Router()
 const responser = require('../../network/response')
+const { getQuinielas } = require('../../db/controllers/quinielaController')
 
-router.get('/tickets', async (req, res) => {
-
+router.get('/', async (req, res) => {
+    console.log("getQuinielas")
     try {
-        responser.success({ res, message: "success", body: "response" })
+        const body = await getQuinielas()
+        console.log(body)
+        responser.success({ res, message: "success", body })
     } catch (error) {
         responser.error({ res, message: error.message || error })
     }
@@ -14,8 +16,6 @@ router.get('/tickets', async (req, res) => {
 
 
 module.exports = router;
-
-
 
 /* price
 type
