@@ -9,6 +9,7 @@ router.post('/', validateToken, async (req, res) => {
     const { _id } = req.body
     try {
         if (!_id) throw 'Debe indicar el _id del usuario'
+        if (res.user.userData._id === _id) throw 'No puedes eliminar tu propio usuario'
 
         const response = await deleteUser({ _id })
 
@@ -19,6 +20,7 @@ router.post('/', validateToken, async (req, res) => {
         responser.success({ res, message: 'success', body: response })
 
     } catch (error) {
+        console.log(error)
         responser.error({ res, message: error.message || error })
     }
 })
