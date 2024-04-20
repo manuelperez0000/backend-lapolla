@@ -1,49 +1,51 @@
 const mongoose = require('mongoose');
+
 const { Schema } = mongoose;
 
-const Method = new Schema({
-    nombre: {
+const User = new Schema({
+    name: {
         type: String,
         default: ""
     },
-    cedula: {
+    ci: {
         type: String,
-        default: ""
-    },
-    correo: {
-        type: String,
-        default: ""
-    },
-    tipo: {
-        type: String,
-        default: ""
-    },
-    cuenta: {
-        type: String,
-        default: ""
-    },
-    banco: {
-        type: String,
-        default: ""
-    },
-    methodName: {
-        type: String,
+        unique: true,
         required: true,
         default: ""
     },
-    telefono: {
+    email: {
+        type: String,
+        unique: true,
+        required: true
+    },
+    phone: {
+        type: String,
+        required: true
+    },
+    operation: {
         type: String,
         default: ""
     },
-    imageUrl: {
+    account: {
         type: String,
+        default: ""
+    },
+    bank: {
+        type: String,
+        default: ""
+    },
+    type: {
+        type: String,
+        default: ""
+    },
+    operationDate: {
+        type: Date,
         required: true
     },
-    userId: {
-        type: String,
-        required: true
+    date: {
+        type: Date,
+        default: Date.now
     }
-
 })
 
-module.exports = mongoose.model('Method', Method);
+module.exports = mongoose.model('User', User);

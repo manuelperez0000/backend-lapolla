@@ -16,8 +16,12 @@ router.post('/addMethod', async (req, res) => {
         banco: method.banco,
         nombre: method.nombre,
         methodName: method.methodName,
-        telefono: method.telefono
+        telefono: method.telefono,
+        imageUrl: method.imageUrl,
+        userId: method.userId
     }
+
+    console.log(methodToCreate)
 
     try {
         const response = await saveMethod(methodToCreate)
@@ -27,9 +31,10 @@ router.post('/addMethod', async (req, res) => {
     }
 })
 
-router.get('/getMethods', async (req, res) => {
+router.get('/getMethods/:id', async (req, res) => {
+    const { id } = req.params
     try {
-        const response = await getMethods()
+        const response = await getMethods(id)
         responser.success({ res, message: "success", body: response })
     } catch (error) {
         responser.error({ res, message: error.message || error })

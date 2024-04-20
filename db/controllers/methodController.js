@@ -5,8 +5,8 @@ const saveMethod = async (method) => {
     return response
 }
 
-const getMethods = async () => {
-    const response = await Method.find()
+const getMethods = async (id) => {
+    const response = await Method.find({ userId: id })
     return response
 }
 
