@@ -36,7 +36,11 @@ const changeUserPassword = async ({ email, password }) => {
 
 const getUser = async (_id) => await User.findOne({ _id })
 
+const getUserByCi = async ({ ci }) => await User.findOne({ ci })
+
 const findOneUser = async (userData) => await User.findOne(userData).sort({ $natural: -1 })
+
+const icreaseUserBalance = async ({ _id, balance }) => await User.findOneAndUpdate({ _id }, { $inc: { balance } })
 
 const userControllers = {
     findUsers,
@@ -47,7 +51,9 @@ const userControllers = {
     updateUser,
     changeUserPassword,
     findOneUser,
-    getUser
+    getUser,
+    getUserByCi,
+    icreaseUserBalance
 }
 
 module.exports = userControllers;

@@ -1,10 +1,26 @@
 //obtener un usuario por id
 const express = require('express')
 const router = express.Router()
-const { getUser } = require('../../db/controllers/userController')
+const { getUser, getUserByCi } = require('../../db/controllers/userController')
 const validateToken = require('../../midelwares/validateToken')
 const responser = require('../../network/response')
 const cors = require('cors')
+
+router.get('/ci/:ci', cors(), validateToken, async (req, res) => {
+
+    const ci = req.params.ci
+    try {
+        const body = await getUserByCi({ ci })
+
+        if (!body) throw 'Usuario no encontrado'
+
+        responser.success({ res, message: 'success', body })
+
+    } catch (error) {
+        responser.error({ res, message: error.message || error })
+    }
+})
+
 router.get('/:id', cors(), validateToken, async (req, res) => {
 
     const _id = req.params.id
@@ -19,5 +35,7 @@ router.get('/:id', cors(), validateToken, async (req, res) => {
         responser.error({ res, message: error.message || error })
     }
 })
+
+
 
 module.exports = router;

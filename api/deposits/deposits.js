@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { saveDeposit, getDeposits, getOneDeposit, updateDeposit } = require('../../db/controllers/depositController')
+const { icreaseUserBalance } = require('../../db/controllers/userController')
 const responser = require('../../network/response')
 const validateToken = require('../../midelwares/validateToken')
 
@@ -44,6 +45,12 @@ router.post('/update', validateToken, async (req, res) => {
         if (!state) throw 'state es requerido'
 
         const response = await updateDeposit({ _id, state })
+        const deposit = await getOneDeposit(_id)
+        const { userId } = deposit
+        //sumar el balance al usuario
+        console.log("userId: " + userId)
+        console.log("balance: " + deposit.monto)
+        await icreaseUserBalance({ _id: userId, balance: deposit.monto })
 
         responser.success({ res, message: "success", body: response })
     } catch (error) {
