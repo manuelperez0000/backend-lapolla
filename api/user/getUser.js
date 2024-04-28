@@ -2,6 +2,7 @@
 const express = require('express')
 const router = express.Router()
 const { getUser, getUserByCi } = require('../../db/controllers/userController')
+const { getMethods, getAdminMethods } = require('../../db/controllers/methodController')
 const validateToken = require('../../midelwares/validateToken')
 const responser = require('../../network/response')
 const cors = require('cors')
@@ -23,11 +24,33 @@ router.get('/ci/:ci', cors(), validateToken, async (req, res) => {
 
 router.get('/:id', cors(), validateToken, async (req, res) => {
 
+    console.log("pasando")
+
     const _id = req.params.id
     try {
-        const body = await getUser({ _id })
+        const user = await getUser({ _id })
 
-        if (!body) throw 'Usuario no encontrado'
+        if (!user) throw 'Usuario no encontrado'
+
+        const userMethods = await getMethods(_id)
+
+        const adminMethods = await getAdminMethods()
+
+        const body = {
+            _id: user._id,
+            name: user.name,
+            ci: user.ci,
+            email: user.email,
+            phone: user.phone,
+            level: user.level,
+            grupero: user.grupero,
+            admin: user.admin,
+            percent: user.percent,
+            balance: user.balance,
+            date: user.date,
+            userMethods,
+            adminMethods
+        }
 
         responser.success({ res, message: 'success', body })
 

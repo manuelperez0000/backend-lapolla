@@ -23,10 +23,7 @@ const findOneUsersWhitEmailAndPassword = async (email, password) => {
 
 const deleteUser = async (_id) => await User.deleteOne({ _id })
 
-const updateUser = async (user) => {
-    const response = await User.findOneAndUpdate({ _id: user._id }, { $set: user })
-    return response
-}
+const updateUser = async (user) => await User.findOneAndUpdate({ _id: user._id }, { $set: user })
 
 //update only password in user account
 const changeUserPassword = async ({ email, password }) => {

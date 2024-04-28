@@ -5,7 +5,9 @@ const { updateUser } = require('../../db/controllers/userController')
 const responser = require('../../network/response')
 
 router.post('/', async (req, res) => {
-    const { name, email, phone, ci, level, _id } = req.body
+    const { name, email, phone, ci, level, _id, percent, grupero, admin } = req.body
+
+    console.log(req.body)
 
     try {
         if (!name) throw 'El nombre es requerido'
@@ -13,6 +15,7 @@ router.post('/', async (req, res) => {
         if (!ci) throw 'La cedula es requerido'
         if (!email) throw 'El email es requerido'
         if (!phone) throw 'El telefono es requerido'
+        if (!percent) throw 'El percent es requerido'
 
         const userToUpdate = {
             name,
@@ -20,7 +23,10 @@ router.post('/', async (req, res) => {
             phone,
             level,
             ci,
-            _id
+            _id,
+            percent,
+            grupero,
+            admin
         }
         /* console.log(userToUpdate) */
 
