@@ -3,6 +3,8 @@ const express = require('express')
 const router = express.Router()
 const responser = require('../../network/response')
 const { saveTicket, getTickets, getTicket } = require('../../db/controllers/ticketController')
+const { icreaseUserBalance } = require('../../db/controllers/userController')
+const { getConfig } = require('../../db/controllers/configController')
 
 router.post('/', async (req, res) => {
     process.env.TZ = "America/Caracas"
@@ -11,12 +13,24 @@ router.post('/', async (req, res) => {
     const hora = (new Date()).getHours()
 
     const ticket = {
-        user: { _id: user._id, percent: user.percent, name: user.name, level: user.level, phone: user.phone, ci: user.ci, email: user.email },
+        user: {
+            _id: user._id,
+            percent: user.percent,
+            name: user.name,
+            level: user.level,
+            phone: user.phone,
+            ci: user.ci,
+            email: user.email
+        },
         quinielaType: type,
         animals,
         hora,
         code
     }
+
+    const { precioGranQquiniela } = await getConfig()
+
+    await icreaseUserBalance({ _id: ticket.user._id, balance:-precioGranQquiniela })
 
     try {
         const body = await saveTicket(ticket)
