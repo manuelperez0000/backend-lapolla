@@ -2,12 +2,8 @@ const { getFilteredAnimals } = require('../../db/controllers/animalsController')
 const { ayerYantier } = require('../utils')
 const { getTickets } = require('../../db/controllers/ticketController')
 const { antier, ayer, ayerFinalTarde, ayerTicket } = ayerYantier()
-const crearQuinielaNueva = require('./crearQuinielaNueva')
-const { updateGranQuiniela } = require('../../db/controllers/quinielaController')
-
-const updateQuiniela = async ({ winners, losers, idNuevaQuiniela, resultAnimals }) => {
-    await updateGranQuiniela({ _id: idNuevaQuiniela, winners, losers, resultAnimals })
-}
+const crearQuinielaNueva = require('./trash/crearQuinielaNueva')
+const { updateQuiniela } = require('./controllers/updateQuiniela')
 
 const lanzarJugada = async () => {
 
@@ -33,11 +29,10 @@ const lanzarJugada = async () => {
         }
 
         const winners = getWinnersOrLossers(tickets, animals, "winners")
-        const losers = getWinnersOrLossers(tickets, animals, "lossers")
+        /* const losers = getWinnersOrLossers(tickets, animals, "lossers") */
         //actualizar la quiniela creada
-        await updateQuiniela({ winners, losers, idNuevaQuiniela, resultAnimals })
+        await updateQuiniela({ winners, idNuevaQuiniela, resultAnimals })
         //generar el reporte
-
 
     } catch (error) {
         console.log(error)

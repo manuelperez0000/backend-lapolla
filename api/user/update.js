@@ -7,8 +7,6 @@ const responser = require('../../network/response')
 router.post('/', async (req, res) => {
     const { name, email, phone, ci, level, _id, percent, grupero, admin } = req.body
 
-    console.log(req.body)
-
     try {
         if (!name) throw 'El nombre es requerido'
         if (!_id) throw 'El _id es requerido'
@@ -28,16 +26,12 @@ router.post('/', async (req, res) => {
             grupero,
             admin
         }
-        /* console.log(userToUpdate) */
 
-        const userSaved = await updateUser(userToUpdate)
-        /* console.log('response:', userSaved) */
-        res.end()
-        return
+        const body = await updateUser(userToUpdate)
 
-        if (!userSaved) throw "Error al actualizar el usuario"
+        if (!body) throw "Error al actualizar el usuario"
 
-        responser.success({ res, message: 'success', body: userSaved })
+        responser.success({ res, message: 'success', body })
 
     } catch (error) {
         console.log(error)

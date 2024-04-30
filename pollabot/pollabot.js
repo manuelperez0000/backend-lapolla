@@ -4,7 +4,7 @@ const lanzarJugada = require('./tareas/lanzarJugada')
 
 const pollabot = () => {
     //sengodos (s) es requerido
-    spesific({ s: 1, m: 57, h: 16 }, () => lanzarJugada())
+    spesific({ s: 0, m: 0, h: 9 }, () => lanzarJugada())
 }
 
 module.exports = pollabot

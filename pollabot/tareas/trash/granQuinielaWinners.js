@@ -1,6 +1,6 @@
-const { getTickets } = require('../../db/controllers/ticketController')
-const { getConfig } = require('../../db/controllers/configController')
-const { getAyerYhoy, granQuiniela, filterDate } = require('../utils')
+const { getTickets } = require('../../../db/controllers/ticketController')
+const { getConfig } = require('../../../db/controllers/configController')
+const { getAyerYhoy, granQuiniela, filterDate } = require('../../utils')
 const percent = (monto, porcentaje) => monto * porcentaje / 100
 
 const getTicketsFromDate = async (fechaHoy, fechaAyer, horaGranQuiniela) => {
