@@ -3,7 +3,7 @@ const express = require('express')
 const router = express.Router()
 const responser = require('../../network/response')
 const { saveTicket, getTickets, getTicket } = require('../../db/controllers/ticketController')
-const { icreaseUserBalance } = require('../../db/controllers/userController')
+const { icreaseUserBalance, getUser } = require('../../db/controllers/userController')
 const { getConfig } = require('../../db/controllers/configController')
 
 router.post('/', async (req, res) => {
@@ -28,15 +28,34 @@ router.post('/', async (req, res) => {
         code
     }
 
-    const { precioGranQquiniela } = await getConfig()
-
-    await icreaseUserBalance({ _id: ticket.user._id, balance:-precioGranQquiniela })
-
     try {
-        const body = await saveTicket(ticket)
-        if (!body) throw 'Error al guardar en ticket en la db'
 
-        responser.success({ res, message: "success", body })
+        console.log("amanecer")
+
+        const { precioGranQuiniela,precioMiniQuiniela } = await getConfig()
+
+        const userCurrent = await getUser(ticket.user._id)
+
+        console.log("user: " + userCurrent)
+
+        if (!userCurrent) throw "Usuario no encontrado"
+
+        const precioQuiniela = type === 1 ? precioGranQuiniela : precioMiniQuiniela
+
+        if (userCurrent.balance >= precioQuiniela) {
+
+            const increaseBalance = await icreaseUserBalance({ _id: ticket.user._id, balance: -precioQuiniela })
+
+            console.log(increaseBalance)
+
+            const body = await saveTicket(ticket)
+            if (!body) throw 'Error al guardar en ticket en la db'
+
+            responser.success({ res, message: "success", body })
+
+        } else {
+            throw "Usuario no tiene fondos"
+        }
 
     } catch (error) {
         console.log(error)

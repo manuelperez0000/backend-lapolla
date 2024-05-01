@@ -25,7 +25,7 @@ router.get('/ci/:ci', cors(), validateToken, async (req, res) => {
 
 router.get('/:id', cors(), validateToken, async (req, res) => {
 
-    console.log("pasando")
+    console.log("pasando:111")
 
     const _id = req.params.id
     try {
