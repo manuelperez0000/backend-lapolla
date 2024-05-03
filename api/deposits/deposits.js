@@ -5,6 +5,8 @@ const { icreaseUserBalance } = require('../../db/controllers/userController')
 const responser = require('../../network/response')
 const validateToken = require('../../midelwares/validateToken')
 
+const validate = require('../../services/validate')
+
 router.get('/', async (req, res) => {
     try {
         const response = await getDeposits()
@@ -14,12 +16,31 @@ router.get('/', async (req, res) => {
     }
 })
 
-
 router.post('/save', async (req, res) => {
 
-    const data = req.body
+    const data = {
+        userId: req.body.userId,
+        adminMethodId: req.body.adminMethodId,
+        operationRef: req.body.operationRef,
+        amount: req.body.amount
+    }
 
     try {
+
+
+        validate.required([
+            data.userId,
+            data.operationRef,
+            data.amount,
+            data.adminMethodId])
+
+        validate.string([
+            data.userId,
+            data.operationRef,
+            data.adminMethodId])
+
+        validate.number(data.amount)
+
         const response = await saveDeposit(data)
         responser.success({ res, message: "success", body: response })
     } catch (error) {
@@ -41,14 +62,15 @@ router.get('/:id', async (req, res) => {
 router.post('/update', validateToken, async (req, res) => {
     try {
         const { _id, state } = req.body
-        if (!_id) throw '_id es requerido'
-        if (!state) throw 'state es requerido'
+
+        validate.required([_id, state])
+        validate.number(state)
+        validate.string(_id)
 
         const response = await updateDeposit({ _id, state })
-        const deposit = await getOneDeposit(_id)
-        const { userId } = deposit
+        const { userId, amount } = await getOneDeposit(_id)
         //sumar el balance al usuario
-        await icreaseUserBalance({ _id: userId, balance: deposit.monto })
+        await icreaseUserBalance({ _id: userId, balance: amount })
 
         responser.success({ res, message: "success", body: response })
     } catch (error) {
@@ -56,4 +78,4 @@ router.post('/update', validateToken, async (req, res) => {
     }
 })
 
-module.exports = router;
+module.exports = router
