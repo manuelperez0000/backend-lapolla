@@ -1,8 +1,8 @@
 const response = require('./response');
 
-const errors = (err, req, res) => {
-    console.log(err);
-    const message = err.message || "Internal Error 2";
+const errors = (req,res) => {
+    console.log("Error capturado en errors")
+    const message = "Internal Error 2";
     response.error({ res, message })
 }
 

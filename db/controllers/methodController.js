@@ -10,6 +10,8 @@ const getMethods = async (id) => {
     return response
 }
 
+const getMethod = async (id) => await Method.findOne({ _id: id })
+
 const getAdminMethods = async () => {
     const response = await Method.find({ userId: adminId })
     return response
@@ -24,7 +26,8 @@ const MethodControllers = {
     saveMethod,
     getMethods,
     getAdminMethods,
-    deleteMethod
+    deleteMethod,
+    getMethod
 }
 
 module.exports = MethodControllers;

@@ -1,8 +1,9 @@
 //creacion de un banco
 const express = require('express')
 const router = express.Router()
-const { saveMethod, getMethods, deleteMethod } = require('../../db/controllers/methodController')
+const { saveMethod, getMethods, deleteMethod, getMethod } = require('../../db/controllers/methodController')
 const responser = require('../../network/response')
+const validate = require('../../services/validate')
 
 router.post('/addMethod', async (req, res) => {
     const method = req.body
@@ -31,11 +32,25 @@ router.post('/addMethod', async (req, res) => {
     }
 })
 
-router.get('/getMethods/:id', async (req, res) => {
+router.get('/getMethod/:id', async (req, res) => {
     const { id } = req.params
     try {
-        const response = await getMethods(id)
-        responser.success({ res, message: "success", body: response })
+        validate.required(id)
+        const body = await getMethod(id)
+        validate.required(body,"No se encontraron registros con el _id: "+ id)
+        responser.success({ res, message: "success", body })
+    } catch (error) {
+        responser.error({ res, message: error.message || error })
+    }
+})
+
+router.get('/getMethods/:id', async (req, res) => {
+    try {
+        const { id } = req.params
+        validate.required(id)
+        const body = await getMethods(id)
+        validate.required(body[0],"No se encontraron registros con el id: "+ id)
+        responser.success({ res, message: "success", body })
     } catch (error) {
         responser.error({ res, message: error.message || error })
     }

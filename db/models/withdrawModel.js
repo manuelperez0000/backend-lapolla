@@ -2,20 +2,16 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
-const Deposit = new Schema({
+const Withdraw = new Schema({
     userId: Schema.Types.ObjectId,
     adminMethodId:Schema.Types.ObjectId,
-    operationRef: {
-        type: String,
-        required: true
-    },
     amount:{
         type:Number,
         required: true
     },
-    status:{
+    state:{
         type:Number,
-        default:0
+        default:1
     },
     date: {
         type: Date,
@@ -24,4 +20,4 @@ const Deposit = new Schema({
 })
 
 
-module.exports = mongoose.model('Deposit', Deposit);
+module.exports = mongoose.model('Withdraw', Withdraw);
