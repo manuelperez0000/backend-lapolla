@@ -29,22 +29,40 @@ router.get('/:id', validateToken, async (req, res) => {
 })
 
 router.post('/', validateToken, async (req, res) => {
-    const data = {
-        userId: req.body.userId,
-        adminMethodId: req.body.adminMethodId,
-        amount: req.body.amount
-    }
+
+    const { userId, payMethodId, amount } = req.body
 
     try {
-        validate.required([data.userId, data.amount, data.adminMethodId])
-        validate.string([data.userId, data.adminMethodId])
-        validate.number(data.amount)
+        validate.required([userId, amount, payMethodId])
+        validate.string([userId, payMethodId])
+        validate.number(amount)
 
-        const adminMethodId = await getMethod(data.adminMethodId)
-        validate.required(adminMethodId, "Id no valido: " + data.adminMethodId)
+        const payMethod = await getMethod(payMethodId)
+        validate.required(payMethod, "Metodo invalido ")
 
-        const body = await saveWithdraw(data)
-        console.log(body)
+        const user = await getUser(userId)
+        validate.required(user, "usuario invalido")
+
+        const dataToSave = {
+            amount,
+            payMethod,
+            user: {
+                _id: user._id,
+                name: user.name,
+                balance: user.balance,
+                level:user.level,
+                ci:user.ci,
+                phone: user.phone,
+                email: user.email
+            }
+        }
+
+        const userBalance = await icreaseUserBalance({ _id:user._id, balance:-amount })
+        validate.required(userBalance)
+
+        const body = await saveWithdraw(dataToSave)
+        validate.required(body, "No se pudo guardar en la base de datos")
+
         responser.success({ res, message: "success", body })
 
     } catch (error) {
