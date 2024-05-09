@@ -3,13 +3,13 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const Withdraw = new Schema({
-    user: {
-        type: Object,
-        required: true
+    payMethod:{
+        type:Object,
+        required:true
     },
-    payMethod: {
-        type: Object,
-        required: true
+    user:{
+        type:Object,
+        required:true
     },
     amount: {
         type: Number,
