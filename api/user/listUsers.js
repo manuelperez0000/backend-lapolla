@@ -9,7 +9,6 @@ router.get('/', cors(), validateToken, async (req, res) => {
 
     try {
         const body = await findUsers()
-
         if (!body) throw 'Usuarios no encontrado'
 
         responser.success({ res, message: 'success', body })
