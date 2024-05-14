@@ -13,6 +13,7 @@ const lanzarJugada = async () => {
 
         //crear quiniela nueva y devolver el id de la quiniela creada para este dia
         const idNuevaQuiniela = await crearQuinielaNueva()
+        return
         //obtener todos los animalitos de ayer y antier desde las 9 de antier hasta las 9 de ayer
         const resultAnimals = await getFilteredAnimals({ from: ayer, to: ayerFinalTarde })
         const animals = resultAnimals.map(animal => animal.animalId)

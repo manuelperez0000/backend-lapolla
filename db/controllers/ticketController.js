@@ -7,14 +7,17 @@ const getTickets = async ({ from, to }) => await TicketsModel.find({ date: { "$g
 
 const getTicket = async ({ code }) => await TicketsModel.findOne({ code })
 
-const getMyTickets = async (_id) => await TicketsModel.find({ "user._id": _id })
+const getMyTickets = async (_id) => await TicketsModel.find({ "user._id": _id }).sort({ $natural: -1 }).limit(100)
+
+const verifyIfCodeIsUsed = async (code) => await TicketsModel.findOne({ code })
 
 const ticketController = {
     saveTicket,
     getReportes,
     getTickets,
     getTicket,
-    getMyTickets
+    getMyTickets,
+    verifyIfCodeIsUsed
 }
 
 module.exports = ticketController

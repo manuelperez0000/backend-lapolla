@@ -16,7 +16,7 @@ const Config = new Schema({
         default: 25
     },
     horaGranQuiniela: {
-        type: Number,
+        type: String,
         default: 1
     },
     horasMiniQuiniela: {

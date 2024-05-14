@@ -27,6 +27,10 @@ const TicketsModel = new Schema({
         type: Number,
         default: 1 //1 proceso, 2 perderdor, 3 ganador y 4 anulado
     },
+    report:{
+        type:Object,
+        required: true
+    },
     date: {
         type: Date,
         default: Date.now

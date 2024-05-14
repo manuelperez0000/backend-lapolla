@@ -1,4 +1,3 @@
-const { getTickets } = require('../../../db/controllers/ticketController')
 const { getConfig } = require('../../../db/controllers/configController')
 const { saveQuiniela } = require('../../../db/controllers/quinielaController')
 const { getAyerYhoy } = require('../../utils')

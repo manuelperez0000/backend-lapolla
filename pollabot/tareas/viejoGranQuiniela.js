@@ -34,7 +34,6 @@ const granQuinielaWinners = async () => {
         const { fechaHoy, fechaAyer } = getAyerYhoy()
 
         const [{ premioCasa, horaGranQuiniela, precioGranQuiniela }] = await getConfig()
-
         const ticketsPromise = getTicketsFromDate(fechaHoy, fechaAyer, horaGranQuiniela)
         const animalsPromise = getAnimalsFromDate(horaGranQuiniela)
 

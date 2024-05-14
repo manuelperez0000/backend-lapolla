@@ -8,7 +8,7 @@ const QuinielaModel = new Schema({
         required: true
     },
     horaDeLanzamiento: {
-        type: Number,
+        type: String,
         required: true
     },
     tipoQuiniela: {

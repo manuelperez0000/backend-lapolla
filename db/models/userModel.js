@@ -37,11 +37,11 @@ const User = new Schema({
     },
     grupero: {
         type: String,
-        default: ""
+        required: false
     },
     admin: {
         type: String,
-        default: ""
+        required: false
     },
     percent: {
         type: Number,

@@ -2,10 +2,12 @@ const express = require('express')
 const router = express.Router()
 const { saveConfig, getConfig, updateConfig } = require('../../db/controllers/configController')
 const responser = require('../../network/response')
+const pollabot = require('../../pollabot/pollabot')
 
 router.post('/save', async (req, res) => {
     try {
         const response = await saveConfig()
+        
         responser.success({ res, message: "success", body: response })
     } catch (error) {
         responser.error({ res, message: error.message || error })
@@ -23,6 +25,7 @@ router.get('/', async (req, res) => {
 
 router.post('/update', async (req, res) => {
     try {
+        
         const { premioCasa,
             precioGranQuiniela,
             precioMiniQuiniela,
@@ -39,6 +42,8 @@ router.post('/update', async (req, res) => {
         }
 
         const response = await updateConfig(config)
+        
+        pollabot()
 
         responser.success({ res, message: "success", body: response })
     } catch (error) {

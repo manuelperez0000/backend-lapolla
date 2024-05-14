@@ -2,7 +2,7 @@ const User = require('../models/userModel')
 
 //buscar usuarios
 const findUsers = async () => {
-    const response = await User.find()
+    const response = await User.find().sort({ $natural: -1 })
     return response
 }
 

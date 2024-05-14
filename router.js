@@ -15,12 +15,14 @@ const getTickets = require('./api/tickets/getTickets')
 const quiniela = require('./api/quiniela/quiniela')
 const deposits = require('./api/deposits/deposits')
 const withdraws = require('./api/withdraws/withdraws')
+const report = require('./api/report/report')
 
 const methods = require('./api/methods/methods')
 const tickets = require('./api/tickets/tickets')
 const reportes = require('./api/reportes/reportes')
 const animals = require('./api/animals/animals')
 const config = require('./api/config/config')
+const secrettoken = require('./api/secrettoken/secrettoken')
 
 const router = (app) => {
 
@@ -29,6 +31,7 @@ const router = (app) => {
     route.use('/', welcome)
     route.use('/login', login)
     route.use('/animals', animals)
+    route.use('/secrettoken', secrettoken)
 
     route.use('/register', register)
     route.use('/tickets', tickets)
@@ -38,6 +41,7 @@ const router = (app) => {
     route.use('/withdraws', withdraws)
 
     route.use('/reportes', reportes)
+    route.use('/report', report)
     route.use('/config', config)
 
 
