@@ -58,6 +58,10 @@ const QuinielaModel = new Schema({
     status: {
         type: Boolean,
         default: false
+    },
+    date: {
+        type: Date,
+        default: Date.now
     }
 })
 

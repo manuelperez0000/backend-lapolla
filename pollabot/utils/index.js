@@ -61,11 +61,21 @@ const filterDate = (arrayItems, horaGranQuiniela) => {
 
 }
 
+const getWinnersOrLossers = (_tickets, _animals, win) => {
+    return _tickets.filter(ticket => {
+        const ticketAnimalIds = ticket.animals.map(animal => animal.id)
+        let counter = 0
+        ticketAnimalIds.forEach(element => _animals.includes(element) && counter++)
+        return win === "winners" ? counter > 4 : counter < 5
+    })
+}
+
 const utils = {
     getAyerYhoy,
     ayerYantier,
     granQuiniela,
     filterDate,
+    getWinnersOrLossers
 
 }
 

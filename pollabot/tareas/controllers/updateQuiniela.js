@@ -1,6 +1,10 @@
-const { updateGranQuiniela } = require('../../../db/controllers/quinielaController')
+const { updateGranQuiniela, finalizarQuiniela } = require('../../../db/controllers/quinielaController')
 const updateQuiniela = async ({ winners, idNuevaQuiniela, resultAnimals }) => {
-    await updateGranQuiniela({ _id: idNuevaQuiniela, winners, resultAnimals })
+    return await updateGranQuiniela({ _id: idNuevaQuiniela, winners, resultAnimals })
 }
 
-module.exports = updateQuiniela
+const closeQuiniela = async (_id) => {
+    return await finalizarQuiniela(_id)
+}
+
+module.exports = { updateQuiniela, closeQuiniela }

@@ -3,12 +3,9 @@ const lanzarJugada = require('./tareas/lanzarJugada')
 const validate = require('../services/validate')
 const { getConfig } = require('../db/controllers/configController')
 
-const clg = (DATA) => console.log(DATA)
-
 const pollabot = async () => {
     try {
 
-        console.log("PollabotEncendido")
         const config = await getConfig()
         validate.required(config, "error al obtener los valores de configuracion en el bot")
 

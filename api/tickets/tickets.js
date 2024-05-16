@@ -6,15 +6,17 @@ const { saveTicket, getTickets, getTicket } = require('../../db/controllers/tick
 const { icreaseUserBalance, getUser } = require('../../db/controllers/userController')
 const { getConfig } = require('../../db/controllers/configController')
 const validate = require('../../services/validate')
-
+const getActiveQuiniela = require('./utils')
 router.post('/', async (req, res) => {
     try {
         process.env.TZ = "America/Caracas"
         const { animals, user, type, code } = req.body
 
-        validate.required([animals, user, type, code],"Error, falta algun dato")
+        validate.required([animals, user, type, code], "Error, falta algun dato")
 
         const hora = (new Date()).getHours()
+
+        const idQuiniela = await getActiveQuiniela()
 
         const ticket = {
             user: {
@@ -23,7 +25,8 @@ router.post('/', async (req, res) => {
             quinielaType: type,
             animals,
             hora,
-            code
+            code,
+            idQuiniela
         }
 
         const { precioGranQuiniela, precioMiniQuiniela, premioCasa } = await getConfig()
@@ -36,7 +39,7 @@ router.post('/', async (req, res) => {
         validate.required(userCurrent.balance > precioQuiniela, "Usuario no tiene fondos")
 
         const increaseBalance = await icreaseUserBalance({ _id: ticket.user._id, balance: -precioQuiniela })
-        validate.required(increaseBalance,"No se pudo completar la venta")
+        validate.required(increaseBalance, "No se pudo completar la venta")
 
         let admin = ""
         let percentAdmin = 0

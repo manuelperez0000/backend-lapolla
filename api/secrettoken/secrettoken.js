@@ -3,6 +3,7 @@ const express = require('express')
 const router = express.Router()
 const responser = require('../../network/response')
 const { verifyIfCodeIsUsed } = require('../../db/controllers/ticketController')
+const validateToken = require('.././../midelwares/validateToken')
 
 const getSecretToken = () => {
     const digits = "23456789ACDEFGHJKLMPQRTUX"
@@ -14,7 +15,7 @@ const getSecretToken = () => {
     return ticketCode
 }
 
-router.get('/', async (req, res) => {
+router.get('/', validateToken, async (req, res) => {
     try {
         //obtener todos los tickets que posean un token igual
         let ticketCode = getSecretToken()

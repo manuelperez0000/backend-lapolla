@@ -34,7 +34,8 @@ const TicketsModel = new Schema({
     date: {
         type: Date,
         default: Date.now
-    }
+    },
+    idQuiniela:Schema.Types.ObjectId
 })
 
 module.exports = mongoose.model('Tickets', TicketsModel);
