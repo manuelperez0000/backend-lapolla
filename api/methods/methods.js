@@ -37,7 +37,7 @@ router.get('/getMethod/:id', async (req, res) => {
     try {
         validate.required(id)
         const body = await getMethod(id)
-        validate.required(body,"No se encontraron registros con el _id: "+ id)
+        
         responser.success({ res, message: "success", body })
     } catch (error) {
         responser.error({ res, message: error.message || error })
@@ -49,7 +49,6 @@ router.get('/getMethods/:id', async (req, res) => {
         const { id } = req.params
         validate.required(id)
         const body = await getMethods(id)
-        validate.required(body[0],"No se encontraron registros con el id: "+ id)
         responser.success({ res, message: "success", body })
     } catch (error) {
         responser.error({ res, message: error.message || error })
