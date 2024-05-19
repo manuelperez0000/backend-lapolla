@@ -8,10 +8,13 @@ const aproveWithdraw = async (_id) => await Withdraw.findOneAndUpdate({ _id }, {
 
 const getWithdraw = async (_id) => await Withdraw.findOne({ _id })
 
+const getWithdrawsOfUser = async (_id) => await Withdraw.find({ userId: _id })
+
 const withdrawController = {
     getWithdraws,
     saveWithdraw,
     aproveWithdraw,
-    getWithdraw
+    getWithdraw,
+    getWithdrawsOfUser
 }
 module.exports = withdrawController

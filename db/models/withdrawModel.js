@@ -11,6 +11,10 @@ const Withdraw = new Schema({
         type:Object,
         required:true
     },
+    userId:{
+        type:Schema.ObjectId,
+        required:true
+    },
     amount: {
         type: Number,
         required: true

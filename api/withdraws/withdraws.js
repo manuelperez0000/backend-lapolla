@@ -69,6 +69,7 @@ router.post('/', validateToken, async (req, res) => {
         const dataToSave = {
             amount,
             payMethod,
+            userId,
             user: {
                 _id: user._id,
                 name: user.name,
