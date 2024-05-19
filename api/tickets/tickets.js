@@ -33,7 +33,7 @@ router.post('/', async (req, res) => {
         const { precioGranQuiniela, precioMiniQuiniela, premioCasa, horasMiniQuiniela } = await getConfig()
         validate.required([precioGranQuiniela, precioMiniQuiniela, premioCasa], "Error al obteber datos del config")
 
-        validate.required(hora < horasMiniQuiniela, "Las mini quinielas inician a las " + horasMiniQuiniela[0])
+        //validate.required(hora < horasMiniQuiniela, "Las mini quinielas inician a las " + horasMiniQuiniela[0])
 
         const horaMiniQuiniela2 = horasMiniQuiniela[1]
         const horaMiniQuiniela3 = horasMiniQuiniela[2]

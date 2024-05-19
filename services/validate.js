@@ -41,9 +41,9 @@ class Validate {
 
     required(data,message) {
         if (Array.isArray(data)) {
-            data.forEach(element => {
+            data.forEach((element,index) => {
                 if (!element && element !== 0) {
-                    throw new Error(message || "Error de validacion, dato es requerido")
+                    throw new Error(message || "Error de validacion, dato es requerido index:"+index)
                 } else {
                     return true
                 }

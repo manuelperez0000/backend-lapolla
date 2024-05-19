@@ -20,9 +20,10 @@ router.post('/save', validateToken, async (req, res) => {
 
     const data = {
         userId: req.body.userId,
-        adminMethodId: req.body.adminMethodId,
         operationRef: req.body.operationRef,
-        amount: req.body.amount
+        amount: req.body.amount,
+        adminMethodId: req.body.adminMethodId,
+        adminMethod:req.body.adminMethodId
     }
 
     try {
@@ -58,13 +59,14 @@ router.get('/:id',validateToken, async (req, res) => {
 
 router.post('/update', validateToken, async (req, res) => {
     try {
-        const { _id, state } = req.body
+        const { _id, status } = req.body
 
-        validate.required([_id, state])
-        validate.number(state)
+        validate.required(status,"Status es requerido")
+        validate.required(_id,"id es requerido")
+        validate.number(status)
         validate.string(_id)
 
-        const response = await updateDeposit({ _id, state })
+        const response = await updateDeposit({ _id, status })
         const { userId, amount } = await getOneDeposit(_id)
         //sumar el balance al usuario
         await icreaseUserBalance({ _id: userId, balance: amount })
@@ -76,4 +78,3 @@ router.post('/update', validateToken, async (req, res) => {
 })
 
 module.exports = router
-
