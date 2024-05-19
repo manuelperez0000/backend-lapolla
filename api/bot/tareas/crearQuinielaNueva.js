@@ -1,5 +1,5 @@
-const { getConfig } = require('../../db/controllers/configController')
-const { saveQuiniela } = require('../../db/controllers/quinielaController')
+const { getConfig } = require('../../../db/controllers/configController')
+const { saveQuiniela } = require('../../../db/controllers/quinielaController')
 const { getAyerYhoy } = require('../utils')
 
 const crearQuinielaNueva = async ({ type }) => {

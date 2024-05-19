@@ -7,11 +7,12 @@ const { icreaseUserBalance, getUser } = require('../../db/controllers/userContro
 const { getConfig } = require('../../db/controllers/configController')
 const validate = require('../../services/validate')
 const getActiveQuiniela = require('./utils')
+
 router.post('/', async (req, res) => {
     try {
         process.env.TZ = "America/Caracas"
-        const { animals, user, type, code } = req.body
 
+        const { animals, user, type, code } = req.body
         validate.required([animals, user, type, code], "Error, falta algun dato")
 
         const hora = (new Date()).getHours()
@@ -29,8 +30,23 @@ router.post('/', async (req, res) => {
             idQuiniela
         }
 
-        const { precioGranQuiniela, precioMiniQuiniela, premioCasa } = await getConfig()
+        const { precioGranQuiniela, precioMiniQuiniela, premioCasa, horasMiniQuiniela } = await getConfig()
         validate.required([precioGranQuiniela, precioMiniQuiniela, premioCasa], "Error al obteber datos del config")
+
+        validate.required(hora < horasMiniQuiniela, "Las mini quinielas inician a las " + horasMiniQuiniela[0])
+
+        const horaMiniQuiniela2 = horasMiniQuiniela[1]
+        const horaMiniQuiniela3 = horasMiniQuiniela[2]
+
+        if(hora >= horaMiniQuiniela2  && hora < horaMiniQuiniela3 ){
+            //se crea una nueva miniquiniela 2
+            //se cierra la quiniela 1
+        }
+
+        if(hora >= horaMiniQuiniela3  && hora < horaMiniQuiniela3 + 4 ){
+            //se crea una nueva miniquiniela 3
+            //se cierra la quiniela 2
+        }
 
         const userCurrent = await getUser(ticket.user._id)
         validate.required(userCurrent, "Usuario no encontrado")
@@ -84,10 +100,7 @@ router.post('/', async (req, res) => {
                 _id: "66207f0edf3abd9ae2cb076d"
             },
             premio: premioCasa * precioQuiniela / 100
-
         }
-
-        console.log(ticket.report)
 
         const body = await saveTicket(ticket)
         if (!body) throw 'Error al guardar en ticket en la db'

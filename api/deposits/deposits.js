@@ -7,7 +7,7 @@ const validateToken = require('../../midelwares/validateToken')
 
 const validate = require('../../services/validate')
 
-router.get('/', async (req, res) => {
+router.get('/',validateToken, async (req, res) => {
     try {
         const response = await getDeposits()
         responser.success({ res, message: "success", body: response })
@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
     }
 })
 
-router.post('/save', async (req, res) => {
+router.post('/save', validateToken, async (req, res) => {
 
     const data = {
         userId: req.body.userId,
@@ -26,8 +26,6 @@ router.post('/save', async (req, res) => {
     }
 
     try {
-
-
         validate.required([
             data.userId,
             data.operationRef,
@@ -48,8 +46,7 @@ router.post('/save', async (req, res) => {
     }
 })
 
-
-router.get('/:id', async (req, res) => {
+router.get('/:id',validateToken, async (req, res) => {
     const _id = req.params.id
     try {
         const response = await getOneDeposit(_id)

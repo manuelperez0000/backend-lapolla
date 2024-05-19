@@ -1,11 +1,10 @@
 require('dotenv').config({ path: '.env' })
-const pollabot = require('./pollabot/pollabot')
 const express = require('express')
 const cors = require('cors')
 const PORT = process.env.PORT || 5000;
 const app = express()
 app.use(cors())
-pollabot()
+
 
 //zona horaria
 process.env.TZ = "America/Caracas"
@@ -21,6 +20,7 @@ const morgan = require('morgan')
 app.use(morgan('dev'))
 
 app.use(express.json())
+
 dbConnect()
 
 app.get('/', (req, res) => res.send("Welcome 34"))

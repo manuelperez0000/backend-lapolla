@@ -7,4 +7,9 @@ const closeQuiniela = async (_id) => {
     return await finalizarQuiniela(_id)
 }
 
-module.exports = { updateQuiniela, closeQuiniela }
+const $ = {
+    updateQuiniela,
+    closeQuiniela
+}
+
+module.exports = $

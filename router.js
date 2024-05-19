@@ -14,8 +14,11 @@ const getUser = require('./api/user/getUser')
 const getTickets = require('./api/tickets/getTickets')
 const quiniela = require('./api/quiniela/quiniela')
 const deposits = require('./api/deposits/deposits')
+const deposit = require('./api/deposits/deposit')
+
 const withdraws = require('./api/withdraws/withdraws')
 const report = require('./api/report/report')
+const bot = require('./api/bot/bot')
 
 const methods = require('./api/methods/methods')
 const tickets = require('./api/tickets/tickets')
@@ -37,7 +40,9 @@ const router = (app) => {
     route.use('/tickets', tickets)
     route.use('/gettickets', getTickets)
     route.use('/quiniela', quiniela)
+    route.use('/bot', bot)
     route.use('/deposits', deposits)
+    route.use('/deposit', deposit)
     route.use('/withdraws', withdraws)
 
     route.use('/reportes', reportes)

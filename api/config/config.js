@@ -2,7 +2,6 @@ const express = require('express')
 const router = express.Router()
 const { saveConfig, getConfig, updateConfig } = require('../../db/controllers/configController')
 const responser = require('../../network/response')
-const pollabot = require('../../pollabot/pollabot')
 
 router.post('/save', async (req, res) => {
     try {
@@ -42,8 +41,6 @@ router.post('/update', async (req, res) => {
         }
 
         const response = await updateConfig(config)
-        
-        pollabot()
 
         responser.success({ res, message: "success", body: response })
     } catch (error) {

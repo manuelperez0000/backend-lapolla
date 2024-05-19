@@ -1,11 +1,11 @@
-const { getFilteredAnimals } = require('../../db/controllers/animalsController')
+const { getFilteredAnimals } = require('../../../db/controllers/animalsController')
 const { ayerYantier } = require('../utils')
-const { getTickets } = require('../../db/controllers/ticketController')
-const { antier, ayer, ayerFinalTarde, ayerTicket } = ayerYantier()
+const { getTickets } = require('../../../db/controllers/ticketController')
 const crearQuinielaNueva = require('./crearQuinielaNueva')
-const { updateQuiniela } = require('./controllers/updateQuiniela')
+const { updateQuiniela, closeQuiniela } = require('../controllers/updateQuiniela')
 const { getWinnersOrLossers } = require('../utils')
-const { getActiveQuiniela } = require('../../api/tickets/utils')
+const getActiveQuiniela = require('../../../api/tickets/utils')
+const { antier, ayer, ayerFinalTarde, ayerTicket } = ayerYantier()
 
 const lanzarJugada = async () => {
 
@@ -14,7 +14,8 @@ const lanzarJugada = async () => {
     try {
 
         //crear quiniela nueva y devolver el id de la quiniela creada para este dia
-        const idNuevaQuiniela = await crearQuinielaNueva({ type: "granQuiniela" })
+        const response = await crearQuinielaNueva({ type: "granQuiniela" })
+        if (!response) throw "No se pudo crear la quiniela"
         //obtener todos los animalitos de ayer y antier desde las 9 de antier hasta las 9 de ayer
 
         const resultAnimals = await getFilteredAnimals({ from: ayer, to: ayerFinalTarde })
@@ -27,10 +28,12 @@ const lanzarJugada = async () => {
         const winners = getWinnersOrLossers(tickets, animals, "winners")
 
         //obtener la quiniela activa anterior
-        const idQuinielaAnterior = await getActiveQuiniela()
+        const quinielaAnterior = await getActiveQuiniela()
+        const idQuinielaAnterior = quinielaAnterior._id
+        console.log(idQuinielaAnterior)
         //finalizar quiniela anterior
-        
-
+        const respFinalizarquiniela = await closeQuiniela(idQuinielaAnterior)
+        if (!respFinalizarquiniela) throw "No se pudo finalizar la quiniela anterior"
 
         //actualizar la quiniela anterior
         await updateQuiniela({ winners, idQuinielaAnterior, resultAnimals })

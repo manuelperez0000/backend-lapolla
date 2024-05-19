@@ -12,7 +12,7 @@ const QuinielaModel = new Schema({
         required: true
     },
     tipoQuiniela: {
-        type: String,
+        type: Number,
         required: true
     },
     porcentajePremio: {
