@@ -8,7 +8,7 @@ const { getAyerYhoy } = require('../bot/utils')
 const { getConfig } = require('../../db/controllers/configController')
 const validate = require('../../services/validate')
 
-router.get('/', validateToken, async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const body = await getQuinielas()
         responser.success({ res, message: "success", body })
