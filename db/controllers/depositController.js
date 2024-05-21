@@ -8,7 +8,7 @@ const getDepositsOfUser = async (_id) => await Deposit.find({ userId: _id }).pop
 
 const getOneDeposit = async (_id) => await Deposit.findOne({ _id })
 
-const updateDeposit = async ({ _id, state }) => await Deposit.findOneAndUpdate({ _id }, { $set: { state } })
+const updateDeposit = async ({ _id, status }) => await Deposit.findOneAndUpdate({ _id }, { $set: { status } })
 
 const ticketController = {
     saveDeposit,

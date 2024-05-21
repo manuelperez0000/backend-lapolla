@@ -66,6 +66,8 @@ router.post('/', validateToken, async (req, res) => {
         const user = await getUser(userId)
         validate.required(user, "usuario invalido")
 
+        validate.required(user.balance >= amount, "Usted no posee fondos")
+
         const dataToSave = {
             amount,
             payMethod,
