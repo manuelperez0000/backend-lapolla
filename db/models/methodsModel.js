@@ -42,8 +42,11 @@ const Method = new Schema({
     userId: {
         type: String,
         required: true
+    },
+    secondary:{
+        type: String,
+        required: true
     }
-
 })
 
 module.exports = mongoose.model('Method', Method);

@@ -6,25 +6,31 @@ const responser = require('../../network/response')
 const validate = require('../../services/validate')
 
 router.post('/addMethod', async (req, res) => {
-    const method = req.body
-    //responser.success({ res, body: method, message: "success" })
-
-    const methodToCreate = {
-        correo: method.correo,
-        cuenta: method.cuenta,
-        tipo: method.tipo,
-        cedula: method.cedula,
-        banco: method.banco,
-        nombre: method.nombre,
-        methodName: method.methodName,
-        telefono: method.telefono,
-        imageUrl: method.imageUrl,
-        userId: method.userId
-    }
-
-    console.log(methodToCreate)
-
     try {
+        const method = req.body
+        //responser.success({ res, body: method, message: "success" })
+
+        const methodToCreate = {
+            correo: method.correo,
+            cuenta: method.cuenta,
+            tipo: method.tipo,
+            cedula: method.cedula,
+            banco: method.banco,
+            nombre: method.nombre,
+            methodName: method.methodName,
+            telefono: method.telefono,
+            imageUrl: method.imageUrl,
+            userId: method.userId,
+            secondary: method.secondary
+        }
+
+        validate.required(methodToCreate.methodName, "Debe agregar un nombre del metodo")
+        validate.required(methodToCreate.secondary, "Debe elegir un diferenciador")
+        validate.required(methodToCreate.imageUrl, "Debe agregar una imagen")
+        validate.required(methodToCreate.userId, "Debe proporcionar un id de usuario")
+
+        console.log("Creando metodo: ", methodToCreate)
+
         const response = await saveMethod(methodToCreate)
         responser.success({ res, body: response, message: "Agregado con exito" })
     } catch (error) {
@@ -37,7 +43,7 @@ router.get('/getMethod/:id', async (req, res) => {
     try {
         validate.required(id)
         const body = await getMethod(id)
-        
+
         responser.success({ res, message: "success", body })
     } catch (error) {
         responser.error({ res, message: error.message || error })
