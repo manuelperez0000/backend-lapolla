@@ -118,7 +118,7 @@ router.get('/find/one/:code', async (req, res) => {
     const { code } = req.params
     console.log(code)
     try {
-        if (code.length !== 5) throw "Ticket invalido er.1"
+        if (code.length !== 6) throw "Ticket invalido er.1"
         const body = await getTicket({ code })
         if (!body) throw "Ticket invalido err.2"
         responser.success({ res, message: "success", body })
