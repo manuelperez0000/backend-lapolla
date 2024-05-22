@@ -56,7 +56,9 @@ router.post('/', validateToken, async (req, res) => {
     const { userId, payMethodId, amount } = req.body
 
     try {
-        validate.required([userId, amount, payMethodId])
+        validate.required(userId,"Error: Id es requerido")
+        validate.required(amount,"Error: el monto es requerido")
+        validate.required(payMethodId,"Error: Debe elegir un metodo de pago")
         validate.string([userId, payMethodId])
         validate.number(amount)
 

@@ -27,11 +27,10 @@ router.post('/save', validateToken, async (req, res) => {
     }
 
     try {
-        validate.required([
-            data.userId,
-            data.operationRef,
-            data.amount,
-            data.adminMethodId])
+        validate.required(data.userId, "Error: id de usurio es requerido")
+        validate.required(data.operationRef, "Numero de operacion es requerido")
+        validate.required(data.amount, "Error, Debe agregar un monto")
+        validate.required(data.adminMethodId, "Error: Debe seleccionar un metodo de pago")
 
         validate.string([
             data.userId,
