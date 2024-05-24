@@ -59,7 +59,6 @@ router.get('/:id', validateToken, async (req, res) => {
 router.post('/update', validateToken, async (req, res) => {
     try {
         const { _id, status } = req.body
-        console.log(status)
 
         validate.required(status, "Status es requerido")
         validate.required(status === 2 | status === 3, "Status no valido: " + status)
@@ -67,7 +66,6 @@ router.post('/update', validateToken, async (req, res) => {
         validate.number(status)
 
         const response = await updateDeposit({ _id, status })
-        console.log("response: ", response)
         const { userId, amount } = await getOneDeposit(_id)
         //sumar el balance al usuario
         await icreaseUserBalance({ _id: userId, balance: amount })

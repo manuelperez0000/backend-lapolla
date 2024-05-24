@@ -2,9 +2,9 @@ const Deposit = require('../models/depositModel')
 
 const saveDeposit = async (depositData) => await Deposit(depositData).save()
 
-const getDeposits = async () => await Deposit.find().populate('adminMethod').exec()
+const getDeposits = async () => await Deposit.find().populate('adminMethod').sort({ $natural: -1 }).exec()
 
-const getDepositsOfUser = async (_id) => await Deposit.find({ userId: _id }).populate('adminMethod').exec()
+const getDepositsOfUser = async (_id) => await Deposit.find({ userId: _id }).populate('adminMethod').sort({ $natural: -1 }).exec()
 
 const getOneDeposit = async (_id) => await Deposit.findOne({ _id })
 

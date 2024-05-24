@@ -56,9 +56,10 @@ router.post('/', validateToken, async (req, res) => {
     const { userId, payMethodId, amount } = req.body
 
     try {
-        validate.required(userId,"Error: Id es requerido")
-        validate.required(amount,"Error: el monto es requerido")
-        validate.required(payMethodId,"Error: Debe elegir un metodo de pago")
+        validate.required(userId, "Error: Id es requerido")
+        validate.required(amount, "Error: el monto es requerido")
+        validate.required(amount > 0, "Error: el monto no puede ser cero o menos de cero")
+        validate.required(payMethodId, "Error: Debe elegir un metodo de pago")
         validate.string([userId, payMethodId])
         validate.number(amount)
 
@@ -70,6 +71,10 @@ router.post('/', validateToken, async (req, res) => {
 
         validate.required(user.balance >= amount, "Usted no posee fondos")
 
+        //retirar el sado al usuario
+        const respRestarSaldo = await icreaseUserBalance({ _id: userId, balance: -amount })
+        validate.required(respRestarSaldo, "Ocurrio un error al intentar restar el sado")
+
         const dataToSave = {
             amount,
             payMethod,
@@ -77,16 +82,13 @@ router.post('/', validateToken, async (req, res) => {
             user: {
                 _id: user._id,
                 name: user.name,
-                balance: user.balance,
+                balance: respRestarSaldo.balance,
                 level: user.level,
                 ci: user.ci,
                 phone: user.phone,
                 email: user.email
             }
         }
-
-        const userBalance = await icreaseUserBalance({ _id: user._id, balance: -amount })
-        validate.required(userBalance)
 
         const body = await saveWithdraw(dataToSave)
         validate.required(body, "No se pudo guardar en la base de datos")

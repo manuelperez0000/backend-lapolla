@@ -22,10 +22,8 @@ router.get('/ci/:ci', cors(), validateToken, async (req, res) => {
         responser.error({ res, message: error.message || error })
     }
 })
-
+ 
 router.get('/:id', cors(), validateToken, async (req, res) => {
-
-    console.log("pasando:111")
 
     const _id = req.params.id
     try {

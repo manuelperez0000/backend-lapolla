@@ -116,7 +116,6 @@ router.post('/', async (req, res) => {
 
 router.get('/find/one/:code', async (req, res) => {
     const { code } = req.params
-    console.log(code)
     try {
         if (code.length !== 6) throw "Ticket invalido er.1"
         const body = await getTicket({ code })

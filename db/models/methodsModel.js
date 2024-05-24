@@ -46,6 +46,10 @@ const Method = new Schema({
     secondary:{
         type: String,
         required: true
+    },
+    deleted:{
+        type: Boolean,
+        default: false
     }
 })
 

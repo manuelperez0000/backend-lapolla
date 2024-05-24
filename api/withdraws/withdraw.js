@@ -9,7 +9,6 @@ router.get('/:id', validateToken, async (req, res) => {
     const _id = req.params.id
     try {
         const body = await getWithdrawsOfUser(_id)
-        console.log(body)
         let message = "Success"
         if(body.length === 0) message = "No se encontro ningun retiro"
         responser.success({ res, message, body })

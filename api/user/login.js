@@ -7,7 +7,8 @@ const { DATA_TOKEN } = require('../../services/temporalEnv')
 const { findOneUsersWhitEmail, findOneUsersWhitEmailAndPassword } = require('../../db/controllers/userController')
 const responser = require('../../network/response')
 const { getConfig } = require('../../db/controllers/configController')
-const { getMethods } = require('../../db/controllers/methodController')
+const { getMethods, getAdminMethods } = require('../../db/controllers/methodController')
+
 router.post('/', cors(), async (req, res) => {
     try {
         const { email, password } = req.body
@@ -20,15 +21,36 @@ router.post('/', cors(), async (req, res) => {
 
         const _userData = findOneUsersWhitEmailAndPassword(email, password)
         const _config = await getConfig()
+        const _adminMethods = await getAdminMethods()
 
-        const _payMethods = getMethods()
+        const [user, config, adminMethods] = await Promise.all([_userData, _config, _adminMethods])
 
-        const [userData, config, payMethods] = await Promise.all([_userData, _config, _payMethods])
+        const userMethods = await getMethods(user._id)
 
-        if (!userData) { throw "Usuario o contraseña incorrecta" }
 
-        const token = jwt.sign({ userData }, DATA_TOKEN, { expiresIn: '100d' })
-        const data = { userData, config, payMethods }
+        if (!user) { throw "Usuario o contraseña incorrecta" }
+
+        const token = jwt.sign({ user }, DATA_TOKEN, { expiresIn: '100d' })
+
+        const userData = {
+            _id: user._id,
+            name: user.name,
+            ci: user.ci,
+            email: user.email,
+            phone: user.phone,
+            level: user.level,
+            grupero: user.grupero,
+            admin: user.admin,
+            percent: user.percent,
+            balance: user.balance,
+            date: user.date,
+            userMethods,
+            adminMethods,
+            config
+        }
+
+        const data = { userData, config, payMethods: userMethods }
+
         responser.success({ res, message: "Success", body: { token, data } })
 
     } catch (error) { responser.error({ res, message: error }) }

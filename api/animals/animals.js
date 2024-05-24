@@ -15,8 +15,6 @@ router.post('/', validateToken, async (req, res) => {
         roulet
     }
 
-    console.log(fecha)
-
     try {
         const response = await saveAnimal(animal)
 

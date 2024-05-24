@@ -6,8 +6,16 @@ const saveMethod = async (method) => {
 }
 
 const getMethods = async (id) => {
-    const response = await Method.find({ userId: id })
-    return response
+    try {
+        if (id) {
+            return await Method.find({ userId: id })
+        } else {
+            return await Method.find()
+        }
+    } catch (error) {
+        console.error(error)
+        return false
+    }
 }
 
 const getMethod = async (id) => await Method.findOne({ _id: id })
@@ -18,7 +26,7 @@ const getAdminMethods = async () => {
 }
 
 const deleteMethod = async (_id) => {
-    const response = await Method.deleteOne({ _id })
+    const response = await Method.findOneAndUpdate({ _id }, { deleted: true })
     return response
 }
 
