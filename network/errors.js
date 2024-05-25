@@ -1,8 +1,7 @@
 const response = require('./response');
 
 const errors = (_req,res) => {
-    console.log("Error capturado en errors")
-    const message = "Internal Error: error capturado al finalizar la aplicacion";
+    const message = "Error en la peticio: Endpoint invalido";
     response.error({ res, message })
 }
 

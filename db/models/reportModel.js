@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
-const report = new Schema({ 
-    ticketsSold:{
-        type:Number,
-        required:true,
+const report = new Schema({
+    ticketsSold: {
+        type: Number,
+        required: true,
     },
     creationDate: {
         type: Date,
@@ -38,6 +38,14 @@ const report = new Schema({
     date: {
         type: Date,
         default: Date.now
+    },
+    userType: {
+        type: Number,
+        required: true
+    },
+    user: {
+        type: Object,
+        required: true
     }
 })
 
