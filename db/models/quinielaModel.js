@@ -57,7 +57,7 @@ const QuinielaModel = new Schema({
     },
     status: {
         type: Boolean,
-        default: false
+        default: true
     },
     date: {
         type: Date,

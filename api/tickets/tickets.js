@@ -1,8 +1,9 @@
 //registro de ticket
+process.env.TZ = "America/Caracas"
 const express = require('express')
 const router = express.Router()
 const responser = require('../../network/response')
-const { saveTicket, getTickets, getTicket } = require('../../db/controllers/ticketController')
+const { saveTicket, getTickets, getTicket, countDocuments } = require('../../db/controllers/ticketController')
 const { icreaseUserBalance, getUser } = require('../../db/controllers/userController')
 const { getConfig } = require('../../db/controllers/configController')
 const validate = require('../../services/validate')
@@ -10,7 +11,6 @@ const getActiveQuiniela = require('./utils')
 
 router.post('/', async (req, res) => {
     try {
-        process.env.TZ = "America/Caracas"
 
         const { animals, user, type, code } = req.body
         validate.required([animals, user, type, code], "Error, falta algun dato")
@@ -18,16 +18,22 @@ router.post('/', async (req, res) => {
         const hora = (new Date()).getHours()
 
         const idQuiniela = await getActiveQuiniela()
+        validate.required(idQuiniela, "No esta activa ninguna quiniela")
+
+        const date = new Date()
+        date.setHours(date.getHours() - 4)
+
+        const count = await countDocuments()
 
         const ticket = {
-            user: {
-                _id: user._id
-            },
+            user,
             quinielaType: type,
             animals,
             hora,
             code,
-            idQuiniela
+            idQuiniela,
+            date,
+            count
         }
 
         const { precioGranQuiniela, precioMiniQuiniela, premioCasa, horasMiniQuiniela } = await getConfig()
@@ -38,12 +44,12 @@ router.post('/', async (req, res) => {
         const horaMiniQuiniela2 = horasMiniQuiniela[1]
         const horaMiniQuiniela3 = horasMiniQuiniela[2]
 
-        if(hora >= horaMiniQuiniela2  && hora < horaMiniQuiniela3 ){
+        if (hora >= horaMiniQuiniela2 && hora < horaMiniQuiniela3) {
             //se crea una nueva miniquiniela 2
             //se cierra la quiniela 1
         }
 
-        if(hora >= horaMiniQuiniela3  && hora < horaMiniQuiniela3 + 4 ){
+        if (hora >= horaMiniQuiniela3 && hora < horaMiniQuiniela3 + 4) {
             //se crea una nueva miniquiniela 3
             //se cierra la quiniela 2
         }
@@ -133,8 +139,13 @@ router.get('/:from/:to', async (req, res) => {
     const newFrom = from + "T00:00:00.000+00:00";
     const newTo = to + "T23:59:59.000+00:00";
 
+    const newDateFrom = new Date(newFrom)
+    const newDateTo = new Date(newTo)
+
+    console.log(newDateTo)
+
     try {
-        const body = await getTickets({ from: newFrom, to: newTo })
+        const body = await getTickets({ from: newDateFrom, to: newDateTo })
         responser.success({ res, message: "success", body })
     } catch (error) {
         console.log(error)

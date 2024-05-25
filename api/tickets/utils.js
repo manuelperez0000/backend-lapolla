@@ -2,8 +2,8 @@ const { getLastActiveQuiniela } = require('../../db/controllers/quinielaControll
 const getActiveQuiniela = async () => {
 
     const response = await getLastActiveQuiniela()
-    console.log("id de la quiniela: "+response._id)
-    return response._id
+    if(response) return response._id
+    return false
 
 }
 

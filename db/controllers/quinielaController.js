@@ -9,7 +9,7 @@ const updateGranQuiniela = async ({ _id, winners, resultAnimals }) => {
 }
 
 const getLastActiveQuiniela = async () => {
-    return quinielaModel.findOne({ status: false }).sort({ $natural: -1 })
+    return quinielaModel.findOne({ status: true }).sort({ $natural: -1 })
 }
 
 const finalizarQuiniela = async (_id) => {

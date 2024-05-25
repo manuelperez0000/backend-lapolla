@@ -27,15 +27,19 @@ const TicketsModel = new Schema({
         type: Number,
         default: 1 //1 proceso, 2 perderdor, 3 ganador y 4 anulado
     },
-    report:{
-        type:Object,
+    report: {
+        type: Object,
         required: true
     },
     date: {
         type: Date,
-        default: Date.now
+        required: true
     },
-    idQuiniela:Schema.Types.ObjectId
+    count:{
+        type: Number,
+        required: true
+    },
+    idQuiniela: Schema.Types.ObjectId
 })
 
 module.exports = mongoose.model('Tickets', TicketsModel);
