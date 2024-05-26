@@ -61,10 +61,15 @@ router.get('/getMethods/:id', async (req, res) => {
     }
 })
 
-router.post('/delete', async (req, res) => {
-    const { _id } = req.body
+router.delete('/delete/:id', async (req, res) => {
     try {
+        const _id = req.params.id
+        validate.required(_id,"Id es requerido")
+        console.log(_id)
+
         const response = await deleteMethod(_id)
+        console.log(response)
+        validate.required(response, "No se encontro este metodo de pago")
         responser.success({ res, message: "Eliminado con exito", body: response })
     } catch (error) {
         responser.error({ res, message: error.message || error })

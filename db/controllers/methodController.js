@@ -26,8 +26,12 @@ const getAdminMethods = async () => {
 }
 
 const deleteMethod = async (_id) => {
-    const response = await Method.findOneAndUpdate({ _id }, { deleted: true })
-    return response
+    try {
+        const deleted = true
+        return await Method.findOneAndUpdate({ _id }, { $set: {deleted} })
+    } catch (error) {
+        console.log("Error en el controlador", error)
+    }
 }
 
 const MethodControllers = {

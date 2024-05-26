@@ -7,9 +7,10 @@ const responser = require('../../network/response')
 
 router.post('/', validateToken, async (req, res) => {
     const { _id } = req.body
+    console.log(_id)
     try {
         if (!_id) throw 'Debe indicar el _id del usuario'
-        if (res.user.userData._id === _id) throw 'No puedes eliminar tu propio usuario'
+        if (res.user.user._id === _id) throw 'No puedes eliminar tu propio usuario'
 
         const response = await deleteUser({ _id })
 
