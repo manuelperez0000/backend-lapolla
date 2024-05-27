@@ -50,6 +50,10 @@ const Method = new Schema({
     deleted:{
         type: Boolean,
         default: false
+    },
+    tipoDeCambio:{
+        type:Number,
+        required: true
     }
 })
 
