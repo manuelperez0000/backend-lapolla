@@ -54,6 +54,11 @@ const Method = new Schema({
     tipoDeCambio:{
         type:Number,
         required: true
+    },
+    adminMethodId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Method',
+        required: true
     }
 })
 

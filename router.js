@@ -19,6 +19,7 @@ const deposit = require('./api/deposits/deposit')
 const withdraws = require('./api/withdraws/withdraws')
 const withdraw = require('./api/withdraws/withdraw')
 const report = require('./api/report/report')
+const reports = require('./api/report/reports')
 const bot = require('./api/bot/bot')
 
 const methods = require('./api/methods/methods')
@@ -49,6 +50,7 @@ const router = (app) => {
 
     route.use('/reportes', reportes)
     route.use('/report', report)
+    route.use('/reports', reports)
     route.use('/config', config)
 
 

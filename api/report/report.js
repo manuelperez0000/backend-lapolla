@@ -8,7 +8,7 @@ const onlyStaf = require('../../midelwares/onlyStaf')
 const onlyMaster = require('../../midelwares/onlyMaster')
 const validateToken = require('../../midelwares/validateToken')
 
-router.get('/', validateToken, onlyMaster, async (req, res) => {
+router.get('/', validateToken, onlyStaf, async (req, res) => {
     try {
         const reports = await getReports()
         validate.required(reports.length > 0, "No se encontraron reportes")
@@ -18,7 +18,7 @@ router.get('/', validateToken, onlyMaster, async (req, res) => {
     }
 })
 
-router.post('/', validateToken, onlyMaster, async (req, res) => {
+router.post('/', validateToken,onlyStaf, async (req, res) => {
     try {
         const { reportDate } = req.body
         validate.required(reportDate, "Fecha de reporte es requerida")

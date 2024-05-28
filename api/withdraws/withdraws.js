@@ -66,13 +66,16 @@ router.post('/', validateToken, async (req, res) => {
         const payMethod = await getMethod(payMethodId)
         validate.required(payMethod, "Metodo invalido ")
 
+        const tipoDeCambio = (await getMethod(payMethod.adminMethodId)).tipoDeCambio
+        console.log("tipoDeCambio:", tipoDeCambio)
+
         const user = await getUser(userId)
         validate.required(user, "usuario invalido")
 
-        validate.required(user.balance >= amount, "Usted no posee fondos")
+        validate.required(user.balance >= amount*tipoDeCambio, "Usted no posee fondos")
 
         //retirar el sado al usuario
-        const respRestarSaldo = await icreaseUserBalance({ _id: userId, balance: -amount })
+        const respRestarSaldo = await icreaseUserBalance({ _id: userId, balance: -amount * tipoDeCambio })
         validate.required(respRestarSaldo, "Ocurrio un error al intentar restar el sado")
 
         const dataToSave = {

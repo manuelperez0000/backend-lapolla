@@ -7,11 +7,9 @@ const validate = require('../../services/validate')
 const validateToken = require('../../midelwares/validateToken')
 const onlyAdminAndMaster = require('../../midelwares/onlyAdminAndMaster')
 
-router.post('/addMethod', async (req, res) => {
+router.post('/addMethod',validateToken, async (req, res) => {
     try {
         const method = req.body
-        //responser.success({ res, body: method, message: "success" })
-
         const methodToCreate = {
             correo: method.correo,
             cuenta: method.cuenta,
@@ -25,18 +23,19 @@ router.post('/addMethod', async (req, res) => {
             userId: method.userId,
             secondary: method.secondary,
             tipoDeCambio: method?.tipoDeCambio || 1,
-            adminMethodId: method?.adminMethodId || "createdByAdmin"
+            adminMethodId: method?.adminMethodId || "000000000000000000000000"
         }
 
-        console.log(method)
 
-        if (methodToCreate.adminMethodId !== "createdByAdmin") {
+        console.log(methodToCreate)
+
+        /* if (methodToCreate.adminMethodId !== "createdByAdmin" ) {
             //encontrar el tipo de cambio de este metodo por el id
             const findedMethodById = await getMethod(adminMethodId)
             console.log(findedMethodById)
-            methodToCreate.tipoDeCambio = findedMethodById?.tipoDeCambio || 1
             //setear el tipo de cambio aqui
-        }
+            methodToCreate.tipoDeCambio = findedMethodById?.tipoDeCambio || 1
+        } */
 
         validate.required(methodToCreate.methodName, "Debe agregar un nombre del metodo")
         validate.required(methodToCreate.secondary, "Debe elegir un diferenciador")

@@ -7,11 +7,12 @@ const saveMethod = async (method) => {
 }
 
 const getMethods = async (id) => {
+    console.log("id: " + id)
     try {
         if (id) {
-            return await Method.find({ userId: id })
+            return await Method.find({ userId: id }).populate('adminMethodId')
         } else {
-            return await Method.find()
+            return await Method.find().populate('adminMethodId')
         }
     } catch (error) {
         console.error(error)
