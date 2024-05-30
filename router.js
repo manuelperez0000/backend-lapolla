@@ -28,6 +28,7 @@ const reportes = require('./api/reportes/reportes')
 const animals = require('./api/animals/animals')
 const config = require('./api/config/config')
 const secrettoken = require('./api/secrettoken/secrettoken')
+const transaction = require('./api/transaction/transaction')
 
 const router = (app) => {
 
@@ -37,6 +38,7 @@ const router = (app) => {
     route.use('/login', login)
     route.use('/animals', animals)
     route.use('/secrettoken', secrettoken)
+    route.use('/transaction', transaction)
 
     route.use('/register', register)
     route.use('/tickets', tickets)

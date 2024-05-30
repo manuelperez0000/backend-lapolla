@@ -7,7 +7,7 @@ const validate = require('../../services/validate')
 const validateToken = require('../../midelwares/validateToken')
 const onlyAdminAndMaster = require('../../midelwares/onlyAdminAndMaster')
 
-router.post('/addMethod',validateToken, async (req, res) => {
+router.post('/addMethod', validateToken, async (req, res) => {
     try {
         const method = req.body
         const methodToCreate = {
@@ -26,8 +26,20 @@ router.post('/addMethod',validateToken, async (req, res) => {
             adminMethodId: method?.adminMethodId || "000000000000000000000000"
         }
 
+        const user = res.user.user
+        if (methodToCreate.cedula) {
+            validate.required(methodToCreate.cedula === user.ci,
+                "No se Permiten cuentas de terceros, esta intentando registrar un metodo de pago con la Cedula: "
+                + methodToCreate.cedula + " y su cedula es: " + user.ci)
+        }
 
-        console.log(methodToCreate)
+        if (methodToCreate.correo) {
+            validate.required(methodToCreate.correo === user.email,
+                "No se Permiten cuentas de terceros, esta intentando registrar un metodo de pago con el correo: "
+                + methodToCreate.correo + " y su correo es: " + user.email)
+        }
+
+
 
         /* if (methodToCreate.adminMethodId !== "createdByAdmin" ) {
             //encontrar el tipo de cambio de este metodo por el id
@@ -61,16 +73,16 @@ router.get('/getMethod/:id', async (req, res) => {
     }
 })
 
-router.get('/getMethods/:id',validateToken, async (req, res) => {
+router.get('/getMethods/:id', validateToken, async (req, res) => {
 
     try {
         const { id } = req.params
         validate.required(id)
         const body = await getMethods(id)
 
-        const filteredMethods = body.filter(method => !method.deleted )
+        const filteredMethods = body.filter(method => !method.deleted)
 
-        responser.success({ res, message: "success", body:filteredMethods })
+        responser.success({ res, message: "success", body: filteredMethods })
     } catch (error) {
         responser.error({ res, message: error.message || error })
     }
