@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const responser = require('../../network/response')
-const { createReport, getReports, deleteReport } = require('../../db/controllers/reportController')
+const { createReport, getReports, deleteReport, verifyReport } = require('../../db/controllers/reportController')
 const { getTickets } = require('../../db/controllers/ticketController')
 const validate = require('../../services/validate')
 const onlyStaf = require('../../midelwares/onlyStaf')
@@ -18,9 +18,10 @@ router.get('/', validateToken, onlyStaf, async (req, res) => {
     }
 })
 
-router.post('/', validateToken,onlyStaf, async (req, res) => {
+router.post('/', validateToken, onlyStaf, async (req, res) => {
     try {
         const { reportDate } = req.body
+
         validate.required(reportDate, "Fecha de reporte es requerida")
 
         const newFrom = reportDate + "T00:00:00.000+00:00"
@@ -70,14 +71,20 @@ router.post('/', validateToken,onlyStaf, async (req, res) => {
 router.post('/staf', validateToken, onlyStaf, async (req, res) => {
     try {
 
-        /*     const date = new Date()
-            const hoy = date.getFullYear() + '-' + (String(date.getMonth() + 1).padStart(2, '0')) + '-' + String(date.getDate()).padStart(2, '0')
-     */
-
         const { date } = req.body
 
         const newFrom = date + "T00:00:00.000+00:00"
         const newTo = date + "T23:59:59.000+00:00"
+
+        //obtener los reportes de este usuario con esta fecha
+
+        const reportExist = await verifyReport(newFrom, res.user.user._id)
+        console.log("fecha:", newFrom)
+        console.log(reportExist)
+        if (reportExist) {
+            deleteReport(reportExist._id)
+            //delete report reportExist._id
+        }
 
         //obtener todos los tickets de ese dia reportDate
         const tickets = await getTickets({ from: newFrom, to: newTo })
@@ -97,8 +104,6 @@ router.post('/staf', validateToken, onlyStaf, async (req, res) => {
             agenciaAmount += ticket.report.agencia?.amount || 0
             premio += ticket.report.premio || 0
         })
-
-        console.log("useraqui:",res.user)
 
         const data = {
             creationDate: newFrom,

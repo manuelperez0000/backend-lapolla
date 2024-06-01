@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { saveAnimal, getAnimals,deleteAnima } = require('../../db/controllers/animalsController')
+const { saveAnimal, getAnimals, deleteAnima } = require('../../db/controllers/animalsController')
 const responser = require('../../network/response')
 const validateToken = require('../../midelwares/validateToken')
 const onlyAdminAndMaster = require('../../midelwares/onlyAdminAndMaster')
@@ -26,14 +26,18 @@ router.delete('/:id', validateToken, onlyAdminAndMaster, async (req, res) => {
 
 router.post('/', validateToken, async (req, res) => {
     const { name, animalId, owner, hora, fecha, roulet } = req.body
+    const newFecha = new Date(fecha)
+    const _newFecha = newFecha.setHours(newFecha.getHours() - 4)
     const animal = {
         name,
         animalId,
         owner,
         hora,
-        fecha,
+        fecha: _newFecha,
         roulet
     }
+
+    validate.required(hora >= 8 && hora <= 21, "Hora invalida: ", hora)
 
     try {
         const response = await saveAnimal(animal)

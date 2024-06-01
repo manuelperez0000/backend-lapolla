@@ -70,12 +70,49 @@ const getWinnersOrLossers = (_tickets, _animals, win) => {
     })
 }
 
+const winers = (tickets, animals) => {
+
+    const winers5asiertos = []
+    const winers6asiertos = []
+
+    tickets.forEach((ticket) => {
+        let counter = 0
+        const animalIdsTickets = ticket.animals.map(animal => animal.id)
+        animalIdsTickets.forEach((animalTicket, index) => {
+            console.log("animalFor: ",index ,' - ', animalTicket)
+            if (animals.includes(animalTicket)) {
+                counter = counter + 1
+            }
+        })
+
+        console.log("counter", counter)
+        if (counter === 6) {
+            winers6asiertos.push(ticket)
+        } else if (counter === 5) {
+            winers5asiertos.push(ticket)
+        }
+    })
+
+    return {
+        winers5asiertos,
+        winers6asiertos
+    }
+}
+
+const to59 = (_date) => {
+    const fecha = _date.getFullYear() + "-" + String(_date.getMonth() + 1).padStart(2, '0') + "-" + String(_date.getDate()).padStart(2, "0")
+    const newFecha = fecha + "T23:59:59.000+00:00"
+    return newFecha
+}
+
 const utils = {
     getAyerYhoy,
     ayerYantier,
     granQuiniela,
     filterDate,
-    getWinnersOrLossers
+    getWinnersOrLossers,
+    to59,
+    winers
 
 }
 

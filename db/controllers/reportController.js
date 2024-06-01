@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const reportModel = require('../models/reportModel')
 
 const createReport = async (report) => await reportModel(report).save()
@@ -21,10 +22,15 @@ const deleteReport = async (_id) => {
     }
 }
 
+const verifyReport = async (dateFrom, userId) => {
+    return await reportModel.findOne({ "user._id": userId, creationDate: dateFrom })
+}
+
 const reportController = {
     createReport,
     getReports,
-    deleteReport
+    deleteReport,
+    verifyReport
 }
 
 module.exports = reportController

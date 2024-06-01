@@ -9,11 +9,17 @@ const updateGranQuiniela = async ({ _id, winners, resultAnimals }) => {
 }
 
 const getLastActiveQuiniela = async () => {
-    return quinielaModel.findOne({ status: true }).sort({ $natural: -1 })
+    return await quinielaModel.findOne({ status: true }).sort({ $natural: -1 })
+}
+
+const getLastActiveGranQuiniela = async () => {
+    const res = await quinielaModel.findOne({ status: true, tipoQuiniela:1 }).sort({ $natural: -1 })
+    console.log(res)
+    return res
 }
 
 const finalizarQuiniela = async (_id) => {
-    return quinielaModel.findOneAndUpdate({ _id }, { $set: { status: true } })
+    return quinielaModel.findOneAndUpdate({ _id }, { $set: { status: false } })
 }
 
 const quinielaController = {
@@ -21,7 +27,8 @@ const quinielaController = {
     getQuinielas,
     updateGranQuiniela,
     getLastActiveQuiniela,
-    finalizarQuiniela
+    finalizarQuiniela,
+    getLastActiveGranQuiniela
 }
 
 module.exports = quinielaController

@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 //registro de ticket
 process.env.TZ = "America/Caracas"
 const express = require('express')
@@ -7,7 +8,7 @@ const { saveTicket, getTickets, getTicket, countDocuments } = require('../../db/
 const { icreaseUserBalance, getUser } = require('../../db/controllers/userController')
 const { getConfig } = require('../../db/controllers/configController')
 const validate = require('../../services/validate')
-const getActiveQuiniela = require('./utils')
+const { getLastActiveGranQuiniela } = require('../../db/controllers/quinielaController')
 
 router.post('/', async (req, res) => {
     try {
@@ -17,7 +18,7 @@ router.post('/', async (req, res) => {
 
         const hora = (new Date()).getHours()
 
-        const idQuiniela = await getActiveQuiniela()
+        const idQuiniela = await getLastActiveGranQuiniela()
         validate.required(idQuiniela, "No esta activa ninguna quiniela")
 
         const date = new Date()
@@ -31,7 +32,7 @@ router.post('/', async (req, res) => {
             animals,
             hora,
             code,
-            idQuiniela,
+            idQuiniela:idQuiniela._id,
             date,
             count
         }
