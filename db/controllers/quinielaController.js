@@ -13,7 +13,8 @@ const getLastActiveQuiniela = async () => {
 }
 
 const getLastActiveGranQuiniela = async () => {
-    const res = await quinielaModel.findOne({ status: true, tipoQuiniela:1 }).sort({ $natural: -1 })
+    const fechaQuiniela = '2024-06-05T00:00:00.000+00:00'
+    const res = await quinielaModel.findOne({ status: true, tipoQuiniela:1,fechaQuiniela }).sort({ $natural: -1 })
     console.log(res)
     return res
 }

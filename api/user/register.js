@@ -1,11 +1,14 @@
+/* eslint-disable no-async-promise-executor */
 //registro de usuarios
 const express = require('express')
 const router = express.Router()
 const { saveUser, findOneUser } = require('../../db/controllers/userController')
 const responser = require('../../network/response')
+const validateToken = require('../../midelwares/validateToken');
 
-router.post('/', async (req, res) => {
-    const { name, email, phone, password, ci, level, admin, grupero, percent } = req.body
+router.post('/', validateToken, async (req, res) => {
+    const user = res.user.user
+    const { name, email, phone, password, ci, level, percent } = req.body
     try {
         if (!name) throw 'El nombre es requerido'
         if (!ci) throw 'La cedula es requerido'
@@ -22,10 +25,12 @@ router.post('/', async (req, res) => {
             password,
             level,
             ci,
-            admin,
-            grupero,
             percent
         }
+
+        if (user.level === 1) userToRegister.admin = user._id
+        if (user.level === 2) userToRegister.admin = user._id
+        if (user.level === 3) userToRegister.grupero = user._id
 
         const registeredUser = new Promise(async (resolve, reject) => {
             const res = await findOneUser({ email })
@@ -33,7 +38,7 @@ router.post('/', async (req, res) => {
             resolve()
         })
 
-        const registeredCI = new Promise(async (resolve, reject) => {
+        const registeredCI = new Promise(async(resolve, reject) => {
             const res = await findOneUser({ ci })
             if (res) reject("Esta cedula ya se encuentra registrada")
             resolve()

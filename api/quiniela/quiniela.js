@@ -1,7 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const responser = require('../../network/response')
-const { getQuinielas, saveQuiniela, finalizarQuiniela, getLastActiveGranQuiniela } = require('../../db/controllers/quinielaController')
+const { getQuinielas, saveQuiniela, getLastActiveGranQuiniela } = require('../../db/controllers/quinielaController')
+/* const { finalizarQuiniela } = require('../../db/controllers/quinielaController') */
 const validateToken = require('../../midelwares/validateToken')
 const onlyMaster = require('../../midelwares/onlyMaster')
 const { getAyerYhoy, to59 } = require('../bot/utils')
@@ -10,6 +11,7 @@ const { findTicketsByIdQuiniela } = require('../../db/controllers/ticketControll
 const validate = require('../../services/validate')
 const { winers } = require('../bot/utils')
 const { getFilteredAnimals } = require('../../db/controllers/animalsController')
+const { icreaseUserBalance } = require('../../db/controllers/userController')
 
 router.get('/', async (req, res) => {
     try {
@@ -93,21 +95,40 @@ router.put('/', validateToken, onlyMaster, async (_req, res) => {
             return _fecha
         }
 
-
         const fecha = fechaMasUnDia(activeGranQuiniela.fechaQuiniela)
         const animals = await getFilteredAnimals({ from: fecha, to: to59(fecha) })
         console.log("animals:", animals)
         const newAnimals = animals.map(i => i.animalId)
         console.log("newAnimals:", newAnimals)
 
-
-        const winnerTickets = winers(tickets, newAnimals)
-        console.log(winnerTickets)
         //repartir la plata a los ganadores
         const precioGranQuiniela = activeGranQuiniela.precioQuiniela
         const premioTotal = tickets.length * 0.8 * precioGranQuiniela
-        const premio6asiertos = premioTotal * 0.7
         const premio5asiertos = premioTotal * 0.3
+        const premio6asiertos = premioTotal * 0.7
+
+        const winnerTickets = winers(tickets, newAnimals)
+        //incrementar el saldo de cada ganador
+        if (winnerTickets.winers5asiertos.length > 0) {
+            const amount5 = premio5asiertos / winnerTickets.winers5asiertos.length
+            winnerTickets.winers5asiertos.forEach((ticket) => {
+                const userId = ticket.user._id
+                icreaseUserBalance({ _id: userId, balance: amount5 })
+            })
+        }
+
+        if (winnerTickets.winers6asiertos.length > 0) {
+            const amount6 = premio6asiertos / winnerTickets.winers6asiertos.length
+            winnerTickets.winers6asiertos.forEach((ticket) => {
+                const userId = ticket.user._id
+                icreaseUserBalance({ _id: userId, balance: amount6 })
+            })
+        }
+        //incrementar el saldo de los taff
+
+        
+        console.log(winnerTickets.winers5asiertos)
+        console.log(winnerTickets.winers6asiertos)
 
         console.log("premioTotal", premio6asiertos, premio5asiertos)
 

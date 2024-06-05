@@ -36,12 +36,12 @@ const User = new Schema({
         default: Date.now
     },
     grupero: {
-        type: String,
-        required: false
+        type: Schema.Types.ObjectId,
+        ref:'User'
     },
     admin: {
-        type: String,
-        required: false
+        type: Schema.Types.ObjectId,
+        ref:'User'
     },
     percent: {
         type: Number,

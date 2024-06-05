@@ -1,9 +1,12 @@
 const User = require('../models/userModel')
 
 //buscar usuarios
-const findUsers = async () => {
-    const response = await User.find().sort({ $natural: -1 })
-    return response
+const findUsers = async (user) => {
+    if (user.level === 1) return await User.find().sort({ $natural: -1 }).populate('admin').populate('grupero')
+    if (user.level === 2) return await User.find({ level: { $in: [3, 4] }, admin: user._id }).sort({ $natural: -1 }).populate('admin').populate('grupero')
+    if (user.level === 3) return await User.find({ level: 4, grupero: user._id }).sort({ $natural: -1 }).populate('admin').populate('grupero')
+
+    return false
 }
 
 //guardar usuarios
