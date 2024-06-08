@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const responser = require('../../network/response')
-const { getQuinielas, saveQuiniela, getLastActiveGranQuiniela } = require('../../db/controllers/quinielaController')
+const { getQuinielas, saveQuiniela, getLastActiveGranQuiniela, countDocuments } = require('../../db/controllers/quinielaController')
 /* const { finalizarQuiniela } = require('../../db/controllers/quinielaController') */
 const validateToken = require('../../midelwares/validateToken')
 const onlyMaster = require('../../midelwares/onlyMaster')
@@ -28,13 +28,14 @@ router.post('/', validateToken, onlyMaster, async (_req, res) => {
 
         const { fechaHoy } = getAyerYhoy()
         const { premioCasa, horaGranQuiniela, precioGranQuiniela, horasMiniQuiniela } = await getConfig()
-
+        const count = await countDocuments()
         const _granQuiniela = {
             precioQuiniela: precioGranQuiniela,
             horaDeLanzamiento: horaGranQuiniela,
             tipoQuiniela: 1,
             porcentajePremio: premioCasa,
             fechaQuiniela: fechaHoy,
+            count
         }
 
         const _miniQuiniela = {
@@ -43,6 +44,7 @@ router.post('/', validateToken, onlyMaster, async (_req, res) => {
             tipoQuiniela: 2,
             porcentajePremio: premioCasa,
             fechaQuiniela: fechaHoy,
+            count
         }
 
         //comprobar si ya esta activa la gran quiniela de hoy
@@ -126,7 +128,7 @@ router.put('/', validateToken, onlyMaster, async (_req, res) => {
         }
         //incrementar el saldo de los taff
 
-        
+
         console.log(winnerTickets.winers5asiertos)
         console.log(winnerTickets.winers6asiertos)
 

@@ -6,6 +6,7 @@ const responser = require('../../network/response')
 const validate = require('../../services/validate')
 const validateToken = require('../../midelwares/validateToken')
 const onlyAdminAndMaster = require('../../midelwares/onlyAdminAndMaster')
+const { saveChangeType, getChangeType } = require('../../db/controllers/tipoDeCambioController')
 
 router.post('/addMethod', validateToken, async (req, res) => {
     try {
@@ -28,13 +29,13 @@ router.post('/addMethod', validateToken, async (req, res) => {
 
         const user = res.user.user
         if (methodToCreate.cedula) {
-            validate.required(methodToCreate.cedula === user.ci,
+            validate.required(methodToCreate.cedula === user.ci || user.level === 1,
                 "No se Permiten cuentas de terceros, esta intentando registrar un metodo de pago con la Cedula: "
                 + methodToCreate.cedula + " y su cedula es: " + user.ci)
         }
 
         if (methodToCreate.correo) {
-            validate.required(methodToCreate.correo === user.email,
+            validate.required(methodToCreate.correo === user.email || user.level === 1,
                 "No se Permiten cuentas de terceros, esta intentando registrar un metodo de pago con el correo: "
                 + methodToCreate.correo + " y su correo es: " + user.email)
         }
@@ -59,6 +60,17 @@ router.post('/addMethod', validateToken, async (req, res) => {
     } catch (error) {
         responser.error({ res, message: error.message || error })
     }
+})
+
+router.get('/changeType', validateToken, onlyAdminAndMaster, async (_req, res) => {
+
+    try {
+        const body = await getChangeType()
+        responser.success({ res, message: "success", body })
+    } catch (error) {
+        responser.error({ res, message: error.message || error })
+    }
+
 })
 
 router.get('/getMethod/:id', async (req, res) => {
@@ -106,11 +118,24 @@ router.put('/changeType', validateToken, onlyAdminAndMaster, async (req, res) =>
         const { _id, tipoDeCambio } = req.body
         validate.required([_id, tipoDeCambio], "Falta un dato")
 
-        const body = await updateChangeType({ _id, tipoDeCambio })
+        const method = await getMethod(_id)
+        const user = res.user.user
+        const change = {
+            user,
+            method,
+            later: method.tipoDeCambio,
+            current: tipoDeCambio
+        }
 
-        console.log(body)
+        const response = await saveChangeType(change)
+        validate.required(response, "Ocurrio un error al guardar los cambio")
 
-        responser.success({ res, message: "Actualizado correctamente", body })
+        const changed = await updateChangeType({ _id, tipoDeCambio })
+        validate.required(changed, "Error al intentar guardar el tipo de cambio")
+
+
+
+        responser.success({ res, message: "Actualizado correctamente", body: response })
 
     } catch (error) {
         responser.error({ res, message: error.message || error })

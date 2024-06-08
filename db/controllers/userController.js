@@ -53,7 +53,8 @@ const userControllers = {
     findOneUser,
     getUser,
     getUserByCi,
-    icreaseUserBalance
+    icreaseUserBalance,
+    User
 }
 
 module.exports = userControllers;

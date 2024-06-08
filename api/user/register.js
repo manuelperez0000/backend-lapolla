@@ -4,10 +4,9 @@ const express = require('express')
 const router = express.Router()
 const { saveUser, findOneUser } = require('../../db/controllers/userController')
 const responser = require('../../network/response')
-const validateToken = require('../../midelwares/validateToken');
 
-router.post('/', validateToken, async (req, res) => {
-    const user = res.user.user
+router.post('/', async (req, res) => {
+    const user = res?.user?.user
     const { name, email, phone, password, ci, level, percent } = req.body
     try {
         if (!name) throw 'El nombre es requerido'
@@ -28,9 +27,10 @@ router.post('/', validateToken, async (req, res) => {
             percent
         }
 
-        if (user.level === 1) userToRegister.admin = user._id
-        if (user.level === 2) userToRegister.admin = user._id
-        if (user.level === 3) userToRegister.grupero = user._id
+        if (user?.level === 1) userToRegister.admin = user._id
+        if (user?.level === 2) userToRegister.admin = user._id
+        if (user?.level === 3) userToRegister.grupero = user._id
+        if (user?.level === 4) throw "Las agencias no tienen permiso de registrar nuevos usuarios"
 
         const registeredUser = new Promise(async (resolve, reject) => {
             const res = await findOneUser({ email })
@@ -38,7 +38,7 @@ router.post('/', validateToken, async (req, res) => {
             resolve()
         })
 
-        const registeredCI = new Promise(async(resolve, reject) => {
+        const registeredCI = new Promise(async (resolve, reject) => {
             const res = await findOneUser({ ci })
             if (res) reject("Esta cedula ya se encuentra registrada")
             resolve()

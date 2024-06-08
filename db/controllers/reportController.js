@@ -6,12 +6,16 @@ const createReport = async (report) => await reportModel(report).save()
 const getReports = async (_id) => {
     try {
         if (_id) {
-            return await reportModel.find({ "user._id": _id }).sort({ creationDate: -1 })
+            return await reportModel.find({ "user._id": _id }).sort({ creationDate: -1 }).limit(400)
         }
-        return await reportModel.find().sort({ creationDate: -1 })
+        return await reportModel.find().sort({ creationDate: -1 }).limit(400)
     } catch (error) {
         return false
     }
+}
+
+const getReportsFromDate = async ({ from, to }) => {
+    return await reportModel.find({ creationDate: { $gte: from, $lt: to } }).sort({ creationDate: -1 })
 }
 
 const deleteReport = async (_id) => {
@@ -30,7 +34,8 @@ const reportController = {
     createReport,
     getReports,
     deleteReport,
-    verifyReport
+    verifyReport,
+    getReportsFromDate
 }
 
 module.exports = reportController

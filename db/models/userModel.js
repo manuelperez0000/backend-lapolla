@@ -37,11 +37,11 @@ const User = new Schema({
     },
     grupero: {
         type: Schema.Types.ObjectId,
-        ref:'User'
+        ref: 'User'
     },
     admin: {
         type: Schema.Types.ObjectId,
-        ref:'User'
+        ref: 'User'
     },
     percent: {
         type: Number,
@@ -50,6 +50,14 @@ const User = new Schema({
     balance: {
         type: Number,
         default: 0
+    },
+    block: {
+        type: Boolean,
+        default: false
+    },
+    deleted:{
+        type: Boolean,
+        defalut:false
     }
 })
 

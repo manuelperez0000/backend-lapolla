@@ -6,10 +6,10 @@ exports.success = ({ res, message = 'success', body }) => {
     })
 }
 
-exports.error = ({ res, message, body }) => {
-    res.status(500).json({
+exports.error = ({ res, message, body, status = 500 }) => {
+    res.status(status).json({
         body,
         message,
-        status: 500
+        status
     })
 }

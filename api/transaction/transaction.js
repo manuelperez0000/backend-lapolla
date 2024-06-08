@@ -2,8 +2,9 @@ const express = require('express')
 const router = express.Router()
 const responser = require('../../network/response')
 const validateToken = require('../../midelwares/validateToken')
-const validate = require('../../services/validate')
+const { required } = require('../../services/validate')
 const { icreaseUserBalance, getUser } = require('../../db/controllers/userController')
+const { saveRecarga, findRecargas,findRecargasById } = require('../../db/controllers/recargaController')
 
 router.post('/', validateToken, async (req, res) => {
     try {
@@ -11,22 +12,57 @@ router.post('/', validateToken, async (req, res) => {
         const idUserTo = req.body._id
         const amount = req.body.amount
 
-        validate.required([idUserFrom, idUserTo, amount])
+        required([idUserFrom, idUserTo, amount])
 
         //obtener saldo del usuario
         const userData = await getUser(idUserFrom)
-        validate.required([userData, userData.balance >= amount], "Saldo insuficiente")
+        required([userData, userData.balance >= amount], "Saldo insuficiente")
 
         const response1 = await icreaseUserBalance({ _id: idUserFrom, balance: -amount })
-        validate.required(response1, "Ocurrio un error al intentar restar el saldo")
+        required(response1, "Ocurrio un error al intentar restar el saldo")
         const response2 = await icreaseUserBalance({ _id: idUserTo, balance: amount })
-        validate.required(response2, "Ocurrio un error al intentar sumar el saldo")
+        required(response2, "Ocurrio un error al intentar sumar el saldo")
 
-        responser.success({ res, message: "success", body: { response1, response2 } })
+        //guardar la transaccion
+        const recargaData = {
+            from: idUserFrom,
+            to: idUserTo,
+            amount
+        }
+
+        const saveResponse = await saveRecarga(recargaData)
+        required(saveResponse, "Error saving")
+
+        const body = {
+            from: response1,
+            to: response2,
+            saved: saveResponse
+        }
+
+        responser.success({ res, message: "success", body })
     } catch (error) {
         console.log(error)
 
-        responser.error({ res, message:error.message || error })
+        responser.error({ res, message: error.message || error })
+    }
+})
+
+router.get('/', validateToken, async (_req, res) => {
+    try {
+        const body = await findRecargas()
+        responser.success({ res, message: 'success', body })
+    } catch (error) {
+        responser.error({ res, message: error.message || error })
+    }
+})
+
+router.get('/:id', validateToken, async (req, res) => {
+    try {
+        const _id = req.params.id
+        const body = await findRecargasById({ _id })
+        responser.success({ res, message: 'success', body })
+    } catch (error) {
+        responser.error({ res, message: error.message || error })
     }
 })
 

@@ -8,7 +8,9 @@ const { saveTicket, getTickets, getTicket, countDocuments } = require('../../db/
 const { icreaseUserBalance, getUser } = require('../../db/controllers/userController')
 const { getConfig } = require('../../db/controllers/configController')
 const validate = require('../../services/validate')
+const { required } = require('../../services/validate')
 const { getLastActiveGranQuiniela } = require('../../db/controllers/quinielaController')
+const validateToken = require('../../midelwares/validateToken')
 
 router.post('/', async (req, res) => {
     try {
@@ -32,7 +34,7 @@ router.post('/', async (req, res) => {
             animals,
             hora,
             code,
-            idQuiniela:idQuiniela._id,
+            idQuiniela: idQuiniela._id,
             date,
             count
         }
@@ -56,13 +58,13 @@ router.post('/', async (req, res) => {
         }
 
         const userCurrent = await getUser(ticket.user._id)
-        validate.required(userCurrent, "Usuario no encontrado")
+        required(userCurrent, "Usuario no encontrado")
 
         const precioQuiniela = type === 1 ? precioGranQuiniela : precioMiniQuiniela
-        validate.required(userCurrent.balance > precioQuiniela, "Usuario no tiene fondos")
+        required(userCurrent.balance > precioQuiniela, "Usuario no tiene fondos")
 
         const increaseBalance = await icreaseUserBalance({ _id: ticket.user._id, balance: -precioQuiniela })
-        validate.required(increaseBalance, "No se pudo completar la venta")
+        required(increaseBalance, "No se pudo completar la venta")
 
         let admin = ""
         let percentAdmin = 0
@@ -121,6 +123,17 @@ router.post('/', async (req, res) => {
     }
 })
 
+router.get('/current/:quinielaType', validateToken, async (_req, res) => {
+    try {
+        const quiniela = await getLastActiveGranQuiniela()
+        console.log(quiniela)
+        required(quiniela, "No se encontro una quiniela activa")
+        responser.success({ res, message: "success", body: quiniela })
+    } catch (error) {
+        responser.error({ status:400, res, message: error.message || error })
+    }
+})
+ 
 router.get('/find/one/:code', async (req, res) => {
     const { code } = req.params
     try {
@@ -129,8 +142,7 @@ router.get('/find/one/:code', async (req, res) => {
         if (!body) throw "Ticket invalido err.2"
         responser.success({ res, message: "success", body })
     } catch (error) {
-        console.log(error)
-        responser.error({ res, message: error })
+        responser.error({ res, message: error.message || error })
     }
 })
 

@@ -1,9 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const responser = require('../../network/response')
-const { createReport, getReports, deleteReport, verifyReport } = require('../../db/controllers/reportController')
+const { createReport, getReports, deleteReport, verifyReport,getReportsFromDate } = require('../../db/controllers/reportController')
 const { getTickets } = require('../../db/controllers/ticketController')
 const validate = require('../../services/validate')
+const { required } = require('../../services/validate')
 const onlyStaf = require('../../midelwares/onlyStaf')
 const onlyMaster = require('../../midelwares/onlyMaster')
 const validateToken = require('../../midelwares/validateToken')
@@ -11,13 +12,12 @@ const validateToken = require('../../midelwares/validateToken')
 router.get('/', validateToken, onlyStaf, async (req, res) => {
     try {
         const reports = await getReports()
-        validate.required(reports.length > 0, "No se encontraron reportes")
         responser.success({ res, message: "success", body: reports })
     } catch (error) {
         responser.error({ res, message: error.message || error })
     }
 })
-
+ 
 router.post('/', validateToken, onlyStaf, async (req, res) => {
     try {
         const { reportDate } = req.body
@@ -138,6 +138,17 @@ router.delete('/:id', validateToken, onlyMaster, async (req, res) => {
 
         responser.success({ res, message: "Eliminado con exito", body: deleted })
 
+    } catch (error) {
+        responser.error({ res, message: error.message || error })
+    }
+})
+ 
+router.get("/:from/:to", validateToken, async (req, res) => {
+    try {
+        const { from, to } = req.params
+        required([from, to])
+        const body = await getReportsFromDate({from,to})
+        responser.success({ res, message: "Eliminado con exito", body })
     } catch (error) {
         responser.error({ res, message: error.message || error })
     }
