@@ -12,8 +12,10 @@ const { required } = require('../../services/validate')
 const { getLastActiveGranQuiniela } = require('../../db/controllers/quinielaController')
 const validateToken = require('../../midelwares/validateToken')
 
-router.post('/', async (req, res) => {
+router.post('/', validateToken, async (req, res) => {
     try {
+        const userLevel = res.user.user.level
+        required(userLevel === 4 || userLevel === 5,"Tipo de usuario no autorizado para comprar tickets")
 
         const { animals, user, type, code } = req.body
         validate.required([animals, user, type, code], "Error, falta algun dato")
@@ -116,10 +118,9 @@ router.post('/', async (req, res) => {
 
         responser.success({ res, message: "success", body })
 
-
     } catch (error) {
-        console.log(error)
-        responser.error({ res, message: error.message || error })
+        console.log(`del throw ${error}`)
+        responser.error({ res, message: error?.message || error })
     }
 })
 
