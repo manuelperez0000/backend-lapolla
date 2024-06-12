@@ -35,7 +35,7 @@ router.get('/', validateToken, async (req, res) => {
 
         responser.success({ res, message: "success", body: { ticketCode } })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 

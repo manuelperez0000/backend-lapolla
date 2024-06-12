@@ -14,7 +14,7 @@ router.get('/', validateToken, async (req, res) => {
         const body = await getWithdraws()
         responser.success({ res, message: "success", body })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 
@@ -34,7 +34,7 @@ router.put('/', validateToken, async (req, res) => {
         responser.success({ res, message: "Peticion de retiro exitosa", body: aprove })
 
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 
@@ -46,7 +46,7 @@ router.get('/:id', validateToken, async (req, res) => {
         const body = await getWithdraw(_id)
         responser.success({ res, message: "success", body })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 
@@ -99,7 +99,7 @@ router.post('/', validateToken, async (req, res) => {
         responser.success({ res, message: "success", body })
 
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 

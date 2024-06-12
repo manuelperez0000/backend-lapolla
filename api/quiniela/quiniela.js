@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
         const body = await getQuinielas()
         responser.success({ res, message: "success", body })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 
@@ -72,7 +72,7 @@ router.post('/', validateToken, onlyMaster, async (_req, res) => {
         responser.success({ res, message: "success", body: { granQuiniela, miniQuiniela } })
 
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 
@@ -136,7 +136,7 @@ router.put('/', validateToken, onlyMaster, async (_req, res) => {
 
         responser.success({ res, message: "Cerrando quinielas", body: {} })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 

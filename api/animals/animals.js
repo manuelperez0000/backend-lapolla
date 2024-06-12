@@ -18,7 +18,7 @@ router.delete('/:id', validateToken, onlyAdminAndMaster, async (req, res) => {
 
         responser.success({ res, message: "Eliminado con exito", body: response.data })
     } catch (error) {
-        responser.error({ res, message: error.message || 'Error en la peticion para guardar un animal' })
+        responser.error({ res, message: error?.message || 'Error en la peticion para guardar un animal' })
     }
 
 
@@ -44,7 +44,7 @@ router.post('/', validateToken, async (req, res) => {
 
         responser.success({ res, message: "success", body: response.data })
     } catch (error) {
-        responser.error({ res, message: error.message || 'Error en la peticion para guardar un animal' })
+        responser.error({ res, message: error?.message || 'Error en la peticion para guardar un animal' })
     }
 })
 
@@ -53,7 +53,7 @@ router.get('/', async (req, res) => {
         const body = await getAnimals()
         responser.success({ res, message: "success", body })
     } catch (error) {
-        responser.error({ res, message: error.message || 'Error en la peticion para obtener animales' })
+        responser.error({ res, message: error?.message || 'Error en la peticion para obtener animales' })
 
     }
 })

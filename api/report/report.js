@@ -14,7 +14,7 @@ router.get('/', validateToken, onlyStaf, async (req, res) => {
         const reports = await getReports()
         responser.success({ res, message: "success", body: reports })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
  
@@ -64,7 +64,7 @@ router.post('/', validateToken, onlyStaf, async (req, res) => {
 
         responser.success({ res, message: "Creado con exito", body })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 
@@ -123,7 +123,7 @@ router.post('/staf', validateToken, onlyStaf, async (req, res) => {
 
         responser.success({ res, message: "Creado con exito", body })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 
@@ -139,7 +139,7 @@ router.delete('/:id', validateToken, onlyMaster, async (req, res) => {
         responser.success({ res, message: "Eliminado con exito", body: deleted })
 
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
  
@@ -150,7 +150,7 @@ router.get("/:from/:to", validateToken, async (req, res) => {
         const body = await getReportsFromDate({from,to})
         responser.success({ res, message: "Eliminado con exito", body })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 

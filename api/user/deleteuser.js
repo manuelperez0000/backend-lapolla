@@ -24,7 +24,7 @@ router.delete('/:id', validateToken, async (req, res) => {
  
      } catch (error) {
          console.log(error)
-         responser.error({ res, message: error.message || error })
+         responser.error({ res, message: error?.message || error })
      } */
 })
 

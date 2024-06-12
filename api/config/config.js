@@ -9,7 +9,7 @@ router.post('/save', async (req, res) => {
         
         responser.success({ res, message: "success", body: response })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 
@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
         const response = await getConfig()
         responser.success({ res, message: "success", body: response })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 
@@ -44,7 +44,7 @@ router.post('/update', async (req, res) => {
 
         responser.success({ res, message: "success", body: response })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 

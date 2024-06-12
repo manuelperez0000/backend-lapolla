@@ -11,7 +11,7 @@ router.get('/:id',validateToken, async (req, res) => {
         const response = await getDepositsOfUser(_id)
         responser.success({ res, message: "success", body: response })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 

@@ -13,7 +13,7 @@ router.get('/:id', validateToken, async (req, res) => {
         if(body.length === 0) message = "No se encontro ningun retiro"
         responser.success({ res, message, body })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 

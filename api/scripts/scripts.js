@@ -12,7 +12,7 @@ router.get('/1', validateToken, onlyMaster, async (_req, res) => {
         console.log(body)
         responser.success({ res, message: "success", body })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 
 })

@@ -131,7 +131,7 @@ router.get('/current/:quinielaType', validateToken, async (_req, res) => {
         required(quiniela, "No se encontro una quiniela activa")
         responser.success({ res, message: "success", body: quiniela })
     } catch (error) {
-        responser.error({ status:400, res, message: error.message || error })
+        responser.error({ status:400, res, message: error?.message || error })
     }
 })
  
@@ -143,7 +143,7 @@ router.get('/find/one/:code', async (req, res) => {
         if (!body) throw "Ticket invalido err.2"
         responser.success({ res, message: "success", body })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 

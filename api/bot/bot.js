@@ -12,7 +12,7 @@ router.put('/', validateToken, async (_req, res) => {
         console.log(response)
         responser.success({ res, message: "success", body: response })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 

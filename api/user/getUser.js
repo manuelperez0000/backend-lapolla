@@ -19,7 +19,7 @@ router.get('/ci/:ci', cors(), validateToken, async (req, res) => {
         responser.success({ res, message: 'success', body })
 
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
  
@@ -57,7 +57,7 @@ router.get('/:id', cors(), validateToken, async (req, res) => {
         responser.success({ res, message: 'success', body })
 
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 

@@ -58,7 +58,7 @@ router.post('/addMethod', validateToken, async (req, res) => {
         const response = await saveMethod(methodToCreate)
         responser.success({ res, body: response, message: "Agregado con exito" })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 
@@ -68,7 +68,7 @@ router.get('/changeType', validateToken, onlyAdminAndMaster, async (_req, res) =
         const body = await getChangeType()
         responser.success({ res, message: "success", body })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 
 })
@@ -81,7 +81,7 @@ router.get('/getMethod/:id', async (req, res) => {
 
         responser.success({ res, message: "success", body })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 
@@ -96,7 +96,7 @@ router.get('/getMethods/:id', validateToken, async (req, res) => {
 
         responser.success({ res, message: "success", body: filteredMethods })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 
@@ -108,7 +108,7 @@ router.delete('/delete/:id', async (req, res) => {
         validate.required(response, "No se encontro este metodo de pago")
         responser.success({ res, message: "Eliminado con exito", body: response })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 
 })
@@ -138,7 +138,7 @@ router.put('/changeType', validateToken, onlyAdminAndMaster, async (req, res) =>
         responser.success({ res, message: "Actualizado correctamente", body: response })
 
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 
 })

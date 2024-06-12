@@ -10,7 +10,7 @@ router.get('/agencia/:_id', async (req, res) => {
         if (!reportes) throw 'No se encontraron reportes para este id'
         responser.success({ res, message: "success", body: reportes })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 

@@ -13,7 +13,7 @@ router.get('/:id', validateToken, onlyStaf, async (req, res) => {
         validate.required(reports.length > 0, "No se encontraron reportes")
         responser.success({ res, message: "success", body: reports })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 

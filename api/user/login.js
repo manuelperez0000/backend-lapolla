@@ -8,6 +8,7 @@ const { findOneUsersWhitEmail, findOneUsersWhitEmailAndPassword } = require('../
 const responser = require('../../network/response')
 const { getConfig } = require('../../db/controllers/configController')
 const { getMethods, getAdminMethods } = require('../../db/controllers/methodController')
+const validate  = require('../../services/validate')
 
 router.post('/', cors(), async (req, res) => {
     try {
@@ -19,14 +20,17 @@ router.post('/', cors(), async (req, res) => {
 
         if (!userFinded) { throw "Usuario no registrado" }
 
-        const _userData = findOneUsersWhitEmailAndPassword(email, password)
+        const _userData = await findOneUsersWhitEmailAndPassword(email, password)
         const _config = await getConfig()
         const _adminMethods = await getAdminMethods()
 
         const [user, config, adminMethods] = await Promise.all([_userData, _config, _adminMethods])
 
-        const userMethods = await getMethods(user._id)
+        validate.required(user, "Email o contraseña invalida")
 
+        console.log("user:",user, " conf:",config," admin methods:",adminMethods)
+
+        const userMethods = await getMethods(user._id)
 
         if (!user) { throw "Usuario o contraseña incorrecta" }
 
@@ -53,7 +57,9 @@ router.post('/', cors(), async (req, res) => {
 
         responser.success({ res, message: "Success", body: { token, data } })
 
-    } catch (error) { responser.error({ res, message: error }) }
+    } catch (error) { 
+        responser.error({ res, message: error?.message || error })
+    }
 })
 
 module.exports = router;

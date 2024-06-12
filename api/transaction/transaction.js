@@ -43,7 +43,7 @@ router.post('/', validateToken, async (req, res) => {
     } catch (error) {
         console.log(error)
 
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 
@@ -52,7 +52,7 @@ router.get('/', validateToken, async (_req, res) => {
         const body = await findRecargas()
         responser.success({ res, message: 'success', body })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 
@@ -62,7 +62,7 @@ router.get('/:id', validateToken, async (req, res) => {
         const body = await findRecargasById({ _id })
         responser.success({ res, message: 'success', body })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 

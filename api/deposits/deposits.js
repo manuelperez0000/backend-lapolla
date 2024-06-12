@@ -12,7 +12,7 @@ router.get('/', validateToken, async (req, res) => {
         const response = await getDeposits()
         responser.success({ res, message: "success", body: response })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 
@@ -42,7 +42,7 @@ router.post('/save', validateToken, async (req, res) => {
         const response = await saveDeposit(data)
         responser.success({ res, message: "success", body: response })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 
@@ -52,7 +52,7 @@ router.get('/:id', validateToken, async (req, res) => {
         const response = await getOneDeposit(_id)
         responser.success({ res, message: "success", body: response })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 
@@ -72,7 +72,7 @@ router.post('/update', validateToken, async (req, res) => {
 
         responser.success({ res, message: "success", body: response })
     } catch (error) {
-        responser.error({ res, message: error.message || error })
+        responser.error({ res, message: error?.message || error })
     }
 })
 

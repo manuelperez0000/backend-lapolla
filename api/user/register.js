@@ -30,6 +30,7 @@ router.post('/', async (req, res) => {
         if (user?.level === 1) userToRegister.admin = user._id
         if (user?.level === 2) userToRegister.admin = user._id
         if (user?.level === 3) userToRegister.grupero = user._id
+        console.log(user?.level, user) //para revisar
         if (user?.level === 4) throw "Las agencias no tienen permiso de registrar nuevos usuarios"
 
         const registeredUser = new Promise(async (resolve, reject) => {
