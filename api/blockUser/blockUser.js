@@ -16,7 +16,7 @@ router.post('/', validateToken, async (req, res) => {
         const block = !user.block
         const response = await blockUser(_id, block)
         required(response, "Este usuario no existe")
-        responser.success({ res, message: `Usuario ${block ? "desbloqueado" : "bloqueado"} correctamente`, body: response })
+        responser.success({ res, message: `Usuario ${block ? "bloqueado" : "desbloqueado"} correctamente`, body: response })
     } catch (error) {
         responser.error({ res, message: error?.message || error })
     }
