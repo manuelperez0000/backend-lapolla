@@ -8,7 +8,7 @@ const { findOneUsersWhitEmail, findOneUsersWhitEmailAndPassword } = require('../
 const responser = require('../../network/response')
 const { getConfig } = require('../../db/controllers/configController')
 const { getMethods, getAdminMethods } = require('../../db/controllers/methodController')
-const validate  = require('../../services/validate')
+const validate = require('../../services/validate')
 
 router.post('/', cors(), async (req, res) => {
     try {
@@ -18,11 +18,13 @@ router.post('/', cors(), async (req, res) => {
 
         const userFinded = await findOneUsersWhitEmail(email)
 
-        
+
         if (!userFinded) { throw "Usuario no registrado" }
-        
-        validate.required(!userFinded.block,"Usuario bloqueado, por favor contactar a su administrador")
-        
+
+        console.log("userFinded: " + userFinded)
+
+        validate.required(!userFinded.block, "Usuario bloqueado, por favor contactar a su administrador")
+
         const _userData = await findOneUsersWhitEmailAndPassword(email, password)
         const _config = await getConfig()
         const _adminMethods = await getAdminMethods()
@@ -31,7 +33,7 @@ router.post('/', cors(), async (req, res) => {
 
         validate.required(user, "Email o contraseña invalida")
 
-        console.log("user:",user, " conf:",config," admin methods:",adminMethods)
+        console.log("user:", user, " conf:", config, " admin methods:", adminMethods)
 
         const userMethods = await getMethods(user._id)
 
@@ -60,7 +62,7 @@ router.post('/', cors(), async (req, res) => {
 
         responser.success({ res, message: "Success", body: { token, data } })
 
-    } catch (error) { 
+    } catch (error) {
         responser.error({ res, message: error?.message || error })
     }
 })

@@ -1,3 +1,3 @@
 const User = require('../models/userModel')
 
-module.exports = async (_id) => await User.findOneAndUpdate({ _id }, { $set: { block: true } })
+module.exports = async (_id,block) => await User.findOneAndUpdate({ _id }, { $set: { block } })

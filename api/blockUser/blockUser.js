@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const blockUser = require('../../db/controllers/blockUserController')
+const { getUser } = require('../../db/controllers/userController')
 const responser = require('../../network/response')
 const validateToken = require('../../midelwares/validateToken')
 const { required, isMongoId } = require('../../services/validate')
@@ -11,9 +12,11 @@ router.post('/', validateToken, async (req, res) => {
     try {
         required(_id, "Id es requerido")
         isMongoId(_id, "Formato incorrecto")
-        const response = await blockUser(_id)
+        const user = await getUser(_id)
+        const block = !user.block
+        const response = await blockUser(_id, block)
         required(response, "Este usuario no existe")
-        responser.success({ res, message: "success", body: response })
+        responser.success({ res, message: `Usuario ${block ? "desbloqueado" : "bloqueado"} correctamente`, body: response })
     } catch (error) {
         responser.error({ res, message: error?.message || error })
     }
