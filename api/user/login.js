@@ -18,8 +18,11 @@ router.post('/', cors(), async (req, res) => {
 
         const userFinded = await findOneUsersWhitEmail(email)
 
+        
         if (!userFinded) { throw "Usuario no registrado" }
-
+        
+        validate.required(!userFinded.block,"Usuario bloqueado, por favor contactar a su administrador")
+        
         const _userData = await findOneUsersWhitEmailAndPassword(email, password)
         const _config = await getConfig()
         const _adminMethods = await getAdminMethods()

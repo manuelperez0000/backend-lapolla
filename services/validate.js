@@ -65,6 +65,16 @@ class Validate {
             return true
         }
     }
+
+    isMongoId(id, message) {
+        const regex = /^[0-9a-fA-F]{24}$/
+        const result = regex.test(id)
+        if (result) {
+            return true
+        } else {
+            throw new Error(message || 'Formato incorrecto')
+        }
+    }
 }
 
 const validate = new Validate
