@@ -42,6 +42,12 @@ const findOneUser = async (userData) => await User.findOne(userData).sort({ $nat
 
 const icreaseUserBalance = async ({ _id, balance }) => await User.findOneAndUpdate({ _id }, { $inc: { balance } })
 
+const validateFatherNoBlock = async ({grupero,admin}) => {
+        const userGrupero = await getUser(grupero)
+        const userAdmin = await getUser(admin)
+        return userAdmin?.block || userGrupero?.block
+}
+
 const userControllers = {
     findUsers,
     saveUser,
@@ -54,7 +60,8 @@ const userControllers = {
     getUser,
     getUserByCi,
     icreaseUserBalance,
-    User
+    User,
+    validateFatherNoBlock
 }
 
 module.exports = userControllers;

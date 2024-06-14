@@ -4,8 +4,9 @@ const express = require('express')
 const router = express.Router()
 const { saveUser, findOneUser } = require('../../db/controllers/userController')
 const responser = require('../../network/response')
+const validateUserType = require('../../midelwares/validateUserType')
 
-router.post('/', async (req, res) => {
+router.post('/', validateUserType, async (req, res) => {
     const user = res?.user?.user
     const { name, email, phone, password, ci, level, percent } = req.body
     try {
@@ -30,7 +31,6 @@ router.post('/', async (req, res) => {
         if (user?.level === 1) userToRegister.admin = user._id
         if (user?.level === 2) userToRegister.admin = user._id
         if (user?.level === 3) userToRegister.grupero = user._id
-        console.log(user?.level, user) //para revisar
         if (user?.level === 4) throw "Las agencias no tienen permiso de registrar nuevos usuarios"
 
         const registeredUser = new Promise(async (resolve, reject) => {

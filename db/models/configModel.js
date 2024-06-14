@@ -26,6 +26,10 @@ const Config = new Schema({
     date: {
         type: Date,
         default: Date.now
+    },
+    premioAcumulado: {
+        type: Number,
+        default: 0
     }
 })
 

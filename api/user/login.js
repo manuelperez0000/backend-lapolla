@@ -4,7 +4,7 @@ const router = express.Router()
 const cors = require('cors')
 const jwt = require('jsonwebtoken');
 const { DATA_TOKEN } = require('../../services/temporalEnv')
-const { findOneUsersWhitEmail, findOneUsersWhitEmailAndPassword } = require('../../db/controllers/userController')
+const { findOneUsersWhitEmail, findOneUsersWhitEmailAndPassword,validateFatherNoBlock } = require('../../db/controllers/userController')
 const responser = require('../../network/response')
 const { getConfig } = require('../../db/controllers/configController')
 const { getMethods, getAdminMethods } = require('../../db/controllers/methodController')
@@ -18,10 +18,10 @@ router.post('/', cors(), async (req, res) => {
 
         const userFinded = await findOneUsersWhitEmail(email)
 
-
         if (!userFinded) { throw "Usuario no registrado" }
 
-        console.log("userFinded: " + userFinded)
+        const resValidate = await validateFatherNoBlock(userFinded)
+        validate.required(!resValidate, "Tu admin o grupero se encuentra bloqueado")
 
         validate.required(!userFinded.block, "Usuario bloqueado, por favor contactar a su administrador")
 

@@ -58,6 +58,10 @@ const User = new Schema({
     deleted:{
         type: Boolean,
         defalut:false
+    },
+    prepaid:{
+       type: Boolean,
+       default:true 
     }
 })
 

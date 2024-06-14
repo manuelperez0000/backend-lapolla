@@ -15,10 +15,10 @@ router.get('/', cors(), validateToken, async (_req, res) => {
 
         if (!body) throw 'Usuarios no encontrado'
 
-        console.log("Doble populate: ",body)
+        /*   console.log("Doble populate: ",body) */
 
         responser.success({ res, message: 'success', body })
- 
+
     } catch (error) {
         responser.error({ res, message: error?.message || error })
     }

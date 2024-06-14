@@ -63,6 +63,7 @@ router.post('/', validateToken, async (req, res) => {
         required(userCurrent, "Usuario no encontrado")
 
         const precioQuiniela = type === 1 ? precioGranQuiniela : precioMiniQuiniela
+        //sera requerido solo si la agencia no es prepagada >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         required(userCurrent.balance > precioQuiniela, "Usuario no tiene fondos")
 
         const increaseBalance = await icreaseUserBalance({ _id: ticket.user._id, balance: -precioQuiniela })
