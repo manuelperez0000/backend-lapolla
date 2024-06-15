@@ -17,7 +17,7 @@ router.post('/', validateToken, onlyMaster, async (req, res) => {
         const state = !user?.prepaid
         const response = await setPrepaid({_id, state})
         required(response, "Este usuario no existe")
-        responser.success({ res, message: `Usuario ${state ? "ahora es prepago" : "ya no es prepago"}`, body: response })
+        responser.success({ res, message: `${state ? "Ahora es prepagado" : "Ahora puede vender sin saldo"}`, body: response })
     } catch (error) {
         responser.error({ res, message: error?.message || error })
     }

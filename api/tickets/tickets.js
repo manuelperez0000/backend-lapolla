@@ -14,10 +14,12 @@ const validateToken = require('../../midelwares/validateToken')
 
 router.post('/', validateToken, async (req, res) => {
     try {
-        const userLevel = res.user.user.level
-        required(userLevel === 4 || userLevel === 5,"Tipo de usuario no autorizado para comprar tickets")
+        const userId = res.user.user._id
+        const user = await getUser(userId)
+        const userLevel = user.level
+        required(userLevel === 4 || userLevel === 5, "Tipo de usuario no autorizado para comprar tickets")
 
-        const { animals, user, type, code } = req.body
+        const { animals, type, code } = req.body
         validate.required([animals, user, type, code], "Error, falta algun dato")
 
         const hora = (new Date()).getHours()
@@ -58,13 +60,14 @@ router.post('/', validateToken, async (req, res) => {
             //se crea una nueva miniquiniela 3
             //se cierra la quiniela 2
         }
-
-        const userCurrent = await getUser(ticket.user._id)
+ 
+        const userCurrent = user
         required(userCurrent, "Usuario no encontrado")
 
         const precioQuiniela = type === 1 ? precioGranQuiniela : precioMiniQuiniela
-        //sera requerido solo si la agencia no es prepagada >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        required(userCurrent.balance > precioQuiniela, "Usuario no tiene fondos")
+        //sera requerido solo si la agencia es prepagada >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        console.log("user prepaid:", user.prepaid)
+        if (user.prepaid) required(userCurrent.balance > precioQuiniela, "Usuario no tiene fondos")
 
         const increaseBalance = await icreaseUserBalance({ _id: ticket.user._id, balance: -precioQuiniela })
         required(increaseBalance, "No se pudo completar la venta")
@@ -132,10 +135,10 @@ router.get('/current/:quinielaType', validateToken, async (_req, res) => {
         required(quiniela, "No se encontro una quiniela activa")
         responser.success({ res, message: "success", body: quiniela })
     } catch (error) {
-        responser.error({ status:400, res, message: error?.message || error })
+        responser.error({ status: 400, res, message: error?.message || error })
     }
 })
- 
+
 router.get('/find/one/:code', async (req, res) => {
     const { code } = req.params
     try {
