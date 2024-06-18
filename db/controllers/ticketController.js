@@ -13,7 +13,11 @@ const verifyIfCodeIsUsed = async (code) => await TicketsModel.findOne({ code })
 
 const countDocuments = async () => await TicketsModel.countDocuments()
 
-const findTicketsByIdQuiniela = async (idQuiniela) => await TicketsModel.find({idQuiniela})
+const findTicketsByIdQuiniela = async (idQuiniela) => await TicketsModel.find({ idQuiniela })
+
+const setWinerTicket = async (idTicket) => await TicketsModel.findOneAndUpdate({ _id: idTicket }, { status: 2 })
+
+const setLosserTicket = async (idTicket) => await TicketsModel.findOneAndUpdate({ _id: idTicket }, { status: 1 })
 
 const ticketController = {
     saveTicket,
@@ -23,7 +27,9 @@ const ticketController = {
     getMyTickets,
     verifyIfCodeIsUsed,
     countDocuments,
-    findTicketsByIdQuiniela
+    findTicketsByIdQuiniela,
+    setWinerTicket,
+    setLosserTicket
 }
 
 module.exports = ticketController

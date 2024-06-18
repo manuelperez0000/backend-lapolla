@@ -5,6 +5,7 @@ const getAyerYhoy = () => {
     const antier = new Date()
 
     ayer.setDate(ayer.getDate() - 1)
+    ayer.setHours(ayer.getHours() + 4)
     antier.setDate(antier.getDate() - 2)
 
     const fechaHoy = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
@@ -17,6 +18,7 @@ const getAyerYhoy = () => {
         fechaAntier
     }
 }
+
 
 const ayerYantier = () => {
     const fechaAyer = new Date()
@@ -79,7 +81,7 @@ const winers = (tickets, animals) => {
         let counter = 0
         const animalIdsTickets = ticket.animals.map(animal => animal.id)
         animalIdsTickets.forEach((animalTicket, index) => {
-            console.log("animalFor: ",index ,' - ', animalTicket)
+            console.log("animalFor: ", index, ' - ', animalTicket)
             if (animals.includes(animalTicket)) {
                 counter = counter + 1
             }

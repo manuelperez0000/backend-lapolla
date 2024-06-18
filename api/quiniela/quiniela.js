@@ -5,11 +5,10 @@ const { getQuinielas, saveQuiniela, getLastActiveGranQuiniela, countDocuments } 
 /* const { finalizarQuiniela } = require('../../db/controllers/quinielaController') */
 const validateToken = require('../../midelwares/validateToken')
 const onlyMaster = require('../../midelwares/onlyMaster')
-const { getAyerYhoy, to59 } = require('../bot/utils')
+const { getAyerYhoy, to59, winers } = require('../../pollabot/utils')
 const { getConfig } = require('../../db/controllers/configController')
 const { findTicketsByIdQuiniela } = require('../../db/controllers/ticketController')
 const validate = require('../../services/validate')
-const { winers } = require('../bot/utils')
 const { getFilteredAnimals } = require('../../db/controllers/animalsController')
 const { icreaseUserBalance } = require('../../db/controllers/userController')
 
@@ -126,7 +125,7 @@ router.put('/', validateToken, onlyMaster, async (_req, res) => {
                 icreaseUserBalance({ _id: userId, balance: amount6 })
             })
         }
-        //incrementar el saldo de los taff
+        //incrementar el saldo de los staff
 
 
         console.log(winnerTickets.winers5asiertos)

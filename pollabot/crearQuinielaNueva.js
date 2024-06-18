@@ -1,11 +1,11 @@
-const { getConfig } = require('../../../db/controllers/configController')
-const { saveQuiniela } = require('../../../db/controllers/quinielaController')
-const { getAyerYhoy } = require('../utils')
+const { getConfig } = require('../db/controllers/configController')
+const { saveQuiniela } = require('../db/controllers/quinielaController')
+const { getAyerYhoy } = require('./utils')
 
-const crearQuinielaNueva = async ({ type }) => {
+const crearQuinielaNueva = async ({ type,count }) => {
     console.log("Creando nueva quiniela")
     try {
-
+ 
         const tipoQuiniela = type === "granQuiniela" ? 1 : 2
 
         const { fechaHoy } = getAyerYhoy()
@@ -16,6 +16,7 @@ const crearQuinielaNueva = async ({ type }) => {
             tipoQuiniela,
             porcentajePremio: premioCasa,
             fechaQuiniela: fechaHoy,
+            count
         }
         const quiniela = await saveQuiniela(nuevaQuiniela)
         return quiniela._id

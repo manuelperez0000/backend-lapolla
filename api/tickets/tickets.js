@@ -9,7 +9,7 @@ const { icreaseUserBalance, getUser } = require('../../db/controllers/userContro
 const { getConfig } = require('../../db/controllers/configController')
 const validate = require('../../services/validate')
 const { required } = require('../../services/validate')
-const { getLastActiveGranQuiniela } = require('../../db/controllers/quinielaController')
+const { getLastActive } = require('../../db/controllers/quinielaController')
 const validateToken = require('../../midelwares/validateToken')
 
 router.post('/', validateToken, async (req, res) => {
@@ -21,11 +21,12 @@ router.post('/', validateToken, async (req, res) => {
 
         const { animals, type, code } = req.body
         validate.required([animals, user, type, code], "Error, falta algun dato")
+        required(type === 1 || type === 2, "Tipo de quieela incorrecto")
 
         const hora = (new Date()).getHours()
 
-        const idQuiniela = await getLastActiveGranQuiniela()
-        validate.required(idQuiniela, "No esta activa ninguna quiniela")
+        const activeQuiniela = await getLastActive({ tipoQuiniela: type })
+        required(activeQuiniela, "No esta activa ninguna quiniela")
 
         const date = new Date()
         date.setHours(date.getHours() - 4)
@@ -38,29 +39,14 @@ router.post('/', validateToken, async (req, res) => {
             animals,
             hora,
             code,
-            idQuiniela: idQuiniela._id,
+            idQuiniela: activeQuiniela._id,
             date,
             count
         }
 
-        const { precioGranQuiniela, precioMiniQuiniela, premioCasa, horasMiniQuiniela } = await getConfig()
-        validate.required([precioGranQuiniela, precioMiniQuiniela, premioCasa], "Error al obteber datos del config")
+        const { precioGranQuiniela, precioMiniQuiniela, premioCasa } = await getConfig()
+        required([precioGranQuiniela, precioMiniQuiniela, premioCasa], "Error al obteber datos del config")
 
-        //validate.required(hora < horasMiniQuiniela, "Las mini quinielas inician a las " + horasMiniQuiniela[0])
-
-        const horaMiniQuiniela2 = horasMiniQuiniela[1]
-        const horaMiniQuiniela3 = horasMiniQuiniela[2]
-
-        if (hora >= horaMiniQuiniela2 && hora < horaMiniQuiniela3) {
-            //se crea una nueva miniquiniela 2
-            //se cierra la quiniela 1
-        }
-
-        if (hora >= horaMiniQuiniela3 && hora < horaMiniQuiniela3 + 4) {
-            //se crea una nueva miniquiniela 3
-            //se cierra la quiniela 2
-        }
- 
         const userCurrent = user
         required(userCurrent, "Usuario no encontrado")
 
