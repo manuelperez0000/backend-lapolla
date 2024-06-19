@@ -1,16 +1,15 @@
 const express = require('express')
 const router = express.Router()
 const responser = require('../../network/response')
-const { getQuinielas, saveQuiniela, getLastActiveGranQuiniela, countDocuments } = require('../../db/controllers/quinielaController')
+const { getQuinielas, getLastActiveGranQuiniela } = require('../../db/controllers/quinielaController')
 /* const { finalizarQuiniela } = require('../../db/controllers/quinielaController') */
 const validateToken = require('../../midelwares/validateToken')
 const onlyMaster = require('../../midelwares/onlyMaster')
-const { getAyerYhoy, to59, winers } = require('../../pollabot/utils')
-const { getConfig } = require('../../db/controllers/configController')
+const { to59, winers } = require('../../pollabot/utils')
 const { findTicketsByIdQuiniela } = require('../../db/controllers/ticketController')
-const validate = require('../../services/validate')
 const { getFilteredAnimals } = require('../../db/controllers/animalsController')
 const { icreaseUserBalance } = require('../../db/controllers/userController')
+const createNweQuiniela = require('./newQuiniela')
 
 router.get('/', async (req, res) => {
     try {
@@ -21,54 +20,11 @@ router.get('/', async (req, res) => {
     }
 })
 
-router.post('/', validateToken, onlyMaster, async (_req, res) => {
-
+router.post('/:tipoQuiniela', validateToken, onlyMaster, async (req, res) => {
+    const tipoQuiniela = req.params.tipoQuiniela
     try {
-
-        const { fechaHoy } = getAyerYhoy()
-        const { premioCasa, horaGranQuiniela, precioGranQuiniela, horasMiniQuiniela } = await getConfig()
-        const count = await countDocuments()
-        const _granQuiniela = {
-            precioQuiniela: precioGranQuiniela,
-            horaDeLanzamiento: horaGranQuiniela,
-            tipoQuiniela: 1,
-            porcentajePremio: premioCasa,
-            fechaQuiniela: fechaHoy,
-            count
-        }
-
-        const _miniQuiniela = {
-            precioQuiniela: precioGranQuiniela,
-            horaDeLanzamiento: horasMiniQuiniela[0],
-            tipoQuiniela: 2,
-            porcentajePremio: premioCasa,
-            fechaQuiniela: fechaHoy,
-            count
-        }
-
-        //comprobar si ya esta activa la gran quiniela de hoy
-        //obtener una gran quiniela con la fecha de hoy
-        const quinielasDeHoy = await getQuinielas({ fechaQuiniela: fechaHoy })
-        const granQuinielasDeHoy = quinielasDeHoy.filter(item => item.tipoQuiniela === 1)
-        const miniQuinielasDeHoy = quinielasDeHoy.filter(item => item.tipoQuiniela === 2)
-
-        let granQuiniela = { validated: false }
-        let miniQuiniela = { validated: false }
-
-        //si la fecha de gran quiniela es ayer continua sino
-        if (granQuinielasDeHoy.length === 0) {
-            granQuiniela.validated = true
-            granQuiniela.result = await saveQuiniela(_granQuiniela)
-            validate.required(granQuiniela, "No se pudo crear la gran quiniela")
-        }
-
-        if (miniQuinielasDeHoy.length === 0) {
-            miniQuiniela.validated = true
-            miniQuiniela.result = await saveQuiniela(_miniQuiniela)
-            validate.required(miniQuiniela, "No se pudo crear la mini quiniela")
-        }
-
-        responser.success({ res, message: "success", body: { granQuiniela, miniQuiniela } })
+        const response = await createNweQuiniela(tipoQuiniela)
+        responser.success({ res, message: "success", body: response })
 
     } catch (error) {
         responser.error({ res, message: error?.message || error })

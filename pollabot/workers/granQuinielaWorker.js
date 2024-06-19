@@ -14,9 +14,9 @@ const apagarGranQuinielaAnterior = async () => {
     //obtener la granquiniela de ayer
     const ayerQuiniela = await getAyerGranQuiniela()
     const granQuinielaAyer = ayerQuiniela[0]
-
+ 
     //revisar si esta apagada
-    const activada = granQuinielaAyer.status
+    const activada = granQuinielaAyer?.status
     //si esta apagada no hacer nada
     if (activada) {
         //si esta encendida apagar
