@@ -30,9 +30,22 @@ const getLastActive = async ({ tipoQuiniela }) => {
 
 const getAyerGranQuiniela = async () => {
     const fechaQuiniela = getAyerCompletedString()
-    return await quinielaModel.find({ fechaQuiniela,tipoQuiniela:1 }).sort({ $natural: -1 })
+    return await quinielaModel.find({ fechaQuiniela, tipoQuiniela: 1 }).sort({ $natural: -1 })
 }
- 
+
+const updateAndFinally = async (_id, winners, resultAnimals, ganadores5Asiertos, ganadores6Asiertos,acumulado) => {
+    return await quinielaModel.findByIdAndUpdate({ _id }, {
+        $set: {
+            status: false, 
+            winners,
+            resultAnimals, 
+            ganadores5Asiertos, 
+            ganadores6Asiertos,
+            acumulado
+        }
+    })
+}
+
 const quinielaController = {
     saveQuiniela,
     getQuinielas,
@@ -42,7 +55,8 @@ const quinielaController = {
     getLastActive,
     countDocuments,
     getLastActiveGranQuinielaAndMini,
-    getAyerGranQuiniela
+    getAyerGranQuiniela,
+    updateAndFinally
 }
 
 module.exports = quinielaController

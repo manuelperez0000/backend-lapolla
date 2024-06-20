@@ -9,7 +9,7 @@ const { to59, winers } = require('../../pollabot/utils')
 const { findTicketsByIdQuiniela } = require('../../db/controllers/ticketController')
 const { getFilteredAnimals } = require('../../db/controllers/animalsController')
 const { icreaseUserBalance } = require('../../db/controllers/userController')
-const createNweQuiniela = require('./newQuiniela')
+const createNewQuiniela = require('./newQuiniela')
 
 router.get('/', async (req, res) => {
     try {
@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
 router.post('/:tipoQuiniela', validateToken, onlyMaster, async (req, res) => {
     const tipoQuiniela = req.params.tipoQuiniela
     try {
-        const response = await createNweQuiniela(tipoQuiniela)
+        const response = await createNewQuiniela(tipoQuiniela)
         responser.success({ res, message: "success", body: response })
 
     } catch (error) {

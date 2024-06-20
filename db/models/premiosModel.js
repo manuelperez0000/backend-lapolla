@@ -3,19 +3,13 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const Premio = new Schema({
-    agencia: {
-        type: Schema.Types.ObjectId,
-        required: true,
-        ref: 'User'
-    },
-    userMethod: {
+    payMethod: {
         type: Object,
         default: {}
     },
-    idTicket: {
-        type: Schema.Types.ObjectId,
+    ticket: {
+        type: Object,
         required: true,
-        ref: 'TicketsModel'
     },
     amount:{
         type: Number,

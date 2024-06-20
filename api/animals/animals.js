@@ -7,11 +7,14 @@ const onlyAdminAndMaster = require('../../midelwares/onlyAdminAndMaster')
 const { required, isMongoId } = require('../../services/validate')
 const { getLastActiveGranQuinielaAndMini } = require('../../db/controllers/quinielaController')
 const { getGanadores } = require('./animalServices')
-const { finalizarQuiniela } = require('../../db/controllers/quinielaController')
+const { finalizarQuiniela, updateAndFinally } = require('../../db/controllers/quinielaController')
 const { getFilteredAnimals } = require('../../db/controllers/animalsController')
 const { getFromTo } = require('../../services/utils')
 const { from, to, fromMini, toMini } = getFromTo()
-const { findTicketsByIdQuiniela } = require('../../db/controllers/ticketController')
+const { findTicketsByIdQuiniela, setWinnerTicket } = require('../../db/controllers/ticketController')
+const { savePremio } = require('../../db/controllers/premioController')
+const config = require('../../config.json')
+const { icreaseUserBalance } = require('../../db/controllers/userController')
 
 router.delete('/:id', validateToken, onlyAdminAndMaster, async (req, res) => {
 
@@ -46,63 +49,84 @@ router.post('/', validateToken, async (req, res) => {
             roulet
         }
 
-        const response = await saveAnimal(animal)
-        required(response)
         //obtener el id de la gran quiniela que esta en juego y la mini quiniela
         const activeQuinielas = await getLastActiveGranQuinielaAndMini()
-        /* console.log("response bien", activeQuinielas) */
-        required(activeQuinielas.length > 0, "No se encontraron quinielas activas")
+        required(activeQuinielas.length > 0, "quiniela finalizada, proxima a partir de las 9:00 AM")
+
+        const response = await saveAnimal(animal)
+        required(response)
+
         const granQuiniela = activeQuinielas.filter(i => i?.tipoQuiniela === 1)[0]
         const miniQuiniela = activeQuinielas.filter(i => i?.tipoQuiniela === 2)[0]
-
         const animals = await getFilteredAnimals({ from, to })
-        const animalsMini = await getFilteredAnimals({ from: fromMini, to: toMini })
-        const ticketsFindedGran = await findTicketsByIdQuiniela(granQuiniela._id)
-        const ticketsFindedMini = await findTicketsByIdQuiniela(miniQuiniela._id)
+        const animalsMini = await getFilteredAnimals({ from: fromMini, to: toMini }) //hacer filtrado inteligente
+        const idQuiniela = granQuiniela?._id
+        const ticketsFindedGran = await findTicketsByIdQuiniela(idQuiniela)
+        const ticketsFindedMini = await findTicketsByIdQuiniela(miniQuiniela?._id)
 
-        const ganadores5 = await getGanadores({ aciertos: 5, animals, ticketsFindedGran })
-        const ganadores6 = await getGanadores({ aciertos: 6, animals, ticketsFindedGran })
-
-        const ganadores3 = await getGanadores({ aciertos: 3, animalsMini, ticketsFindedMini })
+        const ganadores5 = await getGanadores({ aciertos: 5, animals, ticketsFinded: ticketsFindedGran })
+        const ganadores6 = await getGanadores({ aciertos: 6, animals, ticketsFinded: ticketsFindedGran })
+        const ganadores3 = await getGanadores({ aciertos: 3, animals: animalsMini, ticketsFinded: ticketsFindedMini })
 
         //comprarar todos los animalitos con los tickets
-        console.log("ganadores 5 aciertos", ganadores5.length)
-        console.log("ganadores 6 aciertos", ganadores6.length)
-        console.log("ganadores 3 aciertos", ganadores3.length)
-
+        const winners = [...ganadores5, ...ganadores6]
         //si hay uno o mas tickets con 6 asiertos cerrar la gran quiniela
         if (ganadores6.length >= 1) {
-            const resFinalizar = await finalizarQuiniela(granQuiniela._id)
-            console.log("Granquiniela fin: ", resFinalizar)
+            const acumulado = 0
+            updateAndFinally(granQuiniela._id, winners, animals, ganadores5.length, ganadores6.length, acumulado)
         }
+
         //si hay un ticket o mas con 3 animalitos cerrar la mini quiniela
         if (ganadores3.length >= 1) {
-            const resFinalizar = await finalizarQuiniela(miniQuiniela._id)
-            console.log("Miniquiniela fin: ", resFinalizar)
+            const acumulado = 0
+            updateAndFinally(miniQuiniela._id, winners, animals, 0, ganadores3.length, acumulado)
         }
 
         //crear un premio para cada uno de los ganadores
-        //si el ganador es level 5 "cliente se le da el premio
+        const precioGranQuiniela = config.precioGranQuiniela
+        const precioMiniQuiniela = config.precioMiniQuiniela
+        const porcentajePremio = config.porcentajePremio
+        const premio5aciertos = config.premio5aciertos
+        const premio6aciertos = config.premio6aciertos
+
+        //si el ganador es level 5:cliente se le da el premio
         //si el ganador es level 4 es agencia y no se le da premio el premio espera por que 
         //la agencia rellene el metodo de pago y datos del ganador
-        
-        const userMethod = "000000000000000000000000"
-        isMongoId(userMethod, 'Id invalido')
 
-        //lista de tickets con 5 asiertos  //>>>>>>>>>>>>>>>>>>aqui voy
-        /* ganadores5aciertos.forEach((ticket) => {
-            //crear un preio
-            const dataPremio = {
-                user: ticket.user._id,
-                userMethod,
-                ticket: ticket._id
+        ganadores5.forEach(ticket => {
+            const amount = ticketsFindedGran.length * precioGranQuiniela * porcentajePremio * premio5aciertos / ganadores5.length
+            const user = ticket.user
+            if (user.level === 4) {
+                savePremio({ ticket, amount, acierots: 5 })
+            } else {
+                icreaseUserBalance({ _id: user._id, balance: amount })
             }
+            setWinnerTicket(ticket._id)
+        })
 
-            //createPremio(dataPremio)
-        }) */
+        ganadores6.forEach(ticket => {
+            const amount = ticketsFindedGran.length * precioGranQuiniela * porcentajePremio * premio6aciertos / ganadores5.length
+            const user = ticket.user
+            if (user.level === 4) {
+                savePremio({ ticket, amount, acierots: 6 })
+            } else {
+                icreaseUserBalance({ _id: user._id, balance: amount })
+            }
+            setWinnerTicket(ticket._id)
+        })
 
+        ganadores3.forEach(ticket => {
+            const amount = ticketsFindedMini.length * precioMiniQuiniela * porcentajePremio / ganadores3.length
+            const user = ticket.user
+            if (user.level === 4) {
+                savePremio({ ticket, amount, acierots: 6 })
+            } else {
+                icreaseUserBalance({ _id: user._id, balance: amount })
+            }
+            setWinnerTicket(ticket._id)
+        })
 
-        responser.success({ res, message: "success", body: response.data })
+        responser.success({ res, message: "success", body: response })
     } catch (error) {
         responser.error({ res, message: error?.message || 'Error en la peticion para guardar un animal' })
     }

@@ -6,15 +6,14 @@ const { findTicketsByIdQuiniela, setWinerTicket } = require('../../db/controller
 const { icreaseUserBalance } = require('../../db/controllers/userController')
 const { getFromTo } = require('../../services/utils')
 const { setPremioAcumuladoGran } = require('../../db/controllers/configController')
-const crearQuinielaNueva = require('../crearQuinielaNueva')
-const { countDocuments } = require('../../db/controllers/quinielaController')
+const createNewQuiniela = require('../../api/quiniela/newQuiniela')
 const { from, to } = getFromTo()
 
 const apagarGranQuinielaAnterior = async () => {
     //obtener la granquiniela de ayer
     const ayerQuiniela = await getAyerGranQuiniela()
     const granQuinielaAyer = ayerQuiniela[0]
- 
+
     //revisar si esta apagada
     const activada = granQuinielaAyer?.status
     //si esta apagada no hacer nada
@@ -58,8 +57,7 @@ const apagarGranQuinielaAnterior = async () => {
     }
 
     //iniciar nueva quiniela
-    const count = await countDocuments()
-    crearQuinielaNueva({ type: 1, count })
+    createNewQuiniela(1)
 }
 
 module.exports = {

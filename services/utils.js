@@ -8,10 +8,9 @@ function getHoyCompletedString() {
 
 function getAyerCompletedString() {
     const date = new Date()
-    const anio = date.getFullYear()
-    const month = String(date.getMonth() + 1).padStart(2, "0")
-    const day = String(new Date(date.setDate(date.getDate() - 1)).getDate()).padStart(2, "0")
-    return `${anio}-${month}-${day}T00:00:00.000+00:00`
+    date.setDate(date.getDate() - 1)
+    date.setHours(date.getHours() - 4)
+    return date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2,'0') + "-" + String(date.getDate()).padStart(2,'0') + "T00:00:00.000+00:00"
 }
 
 function getHour() {
