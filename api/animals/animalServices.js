@@ -1,4 +1,6 @@
+const { icreaseUserBalance } = require("../../db/controllers/userController")
 const { required, number } = require("../../services/validate")
+const config = require('../../config.json')
 
 const getGanadores = async ({ aciertos, animals, ticketsFinded }) => {
     try {
@@ -12,7 +14,26 @@ const getGanadores = async ({ aciertos, animals, ticketsFinded }) => {
         console.log(error)
     }
 }
- 
+
+
+const getCalc = (quinielaType, percent) => quinielaType === "1" ? percent / 100 * config.precioGranQuiniela : percent / 100 * config.precioMiniQuiniela
+
+const pagarPorcentajeDeGananciaStaff = (ticket) => {
+
+    const { quinielaType } = ticket
+    const agencia = ticket.user
+    const balanceAgencia = getCalc(quinielaType, agencia.percent)
+    const grupero = ticket.user?.grupero
+    const balanceGrupero = getCalc(quinielaType, grupero.percent)
+    const admin = ticket.user?.admin
+    const balanceAdmin = getCalc(quinielaType, admin.percent)
+
+    icreaseUserBalance({ _id: agencia._id, balance: balanceAgencia })
+    icreaseUserBalance({ _id: grupero._id, balance: balanceGrupero })
+    icreaseUserBalance({ _id: admin._id, balance: balanceAdmin })
+}
+
 module.exports = {
-    getGanadores
+    getGanadores,
+    pagarPorcentajeDeGananciaStaff
 }

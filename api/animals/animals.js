@@ -4,10 +4,10 @@ const { saveAnimal, getAnimals, deleteAnima } = require('../../db/controllers/an
 const responser = require('../../network/response')
 const validateToken = require('../../midelwares/validateToken')
 const onlyAdminAndMaster = require('../../midelwares/onlyAdminAndMaster')
-const { required, isMongoId } = require('../../services/validate')
+const { required } = require('../../services/validate')
 const { getLastActiveGranQuinielaAndMini } = require('../../db/controllers/quinielaController')
-const { getGanadores } = require('./animalServices')
-const { finalizarQuiniela, updateAndFinally } = require('../../db/controllers/quinielaController')
+const { getGanadores, pagarPorcentajeDeGananciaStaff } = require('./animalServices')
+const { updateAndFinally } = require('../../db/controllers/quinielaController')
 const { getFilteredAnimals } = require('../../db/controllers/animalsController')
 const { getFromTo } = require('../../services/utils')
 const { from, to, fromMini, toMini } = getFromTo()
@@ -69,18 +69,7 @@ router.post('/', validateToken, async (req, res) => {
         const ganadores3 = await getGanadores({ aciertos: 3, animals: animalsMini, ticketsFinded: ticketsFindedMini })
 
         //comprarar todos los animalitos con los tickets
-        const winners = [...ganadores5, ...ganadores6]
         //si hay uno o mas tickets con 6 asiertos cerrar la gran quiniela
-        if (ganadores6.length >= 1) {
-            const acumulado = 0
-            updateAndFinally(granQuiniela._id, winners, animals, ganadores5.length, ganadores6.length, acumulado)
-        }
-
-        //si hay un ticket o mas con 3 animalitos cerrar la mini quiniela
-        if (ganadores3.length >= 1) {
-            const acumulado = 0
-            updateAndFinally(miniQuiniela._id, winners, animals, 0, ganadores3.length, acumulado)
-        }
 
         //crear un premio para cada uno de los ganadores
         const precioGranQuiniela = config.precioGranQuiniela
@@ -93,38 +82,59 @@ router.post('/', validateToken, async (req, res) => {
         //si el ganador es level 4 es agencia y no se le da premio el premio espera por que 
         //la agencia rellene el metodo de pago y datos del ganador
 
-        ganadores5.forEach(ticket => {
-            const amount = ticketsFindedGran.length * precioGranQuiniela * porcentajePremio * premio5aciertos / ganadores5.length
-            const user = ticket.user
-            if (user.level === 4) {
-                savePremio({ ticket, amount, acierots: 5 })
-            } else {
-                icreaseUserBalance({ _id: user._id, balance: amount })
-            }
-            setWinnerTicket(ticket._id)
-        })
+        if (ganadores6.length >= 1) {
+            const acumulado = 0
+            const winners = [...ganadores5, ...ganadores6]
 
-        ganadores6.forEach(ticket => {
-            const amount = ticketsFindedGran.length * precioGranQuiniela * porcentajePremio * premio6aciertos / ganadores5.length
-            const user = ticket.user
-            if (user.level === 4) {
-                savePremio({ ticket, amount, acierots: 6 })
-            } else {
-                icreaseUserBalance({ _id: user._id, balance: amount })
-            }
-            setWinnerTicket(ticket._id)
-        })
+            ganadores5.forEach(ticket => {
+                const amount = ticketsFindedGran.length * precioGranQuiniela * porcentajePremio * premio5aciertos / ganadores5.length
+                const user = ticket.user
+                if (user.level === 4) {
+                     //pagar las comisiones a las agencias, gruperos y administradores
+                    pagarPorcentajeDeGananciaStaff(ticket)
+                    savePremio({ ticket, amount, acierots: 5 })
+                } else {
+                    icreaseUserBalance({ _id: user._id, balance: amount })
+                }
+                setWinnerTicket(ticket._id)
+            })
 
-        ganadores3.forEach(ticket => {
-            const amount = ticketsFindedMini.length * precioMiniQuiniela * porcentajePremio / ganadores3.length
-            const user = ticket.user
-            if (user.level === 4) {
-                savePremio({ ticket, amount, acierots: 6 })
-            } else {
-                icreaseUserBalance({ _id: user._id, balance: amount })
-            }
-            setWinnerTicket(ticket._id)
-        })
+            ganadores6.forEach(ticket => {
+                const amount = ticketsFindedGran.length * precioGranQuiniela * porcentajePremio * premio6aciertos / ganadores5.length
+                const user = ticket.user
+                if (user.level === 4) {
+                     //pagar las comisiones a las agencias, gruperos y administradores
+                    pagarPorcentajeDeGananciaStaff(ticket)
+                    savePremio({ ticket, amount, acierots: 6 })
+                } else {
+                    icreaseUserBalance({ _id: user._id, balance: amount })
+                }
+                setWinnerTicket(ticket._id)
+            })
+
+            updateAndFinally(granQuiniela._id, winners, animals, ganadores5.length, ganadores6.length, acumulado)
+        }
+
+        //si hay un ticket o mas con 3 animalitos cerrar la mini quiniela
+        if (ganadores3.length >= 1) {
+            const acumulado = 0
+            const winners = ganadores3
+
+            updateAndFinally(miniQuiniela._id, winners, animals, 0, ganadores3.length, acumulado)
+
+            ganadores3.forEach(ticket => {
+                const amount = ticketsFindedMini.length * precioMiniQuiniela * porcentajePremio / ganadores3.length
+                const user = ticket.user
+                if (user.level === 4) {
+                     //pagar las comisiones a las agencias, gruperos y administradores
+                    pagarPorcentajeDeGananciaStaff(ticket)
+                    savePremio({ ticket, amount, acierots: 6 })
+                } else {
+                    icreaseUserBalance({ _id: user._id, balance: amount })
+                }
+                setWinnerTicket(ticket._id)
+            })
+        }
 
         responser.success({ res, message: "success", body: response })
     } catch (error) {

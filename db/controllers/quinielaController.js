@@ -28,9 +28,9 @@ const getLastActive = async ({ tipoQuiniela }) => {
     return res
 }
 
-const getAyerGranQuiniela = async () => {
+const getAyerGranQuiniela = async (tipo = 1) => {
     const fechaQuiniela = getAyerCompletedString()
-    return await quinielaModel.find({ fechaQuiniela, tipoQuiniela: 1 }).sort({ $natural: -1 })
+    return await quinielaModel.find({ fechaQuiniela, tipoQuiniela: tipo }).sort({ $natural: -1 })
 }
 
 const updateAndFinally = async (_id, winners, resultAnimals, ganadores5Asiertos, ganadores6Asiertos,acumulado) => {

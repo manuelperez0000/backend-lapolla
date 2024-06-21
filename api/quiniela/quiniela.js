@@ -21,11 +21,10 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/:tipoQuiniela', validateToken, onlyMaster, async (req, res) => {
-    const tipoQuiniela = req.params.tipoQuiniela
     try {
+        const tipoQuiniela = req.params.tipoQuiniela
         const response = await createNewQuiniela(tipoQuiniela)
         responser.success({ res, message: "success", body: response })
-
     } catch (error) {
         responser.error({ res, message: error?.message || error })
     }

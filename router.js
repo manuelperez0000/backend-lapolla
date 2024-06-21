@@ -15,6 +15,7 @@ const getTickets = require('./api/tickets/getTickets')
 const quiniela = require('./api/quiniela/quiniela')
 const deposits = require('./api/deposits/deposits')
 const deposit = require('./api/deposits/deposit')
+const premios = require('./api/premios/premios')
 
 const withdraws = require('./api/withdraws/withdraws')
 const withdraw = require('./api/withdraws/withdraw')
@@ -44,6 +45,7 @@ const router = (app) => {
     route.use('/transaction', transaction)
     route.use('/blockUser', blockUser)
     route.use('/prepaid', prepaid)
+    route.use('/premios', premios)
 
     route.use('/register', register)
     route.use('/tickets', tickets)
