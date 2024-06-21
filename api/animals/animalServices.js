@@ -22,15 +22,20 @@ const pagarPorcentajeDeGananciaStaff = (ticket) => {
 
     const { quinielaType } = ticket
     const agencia = ticket.user
-    const balanceAgencia = getCalc(quinielaType, agencia.percent)
-    const grupero = ticket.user?.grupero
-    const balanceGrupero = getCalc(quinielaType, grupero.percent)
-    const admin = ticket.user?.admin
-    const balanceAdmin = getCalc(quinielaType, admin.percent)
-
+    const balanceAgencia = getCalc(quinielaType, agencia?.percent)
     icreaseUserBalance({ _id: agencia._id, balance: balanceAgencia })
-    icreaseUserBalance({ _id: grupero._id, balance: balanceGrupero })
-    icreaseUserBalance({ _id: admin._id, balance: balanceAdmin })
+    const grupero = ticket.user?.grupero
+    if (grupero) {
+        const balanceGrupero = getCalc(quinielaType, grupero?.percent)
+        icreaseUserBalance({ _id: grupero._id, balance: balanceGrupero })
+    }
+
+    const admin = ticket.user?.admin
+    if (admin) {
+        const balanceAdmin = getCalc(quinielaType, admin?.percent)
+        icreaseUserBalance({ _id: admin._id, balance: balanceAdmin })
+    }
+
 }
 
 module.exports = {
