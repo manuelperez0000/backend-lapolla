@@ -1,6 +1,7 @@
 const { apagarGranQuinielaAnterior } = require('./workers/granQuinielaWorker')
+const { repartirPremiosMiniQuiniela } = require('./workers/miniQuinielaWorker')
+const createNewQuiniela = require('../api/quiniela/newQuiniela')
 
-const { apagarMiniQuinielaAnterior, repartirPremiosMiniQuiniela } = require('./workers/miniQuinielaWorker')
 console.log("Ejecuta comandos")
 const comandos = [
     {
@@ -13,7 +14,7 @@ const comandos = [
         hora: 15,
         minuto: 0,
         segundo: 0,
-        tarea:()=> apagarMiniQuinielaAnterior()
+        tarea:()=> createNewQuiniela(2)
     },
     {
         hora: 19,

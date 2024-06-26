@@ -1,24 +1,19 @@
 const { getGanadores } = require('../../api/animals/animalServices')
-const { savePremio } = require('../../db/controllers/premioController')
 const { getFilteredAnimals } = require('../../db/controllers/animalsController')
-const { getAyerGranQuiniela, finalizarQuiniela } = require('../../db/controllers/quinielaController')
-const { findTicketsByIdQuiniela, setWinerTicket } = require('../../db/controllers/ticketController')
-const { icreaseUserBalance } = require('../../db/controllers/userController')
+const { getAyerQuiniela, finalizarQuiniela, premioAcumuladoQuiniela } = require('../../db/controllers/quinielaController')
+const { findTicketsByIdQuiniela } = require('../../db/controllers/ticketController')
 const { getFromTo } = require('../../services/utils')
-const { setPremioAcumuladoGran } = require('../../db/controllers/configController')
+const { setPremioAcumulado } = require('../../db/controllers/configController')
 const createNewQuiniela = require('../../api/quiniela/newQuiniela')
 const { from, to } = getFromTo()
+const config = require('../../config.json')
+const { pagoDeClientes, pagoDeAgencias } = require('./workerServices')
 
 const apagarGranQuinielaAnterior = async () => {
     //obtener la granquiniela de ayer
-    const ayerQuiniela = await getAyerGranQuiniela()
-    const granQuinielaAyer = ayerQuiniela[0]
-
-    //revisar si esta apagada
-    const activada = granQuinielaAyer?.status
+    const granQuinielaAyer = await getAyerQuiniela(1)
     //si esta apagada no hacer nada
-    if (activada) {
-        //si esta encendida apagar
+    if (granQuinielaAyer?.status) {
         const resultDesactivar = await finalizarQuiniela(granQuinielaAyer._id)
         console.log(resultDesactivar)
         //buscar ganadores
@@ -27,32 +22,20 @@ const apagarGranQuinielaAnterior = async () => {
 
         const ganadores5 = await getGanadores({ aciertos: 5, animals, ticketsFindedGran })
         //obtener todos los tickets de esta quiniela y ver si hay ganadores
-        const premioTotal = 25 * ticketsFindedGran.length * 0.8 * 0.3
-        const premio = premioTotal / ganadores5.length
+        const premioTotal = config.precioGranQuiniela * ticketsFindedGran.length * config.porcentajePremio * config.premio5aciertos
+        const premio = ganadores5?.length > 0 ? premioTotal / ganadores5.length : 0
 
         if (ganadores5.length > 0) {
 
-            const pagoDeClientes = (ticket) => {
-                const userId = ticket.user._id
-                setWinerTicket(ticket._id)
-                icreaseUserBalance({ _id: userId, balance: premio })
-            }
-
-            const pagoDeAgencias = (ticket) => {
-                //generar un premio
-                const idTicket = ticket._id
-                const idAgencia = ticket.user._id
-                savePremio({ idTicket, agencia: idAgencia, amount: premio })
-            }
-
             ganadores5.forEach(ticket => {
-                if (ticket.user.level === 5) pagoDeClientes(ticket)
-                if (ticket.user.level === 4) pagoDeAgencias(ticket)
+                if (ticket.user.level === 5) pagoDeClientes(ticket, premio)
+                if (ticket.user.level === 4) pagoDeAgencias(ticket, premio)
             })
         } else {
 
             //si no se consigue ganador: acumular premio
-            setPremioAcumuladoGran(premioTotal)
+            setPremioAcumulado(premioTotal, 1)
+            premioAcumuladoQuiniela(granQuinielaAyer._id, premioTotal)
         }
     }
 

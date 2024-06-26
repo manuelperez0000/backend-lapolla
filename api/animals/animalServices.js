@@ -10,8 +10,9 @@ const getGanadores = async ({ aciertos, animals, ticketsFinded }) => {
         return ticketsFinded.filter(ticket =>
             ticket.animals.filter(animal =>
                 idsAnimals.includes(animal.id)).length === aciertos ? true : false)
-    } catch (error) {
-        console.log(error)
+    // eslint-disable-next-line no-unused-vars
+    } catch (_) {
+        return []
     }
 }
 

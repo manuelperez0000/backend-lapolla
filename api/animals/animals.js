@@ -61,12 +61,14 @@ router.post('/', validateToken, async (req, res) => {
         const animals = await getFilteredAnimals({ from, to })
         const animalsMini = await getFilteredAnimals({ from: fromMini, to: toMini }) //hacer filtrado inteligente
         const idQuiniela = granQuiniela?._id
+
+        console.log(animalsMini?.map(i => i.animalId))
         const ticketsFindedGran = await findTicketsByIdQuiniela(idQuiniela)
         const ticketsFindedMini = await findTicketsByIdQuiniela(miniQuiniela?._id)
 
         const ganadores5 = await getGanadores({ aciertos: 5, animals, ticketsFinded: ticketsFindedGran })
         const ganadores6 = await getGanadores({ aciertos: 6, animals, ticketsFinded: ticketsFindedGran })
-        const ganadores3 = await getGanadores({ aciertos: 3, animals: animalsMini, ticketsFinded: ticketsFindedMini })
+        const ganadores4 = await getGanadores({ aciertos: 4, animals: animalsMini, ticketsFinded: ticketsFindedMini })
 
         //comprarar todos los animalitos con los tickets
         //si hay uno o mas tickets con 6 asiertos cerrar la gran quiniela
@@ -116,14 +118,14 @@ router.post('/', validateToken, async (req, res) => {
         }
 
         //si hay un ticket o mas con 3 animalitos cerrar la mini quiniela
-        if (ganadores3.length >= 1) {
+        if (ganadores4.length > 0) {
             const acumulado = 0
-            const winners = ganadores3
+            const winners = ganadores4
 
-            updateAndFinally(miniQuiniela._id, winners, animals, 0, ganadores3.length, acumulado)
+            updateAndFinally(miniQuiniela._id, winners, animals, 0, ganadores4.length, acumulado)
 
-            ganadores3.forEach(ticket => {
-                const amount = ticketsFindedMini.length * precioMiniQuiniela * porcentajePremio / ganadores3.length
+            ganadores4.forEach(ticket => {
+                const amount = ticketsFindedMini.length * precioMiniQuiniela * porcentajePremio / ganadores4.length
                 const user = ticket.user
                 if (user.level === 4) {
                      //pagar las comisiones a las agencias, gruperos y administradores

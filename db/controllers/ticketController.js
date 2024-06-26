@@ -13,7 +13,7 @@ const verifyIfCodeIsUsed = async (code) => await TicketsModel.findOne({ code })
 
 const countDocuments = async () => await TicketsModel.countDocuments()
 
-const findTicketsByIdQuiniela = async (idQuiniela) => await TicketsModel.find({ idQuiniela })
+const findTicketsByIdQuiniela = async (idQuiniela) => await TicketsModel.find({ idQuiniela }) || []
 
 const setWinnerTicket = async (idTicket) => await TicketsModel.findOneAndUpdate({ _id: idTicket }, { status: 2 })
 

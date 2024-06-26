@@ -38,7 +38,7 @@ const getUser = async (_id) => await User.findOne({ _id })
 
 const getUserByCi = async ({ ci }) => await User.findOne({ ci })
 
-const findOneUser = async (userData) => await User.findOne(userData).sort({ $natural: -1 })
+const findOneUser = async (userData) => await User.findOne(userData).sort({ name })
 
 const icreaseUserBalance = async ({ _id, balance }) => await User.findOneAndUpdate({ _id }, { $inc: { balance } })
 

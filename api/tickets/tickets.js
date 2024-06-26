@@ -21,7 +21,9 @@ router.post('/', validateToken, async (req, res) => {
 
         const { animals, type, code } = req.body
         validate.required([animals, user, type, code], "Error, falta algun dato")
-        required(type === 1 || type === 2, "Tipo de quieela incorrecto")
+
+        required(type === 1 && animals.length === 6 || type === 2 && animals.length === 4,"Numero de animalitos incorrecto")
+        required(type === 1 || type === 2, "Tipo de quiniela incorrecto")
 
         const hora = (new Date()).getHours()
 
@@ -146,7 +148,7 @@ router.get('/:from/:to', async (req, res) => {
     const newDateFrom = new Date(newFrom)
     const newDateTo = new Date(newTo)
 
-    console.log(newDateTo)
+    /* console.log(newDateTo) */
 
     try {
         const body = await getTickets({ from: newDateFrom, to: newDateTo })

@@ -1,5 +1,5 @@
 const quinielaModel = require('../models/quinielaModel')
-const { getHoyCompletedString, getAyerCompletedString } = require('../../services/utils')
+const { getHoyCompletedString, getAyerCompletedString, getFromTo } = require('../../services/utils')
 
 const saveQuiniela = async (quiniela) => await quinielaModel(quiniela).save()
 
@@ -28,23 +28,30 @@ const getLastActive = async ({ tipoQuiniela }) => {
     return res
 }
 
-const getAyerGranQuiniela = async (tipo = 1) => {
+const getAyerQuiniela = async (tipo = 1) => {
     const fechaQuiniela = getAyerCompletedString()
-    return await quinielaModel.find({ fechaQuiniela, tipoQuiniela: tipo }).sort({ $natural: -1 })
+    return await quinielaModel.findOne({ fechaQuiniela, tipoQuiniela: tipo })
 }
 
-const updateAndFinally = async (_id, winners, resultAnimals, ganadores5Asiertos, ganadores6Asiertos,acumulado) => {
+const updateAndFinally = async (_id, winners, resultAnimals, ganadores5Asiertos, ganadores6Asiertos, acumulado) => {
     return await quinielaModel.findByIdAndUpdate({ _id }, {
         $set: {
-            status: false, 
+            status: false,
             winners,
-            resultAnimals, 
-            ganadores5Asiertos, 
+            resultAnimals,
+            ganadores5Asiertos,
             ganadores6Asiertos,
             acumulado
         }
     })
 }
+
+const getHoyMiniQuiniela = async () => {
+    const { from, to } = getFromTo()
+    return await quinielaModel.findOne({ fechaQuiniela: { "$gte": from, "$lt": to } })
+}
+
+const premioAcumuladoQuiniela = async (_id, acumulado) => await quinielaModel.findOneAndUpdate({ _id }, { acumulado })
 
 const quinielaController = {
     saveQuiniela,
@@ -55,8 +62,10 @@ const quinielaController = {
     getLastActive,
     countDocuments,
     getLastActiveGranQuinielaAndMini,
-    getAyerGranQuiniela,
-    updateAndFinally
+    getAyerQuiniela,
+    updateAndFinally,
+    getHoyMiniQuiniela,
+    premioAcumuladoQuiniela
 }
 
 module.exports = quinielaController
