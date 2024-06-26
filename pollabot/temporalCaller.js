@@ -1,5 +1,5 @@
 /* const { apagarGranQuinielaAnterior } = require('./workers/granQuinielaWorker') */
-const { repartirPremiosMiniQuiniela } = require('./workers/miniQuinielaWorker')
+/* const { repartirPremiosMiniQuiniela } = require('./workers/miniQuinielaWorker') */
 
 const temporalCaller = () => {
     console.log("Simulador del bot encendido")
@@ -7,7 +7,7 @@ const temporalCaller = () => {
    /*  apagarGranQuinielaAnterior() */
 
     //iniciar mini quiniela
-    repartirPremiosMiniQuiniela()
+    //repartirPremiosMiniQuiniela()
     //apagar la mini quiniela por tiempo
 
 }
