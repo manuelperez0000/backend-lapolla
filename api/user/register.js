@@ -5,8 +5,9 @@ const router = express.Router()
 const { saveUser, findOneUser } = require('../../db/controllers/userController')
 const responser = require('../../network/response')
 const validateUserType = require('../../midelwares/validateUserType')
+const cors = require('cors')
 
-router.post('/', validateUserType, async (req, res) => {
+router.post('/', cors(), validateUserType, async (req, res) => {
     const user = res?.user?.user
     const { name, email, phone, password, ci, level, percent } = req.body
     try {
