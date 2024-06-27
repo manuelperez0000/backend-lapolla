@@ -6,6 +6,7 @@ const { saveUser, findOneUser } = require('../../db/controllers/userController')
 const responser = require('../../network/response')
 const validateUserType = require('../../midelwares/validateUserType')
 const cors = require('cors')
+const { string } = require('../../services/validate')
 
 router.post('/', cors(), validateUserType, async (req, res) => {
     const user = res?.user?.user
@@ -18,16 +19,10 @@ router.post('/', cors(), validateUserType, async (req, res) => {
         if (!password) throw 'La contraseña es requerida'
         if (password.length < 6) throw 'La contraseña debe tener un minimo de 6 caracteres'
         if (level > 5) throw 'Debe indicar un tipo de usuario'
+        
+        string([name, ci, email, phone, password])
 
-        const userToRegister = {
-            name,
-            email,
-            phone,
-            password,
-            level,
-            ci,
-            percent
-        }
+        const userToRegister = { name, email, phone, password, level, ci, percent }
 
         if (user?.level === 1) userToRegister.admin = user._id
         if (user?.level === 2) userToRegister.admin = user._id

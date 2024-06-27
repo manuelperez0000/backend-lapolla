@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
 
 async function sendMail({email,temporalPass}) {
   // send mail with defined transport object
-  const info = await transporter.sendMail({
+  await transporter.sendMail({
     from: 'recuperacion@apuestaslapolla.com',
     to:email,
     subject: "Recuperacion de contraseña apuestaslapolla.com",

@@ -2,9 +2,9 @@ const User = require('../models/userModel')
 
 //buscar usuarios
 const findUsers = async (user) => {
-    if (user.level === 1) return await User.find().sort({ $natural: -1 }).populate('admin').populate('grupero')
-    if (user.level === 2) return await User.find({ level: { $in: [3, 4] }, admin: user._id }).sort({ $natural: -1 }).populate('admin').populate('grupero')
-    if (user.level === 3) return await User.find({ level: 4, grupero: user._id }).sort({ $natural: -1 }).populate('admin').populate('grupero')
+    if (user.level === 1) return await User.find().populate('admin').populate('grupero').sort("name")
+    if (user.level === 2) return await User.find({ level: { $in: [3, 4] }, admin: user._id }).populate('admin').populate('grupero').sort("name")
+    if (user.level === 3) return await User.find({ level: 4, grupero: user._id }).populate('admin').populate('grupero').sort("name")
 
     return false
 }
@@ -38,7 +38,7 @@ const getUser = async (_id) => await User.findOne({ _id })
 
 const getUserByCi = async ({ ci }) => await User.findOne({ ci })
 
-const findOneUser = async (userData) => await User.findOne(userData).sort({ name })
+const findOneUser = async (userData) => await User.findOne(userData)
 
 const icreaseUserBalance = async ({ _id, balance }) => await User.findOneAndUpdate({ _id }, { $inc: { balance } })
 
