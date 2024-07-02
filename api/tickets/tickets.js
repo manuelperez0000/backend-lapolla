@@ -17,13 +17,15 @@ router.post('/', validateToken, async (req, res) => {
         const userId = res.user.user._id
         const user = await getUser(userId)
         const userLevel = user.level
+        const userPercent = user.percent
+
         required(userLevel === 4 || userLevel === 5, "Tipo de usuario no autorizado para comprar tickets")
 
         const { animals, type, code } = req.body
         validate.required([animals, user, type, code], "Error, falta algun dato")
 
-        required(type === 1 && animals.length === 6 || type === 2 && animals.length === 4,"Numero de animalitos incorrecto")
         required(type === 1 || type === 2, "Tipo de quiniela incorrecto")
+        required(type === 1 && animals.length === 6 || type === 2 && animals.length === 4, "Numero de animalitos incorrecto")
 
         const hora = (new Date()).getHours()
 
@@ -37,6 +39,7 @@ router.post('/', validateToken, async (req, res) => {
 
         const ticket = {
             user,
+            userId: user._id,
             quinielaType: type,
             animals,
             hora,
@@ -57,7 +60,8 @@ router.post('/', validateToken, async (req, res) => {
         console.log("user prepaid:", user.prepaid)
         if (user.prepaid) required(userCurrent.balance > precioQuiniela, "Usuario no tiene fondos")
 
-        const increaseBalance = await icreaseUserBalance({ _id: ticket.user._id, balance: -precioQuiniela })
+        const precioMenosPorcentaje = precioQuiniela - (userPercent * precioQuiniela / 100)
+        const increaseBalance = await icreaseUserBalance({ _id: ticket.user._id, balance: -precioMenosPorcentaje })
         required(increaseBalance, "No se pudo completar la venta")
 
         let admin = ""

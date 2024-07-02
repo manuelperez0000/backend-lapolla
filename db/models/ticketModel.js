@@ -7,6 +7,9 @@ const TicketsModel = new Schema({
         type: Object,
         required: true
     },
+    userId: {
+        type: Schema.Types.ObjectId
+    },
     quinielaType: {
         type: String,
         required: true

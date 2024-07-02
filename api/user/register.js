@@ -9,7 +9,7 @@ const cors = require('cors')
 const { string } = require('../../services/validate')
 
 router.post('/', cors(), validateUserType, async (req, res) => {
-    const user = res?.user?.user
+    const user = res?.user
     const { name, email, phone, password, ci, level, percent } = req.body
     try {
         if (!name) throw 'El nombre es requerido'
@@ -19,15 +19,18 @@ router.post('/', cors(), validateUserType, async (req, res) => {
         if (!password) throw 'La contraseña es requerida'
         if (password.length < 6) throw 'La contraseña debe tener un minimo de 6 caracteres'
         if (level > 5) throw 'Debe indicar un tipo de usuario'
-        
+
         string([name, ci, email, phone, password])
 
         const userToRegister = { name, email, phone, password, level, ci, percent }
+        console.log("user: ", user)
 
         if (user?.level === 1) userToRegister.admin = user._id
         if (user?.level === 2) userToRegister.admin = user._id
         if (user?.level === 3) userToRegister.grupero = user._id
         if (user?.level === 4) throw "Las agencias no tienen permiso de registrar nuevos usuarios"
+
+        console.log("userToRegister: ", userToRegister)
 
         const registeredUser = new Promise(async (resolve, reject) => {
             const res = await findOneUser({ email })
@@ -47,11 +50,13 @@ router.post('/', cors(), validateUserType, async (req, res) => {
 
         if (!userSaved) throw "Error al registrar el usuario"
 
+        console.log(userSaved)
+
         responser.success({ res, message: 'success', body: userSaved })
 
     } catch (error) {
         console.log(error)
-        responser.error({ res, message: error })
+        responser.error({ res, message: error?.message || error })
     }
 
 })

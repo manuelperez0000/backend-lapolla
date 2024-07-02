@@ -10,12 +10,14 @@ const config = require('../../config.json')
 const { pagoDeClientes, pagoDeAgencias } = require('./workerServices')
 
 const apagarGranQuinielaAnterior = async () => {
+    console.log("Apagar gran quiniela ejecutado")
+    
     //obtener la granquiniela de ayer
     const granQuinielaAyer = await getAyerQuiniela(1)
     //si esta apagada no hacer nada
     if (granQuinielaAyer?.status) {
         const resultDesactivar = await finalizarQuiniela(granQuinielaAyer._id)
-        console.log(resultDesactivar)
+        console.log("resultDesactivar:" , resultDesactivar)
         //buscar ganadores
         const animals = await getFilteredAnimals({ from, to })
         const ticketsFindedGran = await findTicketsByIdQuiniela(granQuinielaAyer._id)

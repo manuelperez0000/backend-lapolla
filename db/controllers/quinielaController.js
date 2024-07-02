@@ -53,6 +53,8 @@ const getHoyMiniQuiniela = async () => {
 
 const premioAcumuladoQuiniela = async (_id, acumulado) => await quinielaModel.findOneAndUpdate({ _id }, { acumulado })
 
+const getQuinielaByDate = async (from,to) => await quinielaModel.find({fechaQuiniela:{$gt:from,$lt:to}})
+
 const quinielaController = {
     saveQuiniela,
     getQuinielas,
@@ -65,7 +67,8 @@ const quinielaController = {
     getAyerQuiniela,
     updateAndFinally,
     getHoyMiniQuiniela,
-    premioAcumuladoQuiniela
+    premioAcumuladoQuiniela,
+    getQuinielaByDate
 }
 
 module.exports = quinielaController

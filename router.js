@@ -32,6 +32,7 @@ const secrettoken = require('./api/secrettoken/secrettoken')
 const transaction = require('./api/transaction/transaction')
 const blockUser = require('./api/blockUser/blockUser')
 const prepaid = require('./api/prepaid/prepaid')
+const reportUsers = require('./api/reportUsers/reportUsers')
 
 const router = (app) => {
 
@@ -59,6 +60,7 @@ const router = (app) => {
     route.use('/reportes', reportes)
     route.use('/report', report)
     route.use('/reports', reports)
+    route.use('/reportUsers', reportUsers)
     route.use('/config', config)
 
 

@@ -37,11 +37,13 @@ const User = new Schema({
     },
     grupero: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        default:"000000000000000000000000"
     },
     admin: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        default:"000000000000000000000000"
     },
     percent: {
         type: Number,

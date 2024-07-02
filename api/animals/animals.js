@@ -34,7 +34,7 @@ router.delete('/:id', validateToken, onlyAdminAndMaster, async (req, res) => {
 
 })
 
-router.post('/', validateToken, async (req, res) => {
+router.post('/', validateToken,onlyAdminAndMaster, async (req, res) => {
     try {
         const { name, animalId, owner, hora, fecha, roulet } = req.body
         const newFecha = new Date(fecha)
@@ -51,7 +51,7 @@ router.post('/', validateToken, async (req, res) => {
 
         //obtener el id de la gran quiniela que esta en juego y la mini quiniela
         const activeQuinielas = await getLastActiveGranQuinielaAndMini()
-        required(activeQuinielas.length > 0, "quiniela finalizada, proxima a partir de las 9:00 AM")
+        required(activeQuinielas.length > 0, "quinielas finalizadas, proxima a partir de las 9:00 AM")
 
         const response = await saveAnimal(animal)
         required(response)

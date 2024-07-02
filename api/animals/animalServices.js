@@ -2,7 +2,7 @@ const { icreaseUserBalance } = require("../../db/controllers/userController")
 const { required, number } = require("../../services/validate")
 const config = require('../../config.json')
 
-const getGanadores = async ({ aciertos, animals, ticketsFinded }) => {
+const getGanadores = ({ aciertos, animals, ticketsFinded }) => {
     try {
         required([aciertos, animals, ticketsFinded])
         number(aciertos, "Aciertos debe ser un numero")

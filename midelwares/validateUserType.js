@@ -7,10 +7,11 @@ const validateUserType = (req, res, next) => {
     const token = authorization.slice(7)
     try {
         jwt.verify(token, DATA_TOKEN, (err, decoded) => {
+
             if (decoded) {
                 if (err) throw "Token invalido para registrar usuarios"
 
-                if ([1, 2, 3].includes(decoded.level)) res.user = decoded.user
+                if ([1, 2, 3].includes(decoded.user.level)) res.user = decoded.user
 
                 next()
 

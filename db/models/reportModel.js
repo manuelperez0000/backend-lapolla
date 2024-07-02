@@ -51,3 +51,12 @@ const report = new Schema({
 
 
 module.exports = mongoose.model('report', report);
+
+//hacer una peticion que regrese las quinielas en un rango de fecha espesifico
+//dentro tambien pedir los tickets vendidos por esta agencia en el mismo rango de fecha
+
+/* {
+    [quinielas from , to],
+    [tickets, from to]
+    user:_id
+} */
