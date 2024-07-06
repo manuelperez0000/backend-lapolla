@@ -34,7 +34,7 @@ router.delete('/:id', validateToken, onlyAdminAndMaster, async (req, res) => {
 
 })
 
-router.post('/', validateToken,onlyAdminAndMaster, async (req, res) => {
+router.post('/', validateToken, onlyAdminAndMaster, async (req, res) => {
     try {
         const { name, animalId, owner, hora, fecha, roulet } = req.body
         const newFecha = new Date(fecha)
@@ -92,7 +92,7 @@ router.post('/', validateToken,onlyAdminAndMaster, async (req, res) => {
                 const amount = ticketsFindedGran.length * precioGranQuiniela * porcentajePremio * premio5aciertos / ganadores5.length
                 const user = ticket.user
                 if (user.level === 4) {
-                     //pagar las comisiones a las agencias, gruperos y administradores
+                    //pagar las comisiones a las agencias, gruperos y administradores
                     pagarPorcentajeDeGananciaStaff(ticket)
                     savePremio({ ticket, amount, acierots: 5 })
                 } else {
@@ -105,7 +105,7 @@ router.post('/', validateToken,onlyAdminAndMaster, async (req, res) => {
                 const amount = ticketsFindedGran.length * precioGranQuiniela * porcentajePremio * premio6aciertos / ganadores5.length
                 const user = ticket.user
                 if (user.level === 4) {
-                     //pagar las comisiones a las agencias, gruperos y administradores
+                    //pagar las comisiones a las agencias, gruperos y administradores
                     pagarPorcentajeDeGananciaStaff(ticket)
                     savePremio({ ticket, amount, acierots: 6 })
                 } else {
@@ -128,7 +128,7 @@ router.post('/', validateToken,onlyAdminAndMaster, async (req, res) => {
                 const amount = ticketsFindedMini.length * precioMiniQuiniela * porcentajePremio / ganadores4.length
                 const user = ticket.user
                 if (user.level === 4) {
-                     //pagar las comisiones a las agencias, gruperos y administradores
+                    //pagar las comisiones a las agencias, gruperos y administradores
                     pagarPorcentajeDeGananciaStaff(ticket)
                     savePremio({ ticket, amount, acierots: 6 })
                 } else {

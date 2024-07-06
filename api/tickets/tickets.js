@@ -46,7 +46,8 @@ router.post('/', validateToken, async (req, res) => {
             code,
             idQuiniela: activeQuiniela._id,
             date,
-            count
+            count,
+            pagado: user.prepaid
         }
 
         const { precioGranQuiniela, precioMiniQuiniela, premioCasa } = await getConfig()

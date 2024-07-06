@@ -38,8 +38,12 @@ const TicketsModel = new Schema({
         type: Date,
         required: true
     },
-    count:{
+    count: {
         type: Number,
+        required: true
+    },
+    pagado: {
+        type: Boolean,
         required: true
     },
     idQuiniela: Schema.Types.ObjectId

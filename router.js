@@ -33,6 +33,8 @@ const transaction = require('./api/transaction/transaction')
 const blockUser = require('./api/blockUser/blockUser')
 const prepaid = require('./api/prepaid/prepaid')
 const reportUsers = require('./api/reportUsers/reportUsers')
+const pagoQuiniela = require('./api/pagoQuiniela/pagoQuiniela')
+const transfer = require('./api/transfer/transfer')
 
 const router = (app) => {
 
@@ -47,6 +49,7 @@ const router = (app) => {
     route.use('/blockUser', blockUser)
     route.use('/prepaid', prepaid)
     route.use('/premios', premios)
+    route.use('/transfer', transfer)
 
     route.use('/register', register)
     route.use('/tickets', tickets)
@@ -56,6 +59,7 @@ const router = (app) => {
     route.use('/deposit', deposit)
     route.use('/withdraws', withdraws)
     route.use('/withdraw', withdraw)
+    route.use('/pagoQuiniela', pagoQuiniela)
 
     route.use('/reportes', reportes)
     route.use('/report', report)

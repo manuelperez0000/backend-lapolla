@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { getWithdraws, saveWithdraw, aproveWithdraw, getWithdraw } = require('../../db/controllers/withdrawController')
+const { getWithdraws, saveWithdraw, approveWithdraw, getWithdraw } = require('../../db/controllers/withdrawController')
 const { getMethod } = require('../../db/controllers/methodController')
 const { icreaseUserBalance, getUser } = require('../../db/controllers/userController')
 const responser = require('../../network/response')
@@ -28,10 +28,10 @@ router.put('/', validateToken, async (req, res) => {
         const withdraw = await getWithdraw(_id)
         validate.required(withdraw, "No se encontro el retiro")
 
-        const aprove = await aproveWithdraw(_id)
-        validate.required(aprove, "No se encontro retiro")
+        const approve = await approveWithdraw(_id)
+        validate.required(approve, "No se encontro retiro")
 
-        responser.success({ res, message: "Peticion de retiro exitosa", body: aprove })
+        responser.success({ res, message: "Peticion de retiro exitosa", body: approve })
 
     } catch (error) {
         responser.error({ res, message: error?.message || error })

@@ -66,14 +66,29 @@ class Validate {
         }
     }
 
-    isMongoId(id, message = 'Formato incorrecto') {
+    isMongoId(data, message = 'Formato incorrecto') {
         const regex = /^[0-9a-fA-F]{24}$/
-        const result = regex.test(id)
-        if (result) {
-            return true
+        const is_MongoId = (id2) => regex.test(id2)
+
+        if (Array.isArray(data)) {
+            data.forEach((element, index) => {
+                if (!is_MongoId(element)) {
+                    throw new Error(message + " " + index)
+                } else {
+                    return true
+                }
+            })
         } else {
-            throw new Error(message)
+            if (!is_MongoId(data)) {
+                throw new Error(message)
+            } else {
+                return true
+            }
         }
+    }
+
+    objectEmpty(obj){
+        return !Object.keys(obj).length > 0
     }
 }
 

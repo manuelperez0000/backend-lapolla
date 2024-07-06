@@ -15,6 +15,7 @@ const pollabot = async () => {
         console.log("min: " + m )
         //spesific({ s: 0, m, h: 15 }, () => createNewMiniQuiniela2()) //listo
         spesific({ s: 0, m, h: 16 }, () => repartirPremiosMiniQuiniela()) 
+        
  
         /* periodic({ s: 1 }, () => {
             const date = new Date()

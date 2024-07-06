@@ -6,9 +6,6 @@ const { required, isMongoId } = require('../../services/validate')
 const { getReport } = require('./reportUserController')
 const validateToken = require('../../midelwares/validateToken')
 
-
-
-
 router.get('/:_id/:from/:to', validateToken, async (req, res) => {
     const { _id, from, to } = req.params
     const user = res.user.user
