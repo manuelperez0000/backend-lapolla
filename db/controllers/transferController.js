@@ -14,6 +14,8 @@ const getRecibeTransfers = async (_id) => await Transfer.find({ to: _id }).sort(
 
 const getAllTransfers = async (_id) => await Transfer.find({ $or: [{ from: _id }, { to: _id }] },).sort({ $natural: -1 })
 
+const retransf = async (payMethod, ref, retransferir) => await Transfer.findOneAndUpdate({ _id:retransferir._id }, { status: 0, ref, payMethod })
+
 const transferController = {
     getTransfers,
     saveTransfer,
@@ -21,6 +23,7 @@ const transferController = {
     getTransfer,
     getSendTransfers,
     getRecibeTransfers,
-    getAllTransfers
+    getAllTransfers,
+    retransf
 }
 module.exports = transferController

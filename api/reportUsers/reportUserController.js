@@ -25,8 +25,6 @@ exports.getReport = async (userId, from, to) => {
         const filteredTickets = tickets.filter(ticket => String(quinielaNeed._id) === String(ticket.idQuiniela))
         const transfer = paydQuinielas.filter(i => String(i.idQuiniela) === String(quinielaNeed._id))[0]?.idTransfer
 
-        console.log("transfer: ", transfer)
-
         return {
             count: quinielaNeed.count,
             porcentajePremio: quinielaNeed.porcentajePremio,
