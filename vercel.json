@@ -21,5 +21,11 @@
         "Access-Control-Allow-Origin": "*"
       }
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron",
+      "schedule": "0 1 * * *"
+    }
   ]
 }

@@ -1,6 +1,6 @@
 const pollabot = require('../pollabot/pollabot')
 const environment = require('../services/temporalEnv')
-const runScripts = require('./mongooseScripts')
+/* const runScripts = require('./mongooseScripts') */
 const mongoose = require('mongoose')
 const DB_URI = environment.DB_URI
 
