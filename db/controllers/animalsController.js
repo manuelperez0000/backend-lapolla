@@ -1,7 +1,7 @@
 
 const animalsModel = require('../models/animalsModel')
 
-const saveAnimal = async (animal) => await animalsModel(animal).save()
+const saveAnimal = async (animals) => await animalsModel.insertMany(animals)
 
 const getAnimals = async () => await animalsModel.find().sort({ "hora": 1 })
 

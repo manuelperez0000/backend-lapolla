@@ -36,24 +36,57 @@ router.delete('/:id', validateToken, onlyAdminAndMaster, async (req, res) => {
 
 router.post('/', validateToken, onlyAdminAndMaster, async (req, res) => {
     try {
-        const { name, animalId, owner, hora, fecha, roulet } = req.body
+        //const { name, animalId, owner, hora, fecha, roulet } = req.body
+
+        const { owner, animalRuletaActiva, animalGranjita, animalLotoActivo, hora, fecha } = req.body
+
+        required([owner, animalRuletaActiva, animalGranjita, animalLotoActivo, hora, fecha])
+
+        /* {
+            owner: user._id,
+                animalRuletaActiva: animalSelected,
+                    animalGranjita: animalSelected2,
+                        animalLotoActivo: animalSelected3,
+                            hora: hora,
+                                fecha: inputDate + ' ' + hora + ':00:00',
+   
+        } */
+
         const newFecha = new Date(fecha)
         const _newFecha = newFecha.setHours(newFecha.getHours() - 4)
 
-        const animal = {
-            name,
-            animalId,
-            owner,
-            hora,
-            fecha: _newFecha,
-            roulet
-        }
+        const animalsToSave = [
+            {
+                name:animalRuletaActiva.name,
+                animalId:animalRuletaActiva.id,
+                owner,
+                hora,
+                fecha: _newFecha,
+                roulet:1
+            },
+            {
+                name:animalGranjita.name,
+                animalId:animalGranjita.id,
+                owner,
+                hora,
+                fecha: _newFecha,
+                roulet:2
+            },
+            {
+                name:animalLotoActivo.name,
+                animalId:animalLotoActivo.id,
+                owner,
+                hora,
+                fecha: _newFecha,
+                roulet:3
+            }
+        ]
 
         //obtener el id de la gran quiniela que esta en juego y la mini quiniela
         const activeQuinielas = await getLastActiveGranQuinielaAndMini()
         required(activeQuinielas.length > 0, "quinielas finalizadas, proxima a partir de las 9:00 AM")
 
-        const response = await saveAnimal(animal)
+        const response = await saveAnimal(animalsToSave)
         required(response)
 
         const granQuiniela = activeQuinielas.filter(i => i?.tipoQuiniela === 1)[0]

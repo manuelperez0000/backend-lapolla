@@ -1,5 +1,5 @@
 class Validate {
-
+    
     string(data, message) {
         const typeString = (str) => typeof str === 'string' ? true : false
         if (Array.isArray(data)) {
@@ -87,7 +87,7 @@ class Validate {
         }
     }
 
-    objectEmpty(obj){
+    objectEmpty(obj) {
         return !Object.keys(obj).length > 0
     }
 }
