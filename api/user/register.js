@@ -30,8 +30,6 @@ router.post('/', cors(), validateUserType, async (req, res) => {
         if (user?.level === 3) userToRegister.grupero = user._id
         if (user?.level === 4) throw "Las agencias no tienen permiso de registrar nuevos usuarios"
 
-        console.log("userToRegister: ", userToRegister)
-
         const registeredUser = new Promise(async (resolve, reject) => {
             const res = await findOneUser({ email })
             if (res) reject("Este correo ya se encuentra registrado")

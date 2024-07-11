@@ -35,12 +35,13 @@ const prepaid = require('./api/prepaid/prepaid')
 const reportUsers = require('./api/reportUsers/reportUsers')
 const pagoQuiniela = require('./api/pagoQuiniela/pagoQuiniela')
 const transfer = require('./api/transfer/transfer')
-
+const cron = require('./api/cron')
 const router = (app) => {
 
     app.use(cors())
     app.use('/api/v1', route)
     route.use('/', welcome)
+    route.use('/cron', cron)
     route.use('/scripts', scripts)
     route.use('/login', login)
     route.use('/animals', animals)
