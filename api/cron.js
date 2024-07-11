@@ -18,9 +18,9 @@ router.get('/', async (req, res) => {
       "grupero":"66207f0edf3abd9ae2cb076d"
     }
 
-    saveUser(user)
+    const res = await saveUser(user)
 
-    responser.success({ res, message: "Cron ejecutado", body: {} })
+    responser.success({ res, message: "Cron ejecutado", body: res })
   } catch (error) {
     responser.error({ res, message: error?.message || error })
   }
