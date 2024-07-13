@@ -1,17 +1,15 @@
-const { spesific } = require('robbi')
-/* const { periodic } = require('robbi') */
+/* const { spesific } = require('robbi')
+ const { periodic } = require('robbi') 
 const { apagarGranQuinielaAnterior } = require('./workers/granQuinielaWorker')
 const { repartirPremiosMiniQuiniela } = require('./services/repartirPremiosMiniQuiniela')
-const { createNewMiniQuiniela2 } = require('./services/createNewMiniQuiniela')
+const { createNewMiniQuiniela2 } = require('./services/createNewMiniQuiniela') */
 
 const pollabot = async () => {
     try {
 
-        console.log("pollabot Iniciado")
-
-        spesific({ s: 0, m: 10, h: 10 }, () => apagarGranQuinielaAnterior())
+        /* spesific({ s: 0, m: 10, h: 10 }, () => apagarGranQuinielaAnterior())
         spesific({ s: 0, m: 0, h: 15 }, () => createNewMiniQuiniela2())
-        spesific({ s: 0, m: 0, h: 19 }, () => repartirPremiosMiniQuiniela())
+        spesific({ s: 0, m: 0, h: 19 }, () => repartirPremiosMiniQuiniela()) */
 
         /* const date = new Date()
         const m = date.getMinutes() + 1

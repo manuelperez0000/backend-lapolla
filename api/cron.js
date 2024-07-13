@@ -1,26 +1,31 @@
+/* eslint-disable no-duplicate-case */
+/* eslint-disable no-undef */
 const express = require('express')
 const router = express.Router()
 const responser = require('../network/response')
-const { saveUser } = require('../db/controllers/userController')
+const { repartirPremiosMiniQuiniela } = require('../pollabot/services/repartirPremiosMiniQuiniela')
+const { createNewMiniQuiniela2 } = require('../pollabot/services/createNewMiniQuiniela')
+const { apagarGranQuinielaAnterior } = require('../pollabot/workers/granQuinielaWorker')
 
-//obtener un retiro por su id
-router.get('/', async (req, res) => {
+router.get('/:token', async (req, res) => {
   try {
 
-    const user = {
-      "name": "Pollabotx",
-      "email": "pollabot@gmail.com",
-      "ci": "123456784",
-      "password": "123456",
-      "phone": "04141234567",
-      "repassword": "123456",
-      "admin":"66207f0edf3abd9ae2cb076d",
-      "grupero":"66207f0edf3abd9ae2cb076d"
+    const token = req.params.token
+    const { GQ_INIT, MQ_INIT, MIQ_END } = process.env
+   
+    if (token === GQ_INIT) {
+      apagarGranQuinielaAnterior()
     }
 
-    const res2 = await saveUser(user)
+    if (token === MQ_INIT) {
+      createNewMiniQuiniela2()
+    }
 
-    responser.success({ res, message: "Cron ejecutado", body: res2 })
+    if (token === MIQ_END) {
+      repartirPremiosMiniQuiniela()
+    }
+
+    res.end("Bot ejecutado")
   } catch (error) {
     responser.error({ res, message: error?.message || error })
   }
