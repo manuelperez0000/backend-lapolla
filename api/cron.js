@@ -25,7 +25,7 @@ router.get('/:token', async (req, res) => {
       repartirPremiosMiniQuiniela()
     }
 
-    responser.success({res,message:"bot ejecutado",body:{ GQ_INIT, MQ_INIT, MIQ_END}})
+    responser.success({res,message:"bot ejecutado",body:{ hello:"Cuidado tenemos tus datos" }})
   } catch (error) {
     responser.error({ res, message: error?.message || error })
   }
