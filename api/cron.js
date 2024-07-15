@@ -13,23 +13,22 @@ router.get('/:token', async (req, res) => {
     const token = req.params.token
     const { GQ_INIT, MQ_INIT, MIQ_END } = process.env
    
-    if (token === GQ_INIT) {
+    if (token == GQ_INIT) {
       apagarGranQuinielaAnterior()
     }
 
-    if (token === MQ_INIT) {
+    if (token == MQ_INIT) {
       createNewMiniQuiniela2()
     }
 
-    if (token === MIQ_END) {
+    if (token == MIQ_END) {
       repartirPremiosMiniQuiniela()
     }
 
-    res.end("Bot ejecutado")
+    responser.success({res,message:"bot ejecutado",body:{ GQ_INIT, MQ_INIT, MIQ_END}})
   } catch (error) {
     responser.error({ res, message: error?.message || error })
   }
 })
 
 module.exports = router
-
