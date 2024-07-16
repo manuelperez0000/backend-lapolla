@@ -50,6 +50,8 @@ router.get('/:id', validateToken, async (req, res) => {
     }
 })
 
+//sdfsdf  retiros no funcionan
+
 //guardar un retiro
 router.post('/', validateToken, async (req, res) => {
 
@@ -78,13 +80,10 @@ router.post('/', validateToken, async (req, res) => {
         const respRestarSaldo = await icreaseUserBalance({ _id: userId, balance: -amount * tipoDeCambio })
         validate.required(respRestarSaldo, "Ocurrio un error al intentar restar el sado")
 
-        const referencia = ""
-
         const dataToSave = {
             amount,
             payMethod,
             userId,
-            referencia,
             user: {
                 _id: user._id,
                 name: user.name,

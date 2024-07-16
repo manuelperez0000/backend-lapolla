@@ -29,7 +29,7 @@ const Withdraw = new Schema({
     },
     referencia:{
         type: String,
-        required: true
+        default: ""
     }
 })
 
