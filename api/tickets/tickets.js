@@ -11,6 +11,7 @@ const validate = require('../../services/validate')
 const { required } = require('../../services/validate')
 const { getLastActive } = require('../../db/controllers/quinielaController')
 const validateToken = require('../../midelwares/validateToken')
+const { getTicketCode } = require('./ticketServices')
 
 router.post('/', validateToken, async (req, res) => {
     try {
@@ -19,10 +20,16 @@ router.post('/', validateToken, async (req, res) => {
         const userLevel = user.level
         const userPercent = user.percent
 
+        required(!user.block,"Usuario Bloqueado")
+
         required(userLevel === 4 || userLevel === 5, "Tipo de usuario no autorizado para comprar tickets")
 
-        const { animals, type, code } = req.body
-        validate.required([animals, user, type, code], "Error, falta algun dato")
+        const { animals, type } = req.body
+        validate.required([animals, user, type], "Error, falta algun dato")
+
+        const code = await getTicketCode()
+        /* console.log("code:" , code)
+        return responser.success({ res, message: "success", body:{} }) */
 
         required(type === 1 || type === 2, "Tipo de quiniela incorrecto")
         required(type === 1 && animals.length === 6 || type === 2 && animals.length === 4, "Numero de animalitos incorrecto")
@@ -45,6 +52,7 @@ router.post('/', validateToken, async (req, res) => {
             hora,
             code,
             idQuiniela: activeQuiniela._id,
+            quiniela: activeQuiniela._id,
             date,
             count,
             pagado: user.prepaid
@@ -58,7 +66,7 @@ router.post('/', validateToken, async (req, res) => {
 
         const precioQuiniela = type === 1 ? precioGranQuiniela : precioMiniQuiniela
         //sera requerido solo si la agencia es prepagada >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        console.log("user prepaid:", user.prepaid)
+        /* console.log("user prepaid:", user.prepaid) */
         if (user.prepaid) required(userCurrent.balance > precioQuiniela, "Usuario no tiene fondos")
 
         const precioMenosPorcentaje = precioQuiniela - (userPercent * precioQuiniela / 100)

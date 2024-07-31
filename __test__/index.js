@@ -1,5 +1,35 @@
 /* eslint-disable no-undef */
 const Chai = import('chai')
+const animalService = require('../api/animals/animalServices')
+
+
+describe('Para probar el servicio de isWinner', async () => {
+    const { expect } = await Chai
+    
+    const animals = [{animalId:1},{animalId:2},{animalId:3},{animalId:4}]
+    const aciertos = 2
+    const ticket = { animals:[{id:1},{id:2}]}
+
+    it('debería ser true', () => {
+        expect(animalService.isWinner(ticket,animals,aciertos)).to.equal(true)
+    })
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //const { getHoyCompletedString, getHour } = require('../services/utils')
 /* describe('prueba de fechas del servidor', async () => {
@@ -17,7 +47,7 @@ const Chai = import('chai')
 }) */
 
 
-const validate = require('../services/validate')
+/* const validate = require('../services/validate')
 describe('Pruebas a libreria validate', async () => {
     const { expect } = await Chai
 
@@ -62,3 +92,4 @@ describe('Pruebas a libreria validate', async () => {
         }
     })
 })
+ */

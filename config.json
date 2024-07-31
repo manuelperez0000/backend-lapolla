@@ -4,6 +4,8 @@
     "precioGranQuiniela":25,
     "precioMiniQuiniela":25,
     "porcentajePremio":0.8,
+    "premioGranQuiniela":0.7,
+    "premioMiniQuiniela":0.3,
     "premio5aciertos":0.3,
     "premio6aciertos":0.7
 }

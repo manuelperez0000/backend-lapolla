@@ -46,7 +46,11 @@ const TicketsModel = new Schema({
         type: Boolean,
         required: true
     },
-    idQuiniela: Schema.Types.ObjectId
+    idQuiniela: Schema.Types.ObjectId,
+    quiniela: {
+        type:Schema.Types.ObjectId,
+        ref:"quinielaModel",
+    }
 })
 
 module.exports = mongoose.model('Tickets', TicketsModel);

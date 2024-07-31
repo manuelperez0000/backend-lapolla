@@ -27,7 +27,11 @@ const Config = new Schema({
         type: Date,
         default: Date.now
     },
-    premioAcumulado: {
+    premioAcumuladoMini: {
+        type: Number,
+        default: 0
+    },
+    premioAcumuladoGran: {
         type: Number,
         default: 0
     }
