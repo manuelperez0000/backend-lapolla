@@ -1,5 +1,5 @@
 const Method = require('../models/methodsModel')
-
+const environment = require('../../services/temporalEnv')
 
 const saveMethod = async (method) => {
     const response = await Method(method).save()
@@ -24,7 +24,7 @@ const getMethod = async (_id) => await Method.findOne({ _id })
 
 const getAdminMethods = async () => {
     // eslint-disable-next-line no-undef
-    const adminId = process.env.ADMINID
+    const adminId = environment.ADMINID
     const response = await Method.find({ userId: adminId })
     return response
 }
