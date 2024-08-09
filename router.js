@@ -12,6 +12,8 @@ const deleteuser = require('./api/user/deleteuser')
 const updateuser = require('./api/user/update')
 const getUser = require('./api/user/getUser')
 const getTickets = require('./api/tickets/getTickets')
+const getTicketDate = require('./api/tickets/getTicketDate')
+
 const quiniela = require('./api/quiniela/quiniela')
 const deposits = require('./api/deposits/deposits')
 const deposit = require('./api/deposits/deposit')
@@ -51,6 +53,7 @@ const router = (app) => {
     route.use('/prepaid', prepaid)
     route.use('/premios', premios)
     route.use('/transfer', transfer)
+    route.use('/getTicketDate', getTicketDate)
 
     route.use('/register', register)
     route.use('/tickets', tickets)

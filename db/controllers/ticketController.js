@@ -37,6 +37,27 @@ const setPerdedores = async (ids) => {
     )
 }
 
+const getTicketDate = async (data, user) => {
+    const { usuario, date } = data
+    const newFrom = date + "T00:00:00.000+00:00";
+    const newTo = date + "T23:59:59.000+00:00";
+    const from = new Date(newFrom)
+    const to = new Date(newTo)
+
+    if (usuario === "propio") {
+        const result = await getTicketsFromUser(user._id, from, to)
+        return result
+    }
+
+    if (usuario === "otros") {
+        const result = await getTickets({ from, to })
+        return result
+    }
+
+    return false
+
+}
+
 const ticketController = {
     saveTicket,
     getReportes,
@@ -51,7 +72,8 @@ const ticketController = {
     getTicketsFromUser,
     compareTicketCode,
     setGanadores,
-    setPerdedores
+    setPerdedores,
+    getTicketDate
 }
 
 module.exports = ticketController
