@@ -23,6 +23,10 @@ router.post('/', validateToken, async (req, res) => {
     }
 })
 
+router.get('/', (req,res) =>{
+    responser.success({ res, message: "success getting", body:{} })
+})
+
 module.exports = router;
 
 /*consulta = {
