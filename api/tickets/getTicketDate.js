@@ -5,6 +5,7 @@ const responser = require('../../network/response')
 const { required } = require('../../services/validate')
 const { getTicketDate } = require('../../db/controllers/ticketController')
 const validateToken = require('../../midelwares/validateToken')
+
 router.post('/', validateToken, async (req, res) => {
     try {
         const user = res.user.user
@@ -15,7 +16,7 @@ router.post('/', validateToken, async (req, res) => {
             date: data.date
         }
         const result = await getTicketDate(obj, user)
-        required(result)
+        
         responser.success({ res, message: "success", body: result })
     } catch (error) {
         console.log(error)
@@ -28,9 +29,3 @@ router.get('/', (req,res) =>{
 })
 
 module.exports = router;
-
-/*consulta = {
-            quinielaType: tab1 ? "gran" : "mini",
-            usuario: options === 1 ? "propio" : "otros",
-            date: e.target.value
-        }*/
