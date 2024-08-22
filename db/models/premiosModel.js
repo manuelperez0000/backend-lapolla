@@ -5,7 +5,7 @@ const { Schema } = mongoose;
 const Premio = new Schema({
     payMethod: {
         type: Object,
-        default: {}
+        required: true,
     },
     ticket: {
         type: Object,
@@ -15,6 +15,23 @@ const Premio = new Schema({
         type: Number,
         required: true
     },
+    userData:{
+        type: Object,
+        required: true
+    },
+    agencia: Schema.Types.ObjectId,
+    payerId: {
+        type: Schema.Types.ObjectId || String,
+        default:""
+    },
+    status:{
+        type: Boolean,
+        default: false
+    },
+    ref:{
+        type: String,
+        default:""
+    },
     date: {
         type: Date,
         default: Date.now()
@@ -22,3 +39,13 @@ const Premio = new Schema({
 })
 
 module.exports = mongoose.model('Premio', Premio)
+
+/* const userData = {
+    name,ci,phone,
+}
+
+const bankData = {
+    bankName,
+    acountNumber,
+    type
+} */

@@ -58,6 +58,10 @@ const getTicketDate = async (data, user) => {
 
 }
 
+const setTicketPagado = async (ticket) => {
+    await TicketsModel.findOneAndUpdate({ _id: ticket._id }, { pagado: true })
+}
+
 const ticketController = {
     saveTicket,
     getReportes,
@@ -73,7 +77,8 @@ const ticketController = {
     compareTicketCode,
     setGanadores,
     setPerdedores,
-    getTicketDate
+    getTicketDate,
+    setTicketPagado
 }
 
 module.exports = ticketController

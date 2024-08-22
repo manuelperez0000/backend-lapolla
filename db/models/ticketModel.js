@@ -44,7 +44,8 @@ const TicketsModel = new Schema({
     },
     pagado: {
         type: Boolean,
-        required: true
+        required: true,
+        default: false
     },
     idQuiniela: Schema.Types.ObjectId,
     quiniela: {

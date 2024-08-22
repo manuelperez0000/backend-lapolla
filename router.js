@@ -23,6 +23,7 @@ const withdraws = require('./api/withdraws/withdraws')
 const withdraw = require('./api/withdraws/withdraw')
 const report = require('./api/report/report')
 const reports = require('./api/report/reports')
+const saveWinner = require('./api/saveWinner/saveWinner')
 
 const methods = require('./api/methods/methods')
 const tickets = require('./api/tickets/tickets')
@@ -54,6 +55,7 @@ const router = (app) => {
     route.use('/premios', premios)
     route.use('/transfer', transfer)
     route.use('/getTicketDate', getTicketDate)
+    route.use('/saveWinner', saveWinner)
 
     route.use('/register', register)
     route.use('/tickets', tickets)

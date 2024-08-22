@@ -22,7 +22,6 @@ router.post('/',validateToken, async (req, res) => {
         console.log(error)
         responser.error({ res, message: error })
     }
-
 })
 
 router.get('/', async (req, res) => {

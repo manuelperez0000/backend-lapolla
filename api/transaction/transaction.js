@@ -13,6 +13,7 @@ router.post('/', validateToken, async (req, res) => {
         const amount = req.body.amount
 
         required([idUserFrom, idUserTo, amount])
+        required(amount > 0 , "El monto de ragarga no puede ser negativo")
 
         //obtener saldo del usuario
         const userData = await getUser(idUserFrom)

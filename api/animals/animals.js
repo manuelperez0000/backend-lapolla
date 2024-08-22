@@ -7,13 +7,13 @@ const validateToken = require('../../midelwares/validateToken')
 const onlyAdminAndMaster = require('../../midelwares/onlyAdminAndMaster')
 const { required } = require('../../services/validate')
 const { getLastActiveGranQuinielaAndMini, updateAnimals } = require('../../db/controllers/quinielaController')
-const { getGanadores, pagarPorcentajeDeGananciaStaff, getMontoGranQuiniela, getMontoMiniQuiniela } = require('./animalServices')
+const { getGanadores, getMontoGranQuiniela, getMontoMiniQuiniela } = require('./animalServices')
 const { updateAndFinally } = require('../../db/controllers/quinielaController')
 const { getFilteredAnimals } = require('../../db/controllers/animalsController')
 const { getFromTo } = require('../../services/utils')
 const { from, to, fromMini, toMini } = getFromTo()
-const { findTicketsByIdQuiniela, setGanadores, setPerdedores } = require('../../db/controllers/ticketController')
-const { savePremio } = require('../../db/controllers/premioController')
+const { findTicketsByIdQuiniela, setGanadores, setPerdedores,setTicketPagado } = require('../../db/controllers/ticketController')
+/* const { savePremio } = require('../../db/controllers/premioController') */
 const config = require('../../config.json')
 const { icreaseUserBalance } = require('../../db/controllers/userController')
 
@@ -33,7 +33,6 @@ router.delete('/:id', validateToken, onlyAdminAndMaster, async (req, res) => {
     } catch (error) {
         responser.error({ res, message: error?.message || 'Error en la peticion para guardar un animal' })
     }
-
 })
 
 router.post('/', validateToken, onlyAdminAndMaster, async (req, res) => {
@@ -151,15 +150,14 @@ router.post('/', validateToken, onlyAdminAndMaster, async (req, res) => {
         console.log("montoPremioGranQuiniela6: ", montoPremioGranQuiniela6)
         console.log("montoPremioMiniQuiniela: ", montoPremioMiniQuiniela)
 
-        /* return responser.success({ res, message: "success", body: "response" }) */
 
         //const montoPremioGranQuiniela5 = ganadores5?.length > 0 ? (ticketsFindedGran.length * precioGranQuiniela * porcentajePremio * premio5aciertos / ganadores5.length + (acumuladoGranQuiniela * premio5aciertos / ganadores5.length)).toFixed(2) : 0
 
-
-        const pagoPremio = ({ user, monto, ticket, aciertos }) => {
+        const pagoPremio = ({ user, monto, ticket }) => {
             console.log("monto:", round(monto))
             if (user.level === 4) {
-                savePremio({ ticket, amount: monto, aciertos })
+                setTicketPagado(ticket)
+                //savePremio({ ticket, amount: monto, aciertos })
             } else {
                 icreaseUserBalance({ _id: user._id, balance: monto })
             }
@@ -220,7 +218,6 @@ router.post('/', validateToken, onlyAdminAndMaster, async (req, res) => {
                     pagoPremio({ user, monto: montoPremioMiniQuiniela, ticket, aciertos })
                 } else {
                     estructuraDeGanadores.perdedores.push(ticket)
-                    //increaseUserBalance()
                 }
             })
             const idTicketsGanadoresMini = [...estructuraDeGanadores.ganadoresMiniQuiniela].map(i => i._id)
