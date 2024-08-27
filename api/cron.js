@@ -4,7 +4,8 @@ const router = express.Router()
 const responser = require('../network/response')
 /* const { repartirPremiosMiniQuiniela } = require('../pollabot/services/repartirPremiosMiniQuiniela')
 const { createNewMiniQuiniela2 } = require('../pollabot/services/createNewMiniQuiniela')
-const { apagarGranQuinielaAnterior } = require('../pollabot/workers/granQuinielaWorker') */
+*/
+const { apagarGranQuinielaAnterior } = require('../pollabot/workers/granQuinielaWorker') 
 
 router.get('/:token', async (req, res) => {
   try {
@@ -14,12 +15,14 @@ router.get('/:token', async (req, res) => {
     /* const { GQ_INIT, MQ_INIT, MIQ_END } = process.env */ 
     const { GQ_INIT } = process.env
 
-    responser.success({ res, message: "Gran quiniela init", body: { token,GQ_INIT } })
-
-   /*  if (token == GQ_INIT) {
-      apagarGranQuinielaAnterior()
-      responser.success({ res, message: "Gran quiniela", body: { hello: "Cuidado tenemos tus datos" } })
+    if (token === GQ_INIT) {
+      const body = await apagarGranQuinielaAnterior()
+      responser.success({ res, message: "Gran quiniela", body})
+    }else{
+      responser.success({ res, message: "No se detectaron quinielas", body:{}})
     }
+
+   /*  
 
     if (token == MQ_INIT) {
       const body = await createNewMiniQuiniela2()

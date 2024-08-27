@@ -10,7 +10,6 @@ const config = require('../../config.json')
 const { pagoDeClientes, pagoDeAgencias } = require('./workerServices')
 
 const apagarGranQuinielaAnterior = async () => {
-    console.log("Apagar gran quiniela ejecutado")
 
     //obtener la granquiniela de ayer
     const granQuinielaAyer = await getAyerQuiniela(1)
@@ -48,6 +47,8 @@ const apagarGranQuinielaAnterior = async () => {
 
     //iniciar nueva quiniela
     createNewQuiniela(1)
+
+    return { "quinielaApagada": true }
 }
 
 module.exports = {
