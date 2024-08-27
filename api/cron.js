@@ -16,10 +16,10 @@ router.get('/:token', async (req, res) => {
     const { GQ_INIT } = process.env
 
     if (token === GQ_INIT) {
-      const body = await apagarGranQuinielaAnterior()
-      responser.success({ res, message: "Gran quiniela", body})
+      const sdf = await apagarGranQuinielaAnterior()
+      responser.success({ res, message: "Gran quiniela", body:{token,GQ_INIT,sdf}})
     }else{
-      responser.success({ res, message: "No se detectaron quinielas", body:{}})
+      responser.success({ res, message: "No se detectaron quinielas", body:{token,GQ_INIT}})
     }
 
    /*  
