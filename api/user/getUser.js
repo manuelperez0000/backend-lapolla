@@ -14,7 +14,7 @@ router.get('/ci/:ci', cors(), validateToken, async (req, res) => {
     try {
         const body = await getUserByCi({ ci })
 
-        if (!body) throw 'Usuario no encontrado'
+        if (!body) throw 'Usuario no encontrado 2'
 
         responser.success({ res, message: 'success', body })
 
@@ -22,14 +22,16 @@ router.get('/ci/:ci', cors(), validateToken, async (req, res) => {
         responser.error({ res, message: error?.message || error })
     }
 })
- 
+
 router.get('/:id', cors(), validateToken, async (req, res) => {
 
     const _id = req.params.id
     try {
         const user = await getUser({ _id })
 
-        if (!user) throw 'Usuario no encontrado'
+        console.log(user)
+
+        if (!user) throw 'Usuario no encontrado 3'
 
         const userMethods = await getMethods(_id)
 

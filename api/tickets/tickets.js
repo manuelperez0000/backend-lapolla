@@ -61,7 +61,7 @@ router.post('/', validateToken, async (req, res) => {
         required([precioGranQuiniela, precioMiniQuiniela, premioCasa], "Error al obteber datos del config")
 
         const userCurrent = user
-        required(userCurrent, "Usuario no encontrado")
+        required(userCurrent, "Usuario no encontrado 1")
 
         const precioQuiniela = type === 1 ? precioGranQuiniela : precioMiniQuiniela
         //sera requerido solo si la agencia es prepagada >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
