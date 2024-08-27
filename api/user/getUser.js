@@ -29,8 +29,6 @@ router.get('/:id', cors(), validateToken, async (req, res) => {
     try {
         const user = await getUser({ _id })
 
-        console.log(user)
-
         if (!user) throw 'Usuario no encontrado 3'
 
         const userMethods = await getMethods(_id)
