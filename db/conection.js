@@ -5,7 +5,11 @@ const DB_URI = environment.DB_URI
 
 const dbConnect = async () => {
     try {
-        await mongoose.connect(DB_URI)
+        await mongoose.connect(DB_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            socketTimeoutMS: 30000
+        })
         console.log('DB connected')
         //runScripts()
     } catch (error) {
