@@ -1,15 +1,14 @@
-const environment = require('../services/temporalEnv')
 /* const runScripts = require('./mongooseScripts') */
 const mongoose = require('mongoose')
-const DB_URI = environment.DB_URI
+
+/* const environment = require('../services/temporalEnv')
+const DB_URI = environment.DB_URI */
+
+const DB_URI = 'mongodb://mongo:VpCqlFKvsFzaWoSytFPsJQNQcoxZvUaM@autorack.proxy.rlwy.net:26312'
 
 const dbConnect = async () => {
     try {
-        await mongoose.connect(DB_URI, {
-            heartbeatFrequencyMS: 30000,
-            useNewUrlParser: true, 
-            useUnifiedTopology: true
-        })
+        await mongoose.connect(DB_URI)
         console.log('DB connected')
         //runScripts()
     } catch (error) {

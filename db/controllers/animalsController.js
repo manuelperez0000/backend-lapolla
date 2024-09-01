@@ -3,7 +3,15 @@ const animalsModel = require('../models/animalsModel')
 
 const saveAnimal = async (animals) => await animalsModel.insertMany(animals)
 
-const getAnimals = async () => await animalsModel.find().sort({ "hora": 1 })
+const getAnimals = async () => {
+    const res = await animalsModel.find().sort({ "hora": 1 })
+    /* const res = [1,2.3] */
+    if(!res?.length === 0){
+        return res
+    }else{
+        return []
+    }
+}
 
 const getFilteredAnimals = async ({ from, to }) => await animalsModel.find({ fecha: { "$gte": from, "$lt": to } }).sort({ "hora": 1 })
 
