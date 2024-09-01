@@ -6,9 +6,9 @@ const DB_URI = environment.DB_URI
 const dbConnect = async () => {
     try {
         await mongoose.connect(DB_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            socketTimeoutMS: 30000
+            heartbeatFrequencyMS: 30000,
+            useNewUrlParser: true, 
+            useUnifiedTopology: true
         })
         console.log('DB connected')
         //runScripts()
