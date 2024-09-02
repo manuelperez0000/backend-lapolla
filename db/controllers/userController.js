@@ -1,7 +1,7 @@
 const User = require('../models/userModel')
 
 //buscar usuarios
-const findUsers = async (user) => {
+const findUsers = async (user = {level:1}) => {
     if (user.level === 1) return await User.find().populate('admin').populate('grupero').sort("name")
     if (user.level === 2) return await User.find({ level: { $in: [3, 4] }, admin: user._id }).populate('admin').populate('grupero').sort("name")
     if (user.level === 3) return await User.find({ level: 4, grupero: user._id }).populate('admin').populate('grupero').sort("name")

@@ -1,0 +1,35 @@
+{
+    "body": [
+        {
+            "name": "",
+            "ci": "",
+            "level": 5,
+            "grupero": null,
+            "admin": null,
+            "percent": 0,
+            "balance": 0,
+            "block": false,
+            "prepaid": true,
+            "_id": "66d4e7f0218da7d9f28bfe43",
+            "hello": "world",
+            "date": "2024-09-01T22:17:29.314Z"
+        },
+        {
+            "_id": "66d3c761ccb385809173ead5",
+            "name": "Manuel Perez 5",
+            "ci": "20853601",
+            "email": "manuelperez.0000@gmail.com",
+            "phone": "04141220527",
+            "password": "123456",
+            "level": 5,
+            "percent": 0,
+            "balance": 0,
+            "block": false,
+            "prepaid": true,
+            "date": "2024-09-01T01:46:09.427Z",
+            "__v": 0
+        }
+    ],
+    "message": "success",
+    "status": 200
+}

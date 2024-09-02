@@ -1,11 +1,31 @@
 const { number } = require('../../services/validate')
 const configModel = require('../models/configModel')
 
-const saveConfig = async () => await configModel().save()
+const saveConfig = async () => await configModel().save({
+    "premioCasa": 80,
+    "precioGranQuiniela": 25,
+    "precioMiniQuiniela": 25,
+    "date": "2024-03-28T19:28:17.452+00:00",
+    "__v": 0,
+    "premioAcumuladoMini": 0,
+    "premioAcumuladoGran": 0,
+    "horasMiniQuiniela": [
+        3,
+        7
+    ],
+    "horaGranQuiniela": "09:00"
+})
 
-const configId = '6605c4d1f867d9fa9e7d161b'
+const configId = '66d60aab0121c22220430389'
 
-const getConfig = async () => await configModel.findOne({ _id: configId })
+const getConfig = async () => {
+    const consulta = await configModel.find()
+    if (consulta && consulta?.length > 0) {
+        return consulta[0]
+    } else {
+        return false
+    }
+}
 
 const updateConfig = async (update) => await configModel.findOneAndUpdate({ _id: configId }, { $set: update })
 

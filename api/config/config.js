@@ -3,7 +3,7 @@ const router = express.Router()
 const { saveConfig, getConfig, updateConfig } = require('../../db/controllers/configController')
 const responser = require('../../network/response')
 
-router.post('/save', async (req, res) => {
+router.post('/save', async (_, res) => {
     try {
         const response = await saveConfig()
         
@@ -13,7 +13,7 @@ router.post('/save', async (req, res) => {
     }
 })
 
-router.get('/', async (req, res) => {
+router.get('/', async (_, res) => {
     try {
         const response = await getConfig()
         responser.success({ res, message: "success", body: response })

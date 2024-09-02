@@ -23,9 +23,10 @@ const getMethods = async (id) => {
 const getMethod = async (_id) => await Method.findOne({ _id })
 
 const getAdminMethods = async () => {
-    // eslint-disable-next-line no-undef
     const adminId = environment.ADMINID
+    /* console.log("adminId",adminId) */
     const response = await Method.find({ userId: adminId })
+    /* console.log("response",response) */
     return response
 }
 

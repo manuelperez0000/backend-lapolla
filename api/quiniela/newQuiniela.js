@@ -5,9 +5,12 @@ const validate = require('../../services/validate')
 const config = require('../../config.json')
 
 const createNewQuiniela = async (tipoQuiniela) => {
-    
+
     const { fechaHoy } = getAyerYhoy()
-    const { premioCasa, precioGranQuiniela, precioMiniQuiniela } = await getConfig()
+    const variablesConfig = await getConfig()
+    console.log(variablesConfig)
+    validate.required(variablesConfig,"No se encontro variables de configuracion")
+    const { premioCasa, precioGranQuiniela, precioMiniQuiniela } = variablesConfig
     const count = await countDocuments()
     const data = {
         precioQuiniela: tipoQuiniela === 1 ? precioGranQuiniela : precioMiniQuiniela,
@@ -20,7 +23,7 @@ const createNewQuiniela = async (tipoQuiniela) => {
 
     //obtener una gran quiniela con la fecha de hoy
     const quinielasDeHoy = await getQuinielas({ fechaQuiniela: fechaHoy, tipoQuiniela })
- 
+
     //comprobar si ya esta activa la gran quiniela de hoy
     //si la fecha de gran quiniela es ayer continua sino retorna falso
     if (quinielasDeHoy.length === 0) {
@@ -33,7 +36,7 @@ const createNewQuiniela = async (tipoQuiniela) => {
     }
 }
 
-exports.createNewMiniQuiniela = async ()=>{
+exports.createNewMiniQuiniela = async () => {
     console.log("crear mini quiniela ejecutado")
     /* const { fechaHoy } = getAyerYhoy()
     const { premioCasa, precioMiniQuiniela } = await getConfig()
