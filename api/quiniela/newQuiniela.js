@@ -8,7 +8,7 @@ const createNewQuiniela = async (tipoQuiniela) => {
 
     const { fechaHoy } = getAyerYhoy()
     const variablesConfig = await getConfig()
-    console.log(variablesConfig)
+   /*  console.log(variablesConfig) */
     validate.required(variablesConfig,"No se encontro variables de configuracion")
     const { premioCasa, precioGranQuiniela, precioMiniQuiniela } = variablesConfig
     const count = await countDocuments()
@@ -31,13 +31,13 @@ const createNewQuiniela = async (tipoQuiniela) => {
         validate.required(result, "No se pudo crear la quiniela")
         return result
     } else {
-        console.log("Ya existe una quiniela para hoy")
+       /*  console.log("Ya existe una quiniela para hoy") */
         return false
     }
 }
 
 exports.createNewMiniQuiniela = async () => {
-    console.log("crear mini quiniela ejecutado")
+    /* console.log("crear mini quiniela ejecutado") */
     /* const { fechaHoy } = getAyerYhoy()
     const { premioCasa, precioMiniQuiniela } = await getConfig()
     const count = await countDocuments()

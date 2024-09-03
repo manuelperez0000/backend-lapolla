@@ -27,7 +27,7 @@ router.delete('/:id', validateToken, onlyAdminAndMaster, async (req, res) => {
     try {
         const response = await deleteAnima(animalId)
 
-        console.log(response)
+      /*   console.log(response) */
 
         responser.success({ res, message: "Eliminado con exito", body: response.data })
     } catch (error) {
@@ -146,15 +146,15 @@ router.post('/', validateToken, onlyAdminAndMaster, async (req, res) => {
             acumulado: acumuladoMiniQuiniela
         })
 
-        console.log("montoPremioGranQuiniela5: ", montoPremioGranQuiniela5)
+      /*   console.log("montoPremioGranQuiniela5: ", montoPremioGranQuiniela5)
         console.log("montoPremioGranQuiniela6: ", montoPremioGranQuiniela6)
-        console.log("montoPremioMiniQuiniela: ", montoPremioMiniQuiniela)
+        console.log("montoPremioMiniQuiniela: ", montoPremioMiniQuiniela) */
 
 
         //const montoPremioGranQuiniela5 = ganadores5?.length > 0 ? (ticketsFindedGran.length * precioGranQuiniela * porcentajePremio * premio5aciertos / ganadores5.length + (acumuladoGranQuiniela * premio5aciertos / ganadores5.length)).toFixed(2) : 0
 
         const pagoPremio = ({ user, monto, ticket }) => {
-            console.log("monto:", round(monto))
+          /*   console.log("monto:", round(monto)) */
             if (user.level === 4) {
                 setTicketPagado(ticket)
                 //savePremio({ ticket, amount: monto, aciertos })
@@ -172,7 +172,7 @@ router.post('/', validateToken, onlyAdminAndMaster, async (req, res) => {
                 const aciertos = getAciertos.length
                 const { user } = ticket
 
-                console.log("aciertos: ", aciertos)
+               /*  console.log("aciertos: ", aciertos) */
 
                 if (aciertos === 6) {
                     estructuraDeGanadore.ganadores6.push(ticket)
@@ -194,7 +194,7 @@ router.post('/', validateToken, onlyAdminAndMaster, async (req, res) => {
             updateConfig({ premioAcumuladoGran: 0 })
             //cerrar la quiniela
             const xx = await updateAndFinally(granQuiniela._id, estructuraDeGanadore.ganadores5.length + estructuraDeGanadore.ganadores6.length, animals, estructuraDeGanadore.ganadores5.length, estructuraDeGanadore.ganadores6.length, 0)
-            console.log("Update and finally: ",xx)
+            /* console.log("Update and finally: ",xx) */
         }
 
 

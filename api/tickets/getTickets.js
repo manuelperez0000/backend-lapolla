@@ -10,7 +10,7 @@ router.get('/:id', async (req, res) => {
         const body = await getMyTickets(id)
         responser.success({ res, message: "success", body })
     } catch (error) {
-        console.log(error)
+        /* console.log(error) */
         responser.error({ res, message: error })
     }
 })

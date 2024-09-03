@@ -19,7 +19,7 @@ router.post('/',validateToken, async (req, res) => {
 
         responser.success({ res, message: "success", body: result })
     } catch (error) {
-        console.log(error)
+        /* console.log(error) */
         responser.error({ res, message: error })
     }
 })

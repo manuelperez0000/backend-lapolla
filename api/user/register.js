@@ -23,7 +23,7 @@ router.post('/', cors(), validateUserType, async (req, res) => {
         string([name, ci, email, phone, password])
 
         const userToRegister = { name, email, phone, password, level, ci, percent }
-        console.log("user: ", user)
+        /* console.log("user: ", user) */
 
         if (user?.level === 1) userToRegister.admin = user._id
         if (user?.level === 2) userToRegister.admin = user._id
@@ -48,12 +48,12 @@ router.post('/', cors(), validateUserType, async (req, res) => {
 
         if (!userSaved) throw "Error al registrar el usuario"
 
-        console.log(userSaved)
+       /*  console.log(userSaved) */
 
         responser.success({ res, message: 'success', body: userSaved })
 
     } catch (error) {
-        console.log(error)
+        /* console.log(error) */
         responser.error({ res, message: error?.message || error })
     }
 

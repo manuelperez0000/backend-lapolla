@@ -28,7 +28,7 @@ exports.savePago = async (data) => {
 
     } else {
         //updateTransfer
-        console.log("retransferir: ", retransferir)
+       /*  console.log("retransferir: ", retransferir) */
         const resultTransfer = await retransfer(payMethod, ref, retransferir)
         return { resultTransfer }
     }

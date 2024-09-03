@@ -64,8 +64,8 @@ const getMontoGranQuiniela = ({ ganadores, premioGranQuiniela, cantidadTickets, 
 
 const getMontoMiniQuiniela = ({ ganadores, premioMiniQuiniela, cantidadTickets, precioQuiniela, porcentajePremio, acumulado }) => {
     if (ganadores.length === 0 || !ganadores) return 0
-    console.log("getMonto mini: ")
-    console.log({ ganadores, premioMiniQuiniela, cantidadTickets, precioQuiniela, porcentajePremio, acumulado })
+  /*   console.log("getMonto mini: ") */
+    /* console.log({ ganadores, premioMiniQuiniela, cantidadTickets, precioQuiniela, porcentajePremio, acumulado }) */
     
     return cantidadTickets * precioQuiniela * porcentajePremio * premioMiniQuiniela / ganadores.length + (acumulado * premioMiniQuiniela / ganadores.length)
 

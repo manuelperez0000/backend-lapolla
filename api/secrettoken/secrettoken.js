@@ -24,7 +24,7 @@ router.get('/', validateToken, async (req, res) => {
 
         while (!used && intentos < 10) {
             intentos += 1
-            console.log(intentos)
+            /* console.log(intentos) */
             const verified = await verifyIfCodeIsUsed(ticketCode)
             if (verified) {
                 ticketCode = getSecretToken()

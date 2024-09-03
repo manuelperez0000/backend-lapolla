@@ -35,27 +35,27 @@ router.put('/', validateToken, onlyMaster, async (_req, res) => {
         //obtener gran quiniela ultima
         const activeGranQuiniela = await getLastActiveGranQuiniela()
 
-        console.log("fechaquiniela: ", activeGranQuiniela.fechaQuiniela)
+       /*  console.log("fechaquiniela: ", activeGranQuiniela.fechaQuiniela) */
 
         //await finalizarQuiniela(activeGranQuiniela._id)
         //traer todos los tickets con el id de esta quiniela
         const tickets = await findTicketsByIdQuiniela(activeGranQuiniela._id)
         //obtener los animales para esta quiniela
 
-        console.log("cantidad de tickets: ", tickets.length)
+        /* console.log("cantidad de tickets: ", tickets.length) */
         const fechaMasUnDia = (_fecha) => {
-            console.log("first fecha:  ", _fecha)
+            /* console.log("first fecha:  ", _fecha) */
             _fecha.setDate(_fecha.getDate() + 1)
             _fecha.setHours(_fecha.getHours() + 4)
-            console.log("_fecha", _fecha)
+           /*  console.log("_fecha", _fecha) */
             return _fecha
         }
 
         const fecha = fechaMasUnDia(activeGranQuiniela.fechaQuiniela)
         const animals = await getFilteredAnimals({ from: fecha, to: to59(fecha) })
-        console.log("animals:", animals)
+        /* console.log("animals:", animals) */
         const newAnimals = animals.map(i => i.animalId)
-        console.log("newAnimals:", newAnimals)
+        /* console.log("newAnimals:", newAnimals) */
 
         //repartir la plata a los ganadores
         const precioGranQuiniela = activeGranQuiniela.precioQuiniela
@@ -83,10 +83,10 @@ router.put('/', validateToken, onlyMaster, async (_req, res) => {
         //incrementar el saldo de los staff
 
 
-        console.log(winnerTickets.winers5asiertos)
-        console.log(winnerTickets.winers6asiertos)
+      /*   console.log(winnerTickets.winers5asiertos)
+        console.log(winnerTickets.winers6asiertos) */
 
-        console.log("premioTotal", premio6asiertos, premio5asiertos)
+      /*   console.log("premioTotal", premio6asiertos, premio5asiertos) */
 
         responser.success({ res, message: "Cerrando quinielas", body: {} })
     } catch (error) {

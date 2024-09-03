@@ -35,7 +35,7 @@ const setPremioAcumulado = async (saldo, tipoQuiniela) => {
         if (tipoQuiniela === 1) return await configModel.findOneAndUpdate({ _id: configId }, { $inc: { premioAcumuladoMini: saldo } })
         if (tipoQuiniela === 2) return await configModel.findOneAndUpdate({ _id: configId }, { $inc: { premioAcumuladoGran: saldo } })
     } catch (error) {
-        console.log(error)
+        /* console.log(error) */
     }
     return null
 }

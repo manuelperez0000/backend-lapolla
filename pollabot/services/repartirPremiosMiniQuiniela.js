@@ -10,11 +10,11 @@ const { setPremioAcumulado } = require("../../db/controllers/configController")
 const { required } = require("../../services/validate")
 
 exports.repartirPremiosMiniQuiniela = async () => {
-    console.log("Repartir premios mini quiniela ejecutado")
+    //console.log("Repartir premios mini quiniela ejecutado")
     try {
         // 1 obtener la mini quiniela de ayer
         const miniQuinielaayer = await getAyerQuiniela(2)
-        console.log("miniQuinielaayer:" + miniQuinielaayer)
+        //console.log("miniQuinielaayer:" + miniQuinielaayer)
         if (miniQuinielaayer) {
             const animals = await getFilteredAnimals({ from: fromMini, to: toMini })
 
@@ -30,9 +30,9 @@ exports.repartirPremiosMiniQuiniela = async () => {
             if (ganadores4.length > 0) {
 
                 const premio = premioTotal / ganadores4.length
-                console.log("el premio es ", premio)
+                /* console.log("el premio es ", premio)
 
-                console.log("total ganadores mini quiniela: ", ganadores4.length)
+                console.log("total ganadores mini quiniela: ", ganadores4.length) */
  
                 ganadores4.forEach(ticket => {
                     if (ticket.user.level === 5) pagoDeClientes(ticket, premio)
@@ -40,16 +40,16 @@ exports.repartirPremiosMiniQuiniela = async () => {
                 })
 
             } else {
-                console.log("No hubo ganadores")
+               /*  console.log("No hubo ganadores") */
                 //si no se consigue ganador: acumular premio
                 setPremioAcumulado(premioTotal, 2)
                 premioAcumuladoQuiniela(miniQuinielaayer._id, premioTotal)
             }
         } else {
-            console.log("No hay mini quiniela de ayer")
+            /* console.log("No hay mini quiniela de ayer") */
         }
 
     } catch (error) {
-        console.log(error)
+        /* console.log(error) */
     }
 }

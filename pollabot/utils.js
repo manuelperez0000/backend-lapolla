@@ -80,13 +80,13 @@ const winers = (tickets, animals) => {
         let counter = 0
         const animalIdsTickets = ticket.animals.map(animal => animal.id)
         animalIdsTickets.forEach((animalTicket, index) => {
-            console.log("animalFor: ", index, ' - ', animalTicket)
+           /*  console.log("animalFor: ", index, ' - ', animalTicket) */
             if (animals.includes(animalTicket)) {
                 counter = counter + 1
             }
         })
 
-        console.log("counter", counter)
+       /*  console.log("counter", counter) */
         if (counter === 6) {
             winers6asiertos.push(ticket)
         } else if (counter === 5) {

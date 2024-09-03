@@ -11,7 +11,7 @@ process.env.TZ = "America/Caracas"
 const date = new Date()
 const hora = date.getHours()
 const minutos = date.getMinutes()
-console.log(`Hora del servidor: ${hora}:${minutos}`)
+/* console.log(`Hora del servidor: ${hora}:${minutos}`) */
 
 const router = require('./router')
 const dbConnect = require('./db/conection')

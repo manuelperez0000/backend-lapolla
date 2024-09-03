@@ -10,7 +10,7 @@ const { getFromTo } = require('../../services/utils')
 const { fromMini, toMini } = getFromTo()
 
 const repartirPremiosMiniQuiniela = async () => { //finaliza a las 7pm
-    console.log("Repartir premios mini quiniela ejecutado")
+   /*  console.log("Repartir premios mini quiniela ejecutado") */
     try {
         // 1 obtener la mini quiniela de ayer
         const miniQuinielaayer = await getAyerQuiniela(2)
@@ -22,9 +22,9 @@ const repartirPremiosMiniQuiniela = async () => { //finaliza a las 7pm
         if (ganadores4.length > 0) {
 
             const premio = premioTotal / ganadores4.length
-            console.log("el premio es ", premio)
+            /* console.log("el premio es ", premio)
 
-            console.log("total ganadores mini quiniela: ", ganadores4.length)
+            console.log("total ganadores mini quiniela: ", ganadores4.length) */
 
             ganadores4.forEach(ticket => {
                 if (ticket.user.level === 5) pagoDeClientes(ticket, premio)
@@ -32,7 +32,7 @@ const repartirPremiosMiniQuiniela = async () => { //finaliza a las 7pm
             })
 
         } else {
-            console.log("No hubo ganadores")
+            /* console.log("No hubo ganadores") */
             //si no se consigue ganador: acumular premio
             setPremioAcumulado(premioTotal, 2)
             premioAcumuladoQuiniela(miniQuinielaayer._id, premioTotal)

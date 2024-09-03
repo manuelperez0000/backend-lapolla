@@ -69,7 +69,7 @@ router.post('/', validateToken, async (req, res) => {
         validate.required(payMethod, "Metodo invalido ")
 
         const tipoDeCambio = (await getMethod(payMethod.adminMethodId)).tipoDeCambio
-        console.log("tipoDeCambio:", tipoDeCambio)
+       /*  console.log("tipoDeCambio:", tipoDeCambio) */
 
         const user = await getUser(userId)
         validate.required(user, "usuario invalido")

@@ -79,8 +79,8 @@ router.post('/staf', validateToken, onlyStaf, async (req, res) => {
         //obtener los reportes de este usuario con esta fecha
 
         const reportExist = await verifyReport(newFrom, res.user.user._id)
-        console.log("fecha:", newFrom)
-        console.log(reportExist)
+        /* console.log("fecha:", newFrom)
+        console.log(reportExist) */
         if (reportExist) {
             deleteReport(reportExist._id)
             //delete report reportExist._id

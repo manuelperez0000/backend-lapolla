@@ -16,13 +16,13 @@ const apagarGranQuinielaAnterior = async () => {
     //si esta apagada no hacer nada
     if (granQuinielaAyer?.status) {
         const resultDesactivar = await finalizarQuiniela(granQuinielaAyer._id)
-        console.log("resultDesactivar:", resultDesactivar)
+        /* console.log("resultDesactivar:", resultDesactivar) */
         //buscar ganadores
         const animals = await getFilteredAnimals({ from, to })
         const ticketsFindedGran = await findTicketsByIdQuiniela(granQuinielaAyer._id)
 
         const formatedObjectTickets = getObjectFormated(ticketsFindedGran, animals)
-        console.log(formatedObjectTickets)
+        /* console.log(formatedObjectTickets) */
         //editar todos los tickets ganadores y perdedores
 
 

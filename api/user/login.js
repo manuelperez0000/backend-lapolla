@@ -33,7 +33,7 @@ router.post('/', cors(), async (req, res) => {
 
         validate.required(user, "Email o contraseña invalida")
 
-        console.log("user:", user, " conf:", config, " admin methods:", adminMethods)
+        /* console.log("user:", user, " conf:", config, " admin methods:", adminMethods) */
 
         const userMethods = await getMethods(user._id)
 

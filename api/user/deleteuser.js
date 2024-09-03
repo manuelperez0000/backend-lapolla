@@ -7,7 +7,7 @@ const responser = require('../../network/response')
 
 router.delete('/:id', validateToken, async (req, res) => {
     const _id = req.params.id
-    console.log(_id)
+    /* console.log(_id) */
     responser.success({ res, message: 'success', body: { _id } })
     /*  return
      try {

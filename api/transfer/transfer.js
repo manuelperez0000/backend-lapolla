@@ -31,11 +31,11 @@ router.put('/approve/:id', validateToken, async (req, res) => {
         //obtener transferencia
         const transferData = await getTransferById(id)
 
-        console.log("transferData: ", transferData)
+       /*  console.log("transferData: ", transferData) */
         const saldo = transferData.amount
 
         const { amount, from, to } = transferData
-        console.log("Saldo: ", saldo)
+        /* console.log("Saldo: ", saldo) */
 
         //quitar saldo al grupero 
         await icreaseUserBalance({ _id: to, balance: -amount })

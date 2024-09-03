@@ -7,7 +7,7 @@ const validateToken = require('../../midelwares/validateToken')
 const validate = require('../../services/validate')
 router.post('/', validateToken, async (req, res) => {
 
-    console.log(req.body)
+   /*  console.log(req.body) */
 
     const { name, email, phone, ci, level, _id, percent, grupero, admin } = req.body
     const user = res.user.user
