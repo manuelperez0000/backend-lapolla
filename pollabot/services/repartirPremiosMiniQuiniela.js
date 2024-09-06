@@ -7,49 +7,55 @@ const { fromMini, toMini } = getFromTo()
 const config = require('../../config.json')
 const { pagoDeClientes, pagoDeAgencias } = require("../workers/workerServices")
 const { setPremioAcumulado } = require("../../db/controllers/configController")
-const { required } = require("../../services/validate")
 
 exports.repartirPremiosMiniQuiniela = async () => {
-    //console.log("Repartir premios mini quiniela ejecutado")
-    try {
-        // 1 obtener la mini quiniela de ayer
-        const miniQuinielaayer = await getAyerQuiniela(2)
-        //console.log("miniQuinielaayer:" + miniQuinielaayer)
-        if (miniQuinielaayer) {
-            const animals = await getFilteredAnimals({ from: fromMini, to: toMini })
 
-            required(animals.length !== 0, "No hay animales en este rango de horas")
+    let obj = {}
+    // 1 obtener la mini quiniela de ayer
+    const miniQuinielaayer = await getAyerQuiniela(2)
 
-            const ticketsFindedMini = await findTicketsByIdQuiniela(miniQuinielaayer?._id)
+    obj.miniQuinielaayers = miniQuinielaayer
+    //console.log("miniQuinielaayer:" + miniQuinielaayer)
+    if (miniQuinielaayer.resultFindOneQuiniela) {
+        const animals = await getFilteredAnimals({ from: fromMini, to: toMini })
 
-            required(ticketsFindedMini.lenght !== 0, "No se encontraron tickets en esta mini quiniela" )
+        obj.animals = animals
+        //required(animals.length !== 0, "No hay animales en este rango de horas")
 
-            const ganadores4 = getGanadores({ aciertos: 4, animals, ticketsFinded: ticketsFindedMini })
-            const premioTotal = config.precioMiniQuiniela * ticketsFindedMini.length * config.porcentajePremio
+        const ticketsFindedMini = await findTicketsByIdQuiniela(miniQuinielaayer?._id)
 
-            if (ganadores4.length > 0) {
+        obj.ticketsFindedMini = ticketsFindedMini
+        //required(ticketsFindedMini.lenght !== 0, "No se encontraron tickets en esta mini quiniela")
 
-                const premio = premioTotal / ganadores4.length
-                /* console.log("el premio es ", premio)
+        const ganadores4 = getGanadores({ aciertos: 4, animals, ticketsFinded: ticketsFindedMini })
 
-                console.log("total ganadores mini quiniela: ", ganadores4.length) */
- 
-                ganadores4.forEach(ticket => {
-                    if (ticket.user.level === 5) pagoDeClientes(ticket, premio)
-                    if (ticket.user.level === 4) pagoDeAgencias(ticket, premio)
-                })
+        obj.ganadores4 = ganadores4
+        const premioTotal = config.precioMiniQuiniela * ticketsFindedMini.length * config.porcentajePremio
 
-            } else {
-               /*  console.log("No hubo ganadores") */
-                //si no se consigue ganador: acumular premio
-                setPremioAcumulado(premioTotal, 2)
-                premioAcumuladoQuiniela(miniQuinielaayer._id, premioTotal)
-            }
+        obj.premioTotal = premioTotal
+
+        if (ganadores4.length > 0) {
+
+            const premio = premioTotal / ganadores4.length
+
+            obj.premio = premio
+
+            ganadores4.forEach(ticket => {
+                if (ticket.user.level === 5) pagoDeClientes(ticket, premio)
+                if (ticket.user.level === 4) pagoDeAgencias(ticket, premio)
+            })
+
         } else {
-            /* console.log("No hay mini quiniela de ayer") */
-        }
+ 
+            setPremioAcumulado(premioTotal, 2)
 
-    } catch (error) {
-        /* console.log(error) */
+            premioAcumuladoQuiniela(miniQuinielaayer._id, premioTotal)
+        }
+    } else {
+        obj.result = "No hubo mini quiniela ayer"
     }
+
+    return obj
+
+
 }

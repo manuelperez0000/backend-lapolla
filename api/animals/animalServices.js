@@ -12,8 +12,12 @@ const isWinner = (ticket, animals, aciertos) => {
 }
 
 const getGanadores = ({ aciertos, animals, ticketsFinded }) => {
-    const res = ticketsFinded.filter(ticket => isWinner(ticket, animals, aciertos))
-    return res
+    if(ticketsFinded.legth > 0){
+        const res = ticketsFinded?.filter(ticket => isWinner(ticket, animals, aciertos))
+        return res
+    }else{
+        return []
+    }
 }
 
 const getObjectFormated = (ticketsFindedGran, animals, aciertos = 5) => {

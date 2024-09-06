@@ -2,20 +2,35 @@ const { getConfig } = require("../../db/controllers/configController")
 const { countDocuments, getQuinielas, saveQuiniela, getAyerQuiniela, finalizarQuiniela } = require("../../db/controllers/quinielaController")
 const { getAyerYhoy } = require("../utils")
 const config = require('../../config.json')
-const { required } = require("../../services/validate")
+/* const { required } = require("../../services/validate") */
 const { fechaHoy } = getAyerYhoy()
 
 exports.createNewMiniQuiniela2 = async () => {
 
+    let objResult = {}
 
     //cerrar miniQuiniela de ayer
 
     const miniQuinielaAyer = await getAyerQuiniela(2)
 
+    objResult.miniQuinielaAyer = miniQuinielaAyer
+
+
     const resultDesactivar = await finalizarQuiniela(miniQuinielaAyer?._id)
 
-    const { premioCasa, precioMiniQuiniela } = await getConfig()
+    objResult.resultDesactivar = resultDesactivar
+
+
+    const resultGetConfig = await getConfig()
+
+    const { premioCasa, precioMiniQuiniela } = resultGetConfig
+
+    objResult.getConfig = resultGetConfig
+
     const count = await countDocuments()
+
+    objResult.cantidadDeQuinielas = count
+
     const data = {
         precioQuiniela: precioMiniQuiniela,
         horaDeLanzamiento: config.horaMiniQuiniela,
@@ -27,14 +42,13 @@ exports.createNewMiniQuiniela2 = async () => {
 
     const miniQuinielaDeHoy = await getQuinielas({ fechaQuiniela: fechaHoy, tipoQuiniela: 2 })
 
+    objResult.miniQuinielaDeHoy = miniQuinielaDeHoy
+
     //si la fecha de gran quiniela es ayer continua sino retorna falso
 
-    const nuevaMiniQuiniela = miniQuinielaDeHoy.length === 0 & await saveQuiniela(data)
+    const nuevaMiniQuiniela = miniQuinielaDeHoy.length === 0 && await saveQuiniela(data)
 
-    const resultObjects = {
-        resultDesactivar,
-        nuevaMiniQuiniela
-    }
+    objResult.nuevaMiniQuiniela = nuevaMiniQuiniela
 
-    return resultObjects
+    return objResult
 }

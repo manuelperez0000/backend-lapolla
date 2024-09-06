@@ -30,7 +30,19 @@ const getLastActive = async ({ tipoQuiniela }) => {
 
 const getAyerQuiniela = async (tipo = 1) => {
     const fechaQuiniela = getAyerCompletedString()
-    return await quinielaModel.findOne({ fechaQuiniela, tipoQuiniela: tipo })
+
+    const response = await quinielaModel.findOne({ fechaQuiniela, tipoQuiniela: tipo })
+    if (response) {
+        return {
+            fechaQuinielaAyer: fechaQuiniela,
+            resultFindOneQuiniela: response
+        }
+    } else {
+        return {
+            fechaQuinielaAyer : fechaQuiniela,
+            resultFindOneQuiniela: null
+        }
+    }
 }
 
 const updateAndFinally = async (_id, winners, resultAnimals, ganadores5Asiertos, ganadores6Asiertos, acumulado) => {
@@ -56,9 +68,9 @@ const premioAcumuladoQuiniela = async (_id, acumulado) => await quinielaModel.fi
 const getQuinielaByDate = async (from, to) => await quinielaModel.find({ fechaQuiniela: { $gt: from, $lt: to } })
 
 const updateAnimals = async ({ _id, resultAnimals }) => {
-    if(_id && resultAnimals.length > 0) {
+    if (_id && resultAnimals.length > 0) {
         return await quinielaModel.findOneAndUpdate({ _id }, { resultAnimals })
-    }  
+    }
 }
 
 const quinielaController = {

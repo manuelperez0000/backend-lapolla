@@ -10,7 +10,7 @@ function getAyerCompletedString() {
     const date = new Date()
     date.setDate(date.getDate() - 1)
     date.setHours(date.getHours() - 4)
-    return date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2,'0') + "-" + String(date.getDate()).padStart(2,'0') + "T00:00:00.000+00:00"
+    return date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, '0') + "-" + String(date.getDate()).padStart(2, '0') + "T00:00:00.000+00:00"
 }
 
 function getHour() {
@@ -30,5 +30,15 @@ function getFromTo() {
     return { from, to, fromMini, toMini }
 }
 
-module.exports = { getHoyCompletedString, getHour, getFromTo, getAyerCompletedString }
+function validateTokenParams(token, params) {
+
+    if (token != params.GQ_INIT && token != params.MIQ_END && token != params.MQ_INIT) {
+        return false
+    } else {
+        return true
+    }
+
+}
+
+module.exports = { getHoyCompletedString, getHour, getFromTo, getAyerCompletedString, validateTokenParams }
 
