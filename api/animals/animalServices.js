@@ -12,10 +12,10 @@ const isWinner = (ticket, animals, aciertos) => {
 }
 
 const getGanadores = ({ aciertos, animals, ticketsFinded }) => {
-    if(ticketsFinded.legth > 0){
+    if (ticketsFinded.legth > 0) {
         const res = ticketsFinded?.filter(ticket => isWinner(ticket, animals, aciertos))
         return res
-    }else{
+    } else {
         return []
     }
 }
@@ -35,30 +35,6 @@ const getObjectFormated = (ticketsFindedGran, animals, aciertos = 5) => {
 
 const getCalc = (quinielaType, percent) => quinielaType === "1" ? percent / 100 * config.precioGranQuiniela : percent / 100 * config.precioMiniQuiniela
 
-const pagarPorcentajeDeGananciaStaff = (ticket) => {
-
-    const { quinielaType } = ticket
-    const agencia = ticket.user
-    const balanceAgencia = getCalc(quinielaType, agencia?.percent)
-    /* icreaseUserBalance({ _id: agencia._id, balance: balanceAgencia }) */
-    const grupero = ticket.user?.grupero
-    if (grupero) {
-        const balanceGrupero = getCalc(quinielaType, grupero?.percent)
-        /* icreaseUserBalance({ _id: grupero._id, balance: balanceGrupero }) */
-
-        /******************************************************************************************* */
-        //aumentar tambien el balance del admin **************************************************//
-        /******************************************************************************************* */
-    }
-
-    const admin = ticket.user?.admin
-    if (admin) {
-        const balanceAdmin = getCalc(quinielaType, admin?.percent)
-        /*  icreaseUserBalance({ _id: admin._id, balance: balanceAdmin }) */
-    }
-
-}
-
 const getMontoGranQuiniela = ({ ganadores, premioGranQuiniela, cantidadTickets, precioQuiniela, porcentajePremio, premio, acumulado }) => {
     if (ganadores.length === 0 || !ganadores) return 0
     const total = cantidadTickets * precioQuiniela * porcentajePremio * premioGranQuiniela * premio / ganadores.length + (acumulado * premio / ganadores.length)
@@ -68,18 +44,49 @@ const getMontoGranQuiniela = ({ ganadores, premioGranQuiniela, cantidadTickets, 
 
 const getMontoMiniQuiniela = ({ ganadores, premioMiniQuiniela, cantidadTickets, precioQuiniela, porcentajePremio, acumulado }) => {
     if (ganadores.length === 0 || !ganadores) return 0
-  /*   console.log("getMonto mini: ") */
+    /*   console.log("getMonto mini: ") */
     /* console.log({ ganadores, premioMiniQuiniela, cantidadTickets, precioQuiniela, porcentajePremio, acumulado }) */
-    
+
     return cantidadTickets * precioQuiniela * porcentajePremio * premioMiniQuiniela / ganadores.length + (acumulado * premioMiniQuiniela / ganadores.length)
 
 }
 
+const getArrayAnimalsToSave = ({ owner,hora,animalRuletaActiva, _newFecha, animalGranjita, animalLotoActivo }) => {
+    return [
+        {
+            name: animalRuletaActiva.name,
+            animalId: animalRuletaActiva.id,
+            owner,
+            hora,
+            fecha: _newFecha,
+            roulet: 1
+        },
+        {
+            name: animalGranjita.name,
+            animalId: animalGranjita.id,
+            owner,
+            hora,
+            fecha: _newFecha,
+            roulet: 2
+        },
+        {
+            name: animalLotoActivo.name,
+            animalId: animalLotoActivo.id,
+            owner,
+            hora,
+            fecha: _newFecha,
+            roulet: 3
+        }
+    ]
+}
+
+//https://backend-lapolla-production.vercel.app/api/v1/cron/isudhfyLIJDOHFI4654sdsf86JHGJdsfgwer54IUN
+
 module.exports = {
     getGanadores,
-    pagarPorcentajeDeGananciaStaff,
     getObjectFormated,
     isWinner,
     getMontoGranQuiniela,
-    getMontoMiniQuiniela
+    getMontoMiniQuiniela,
+    getArrayAnimalsToSave
 }

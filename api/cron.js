@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+require('dotenv').config({ path: '.env' })
 const express = require('express')
 const router = express.Router()
 const responser = require('../network/response')
@@ -11,9 +12,12 @@ const { validateTokenParams } = require('../services/utils')
 router.get('/:token', async (req, res) => {
   try {
 
-    const token = req.params.token
+    const token = req?.params?.token
 
     const { GQ_INIT, MQ_INIT, MIQ_END } = process.env
+
+    /* responser.success({ res, message: "success", body: { GQ_INIT, MQ_INIT, MIQ_END,token } })
+    return */
 
     required(validateTokenParams(token, { GQ_INIT, MQ_INIT, MIQ_END }), "token invalido")
 

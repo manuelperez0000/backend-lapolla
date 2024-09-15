@@ -10,9 +10,9 @@ exports.getPollas = async () => {
     const activeMini = await getLastActive({ tipoQuiniela: 2 })
 
     if (!activeGran && !activeMini) return false
-
-    const ticketsMini = await findTicketsByIdQuiniela(activeMini._id)
-    const ticketsGran = await findTicketsByIdQuiniela(activeGran._id)
+    
+    const ticketsMini = await findTicketsByIdQuiniela(activeMini?._id)
+    const ticketsGran = await findTicketsByIdQuiniela(activeGran?._id)
 
     const gran = (ticketsMini?.length || 0) * 25 * 0.8
     const mini = (ticketsGran?.length || 0) * 25 * 0.8

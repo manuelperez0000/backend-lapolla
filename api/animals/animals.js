@@ -1,4 +1,4 @@
-const round = (num) => Math.round(num * 100) / 100
+/* const round = (num) => Math.round(num * 100) / 100 */
 const express = require('express')
 const router = express.Router()
 const { saveAnimal, getAnimals, deleteAnima } = require('../../db/controllers/animalsController')
@@ -7,12 +7,12 @@ const validateToken = require('../../midelwares/validateToken')
 const onlyAdminAndMaster = require('../../midelwares/onlyAdminAndMaster')
 const { required } = require('../../services/validate')
 const { getLastActiveGranQuinielaAndMini, updateAnimals } = require('../../db/controllers/quinielaController')
-const { getGanadores, getMontoGranQuiniela, getMontoMiniQuiniela } = require('./animalServices')
+const { getGanadores, getMontoGranQuiniela, getMontoMiniQuiniela, getArrayAnimalsToSave } = require('./animalServices')
 const { updateAndFinally } = require('../../db/controllers/quinielaController')
 const { getFilteredAnimals } = require('../../db/controllers/animalsController')
 const { getFromTo } = require('../../services/utils')
 const { from, to, fromMini, toMini } = getFromTo()
-const { findTicketsByIdQuiniela, setGanadores, setPerdedores,setTicketPagado } = require('../../db/controllers/ticketController')
+const { findTicketsByIdQuiniela, setGanadores, setPerdedores, setTicketPagado } = require('../../db/controllers/ticketController')
 /* const { savePremio } = require('../../db/controllers/premioController') */
 const config = require('../../config.json')
 const { icreaseUserBalance } = require('../../db/controllers/userController')
@@ -27,7 +27,7 @@ router.delete('/:id', validateToken, onlyAdminAndMaster, async (req, res) => {
     try {
         const response = await deleteAnima(animalId)
 
-      /*   console.log(response) */
+        /*   console.log(response) */
 
         responser.success({ res, message: "Eliminado con exito", body: response.data })
     } catch (error) {
@@ -39,44 +39,18 @@ router.post('/', validateToken, onlyAdminAndMaster, async (req, res) => {
     try {
 
         const { owner, animalRuletaActiva, animalGranjita, animalLotoActivo, hora, fecha } = req.body
-
         required([owner, animalRuletaActiva, animalGranjita, animalLotoActivo, hora, fecha])
 
         const newFecha = new Date(fecha)
         const _newFecha = newFecha.setHours(newFecha.getHours() - 4)
 
-        const animalsToSave = [
-            {
-                name: animalRuletaActiva.name,
-                animalId: animalRuletaActiva.id,
-                owner,
-                hora,
-                fecha: _newFecha,
-                roulet: 1
-            },
-            {
-                name: animalGranjita.name,
-                animalId: animalGranjita.id,
-                owner,
-                hora,
-                fecha: _newFecha,
-                roulet: 2
-            },
-            {
-                name: animalLotoActivo.name,
-                animalId: animalLotoActivo.id,
-                owner,
-                hora,
-                fecha: _newFecha,
-                roulet: 3
-            }
-        ]
+        const animalsToSave = getArrayAnimalsToSave({ owner, hora, animalRuletaActiva, _newFecha, animalGranjita, animalLotoActivo })
 
         //obtener el id de la gran quiniela que esta en juego y la mini quiniela
         const activeQuinielas = await getLastActiveGranQuinielaAndMini()
-        required(activeQuinielas.length > 0, "quinielas finalizadas, proxima a partir de las 9:00 AM")
+        required(activeQuinielas?.length > 0, "quinielas finalizadas, proxima a partir de las 9:00 AM")
         const response = await saveAnimal(animalsToSave)
-        required(response)
+        required(response, "No se pudo guardar los animalitos")
 
         //guardar este resultado en quiniela, agregar
         const granQuiniela = activeQuinielas.filter(i => i?.tipoQuiniela === 1)[0]
@@ -115,6 +89,10 @@ router.post('/', validateToken, onlyAdminAndMaster, async (req, res) => {
         const ganadores5 = getGanadores({ aciertos: 5, animals, ticketsFinded: ticketsFindedGran })
         const ganadores4 = getGanadores({ aciertos: 4, animals: animalsMini, ticketsFinded: ticketsFindedMini })
 
+        console.log("ganadores 4:", ganadores4)
+        console.log("abnimalsMini:", animalsMini)
+        console.log("ticketsFindedMini:", ticketsFindedMini)
+
         //mini quiniela
 
         const montoPremioGranQuiniela6 = getMontoGranQuiniela({
@@ -146,15 +124,15 @@ router.post('/', validateToken, onlyAdminAndMaster, async (req, res) => {
             acumulado: acumuladoMiniQuiniela
         })
 
-      /*   console.log("montoPremioGranQuiniela5: ", montoPremioGranQuiniela5)
-        console.log("montoPremioGranQuiniela6: ", montoPremioGranQuiniela6)
-        console.log("montoPremioMiniQuiniela: ", montoPremioMiniQuiniela) */
+        /*   console.log("montoPremioGranQuiniela5: ", montoPremioGranQuiniela5)
+          console.log("montoPremioGranQuiniela6: ", montoPremioGranQuiniela6)
+          console.log("montoPremioMiniQuiniela: ", montoPremioMiniQuiniela) */
 
 
         //const montoPremioGranQuiniela5 = ganadores5?.length > 0 ? (ticketsFindedGran.length * precioGranQuiniela * porcentajePremio * premio5aciertos / ganadores5.length + (acumuladoGranQuiniela * premio5aciertos / ganadores5.length)).toFixed(2) : 0
 
         const pagoPremio = ({ user, monto, ticket }) => {
-          /*   console.log("monto:", round(monto)) */
+            /*   console.log("monto:", round(monto)) */
             if (user.level === 4) {
                 setTicketPagado(ticket)
                 //savePremio({ ticket, amount: monto, aciertos })
@@ -172,7 +150,7 @@ router.post('/', validateToken, onlyAdminAndMaster, async (req, res) => {
                 const aciertos = getAciertos.length
                 const { user } = ticket
 
-               /*  console.log("aciertos: ", aciertos) */
+                /*  console.log("aciertos: ", aciertos) */
 
                 if (aciertos === 6) {
                     estructuraDeGanadore.ganadores6.push(ticket)
@@ -207,7 +185,11 @@ router.post('/', validateToken, onlyAdminAndMaster, async (req, res) => {
         /*888888888888888888888888888888888888888888888****************************************/
 
         if (ganadores4.length > 0) {
+
+            console.log("GANADORES POSITIVOooooooooooooooooooooooooooooooo")
+
             const estructuraDeGanadores = { ganadoresMiniQuiniela: [], perdedores: [] }
+
             ticketsFindedMini.forEach((ticket) => {
                 const animalsMiniQuiniela = animalsMini.map(a => a.animalId)
                 const getAciertos = ticket.animals.filter(animal => animalsMiniQuiniela.includes(animal.id))
@@ -220,8 +202,12 @@ router.post('/', validateToken, onlyAdminAndMaster, async (req, res) => {
                     estructuraDeGanadores.perdedores.push(ticket)
                 }
             })
+
             const idTicketsGanadoresMini = [...estructuraDeGanadores.ganadoresMiniQuiniela].map(i => i._id)
             const idTicketsPerdedoresMini = [...estructuraDeGanadores.perdedores].map(i => i._id)
+
+            console.log("Ganadores mini >>>>>>>>>>: ", idTicketsGanadoresMini)
+
             setGanadores(idTicketsGanadoresMini)
             setPerdedores(idTicketsPerdedoresMini)
             updateConfig({ premioAcumuladoMini: 0 })

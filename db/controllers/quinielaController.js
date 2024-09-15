@@ -15,6 +15,7 @@ const getLastActiveQuiniela = async () => {
 
 const getLastActiveGranQuinielaAndMini = async () => {
     const fechaQuiniela = getAyerCompletedString()
+    
     return await quinielaModel.find({ status: true, fechaQuiniela }).sort({ $natural: -1 })
 }
 
@@ -23,8 +24,14 @@ const finalizarQuiniela = async (_id) => await quinielaModel.findOneAndUpdate({ 
 const countDocuments = async () => await quinielaModel.countDocuments()
 
 const getLastActive = async ({ tipoQuiniela }) => {
-    const fechaQuiniela = getHoyCompletedString()
+    const fechaQuiniela = getAyerCompletedString()
+//*************************************************************************************************** */
+//**********************************MAL ************************************************************ */
+//*************************************************************************************************** */
+    console.log("tipoQuiniela: ",tipoQuiniela)
+    console.log("fechaQuiniela: ",fechaQuiniela)
     const res = await quinielaModel.findOne({ status: true, tipoQuiniela, fechaQuiniela }).sort({ $natural: -1 })
+    console.log("res: ",res)
     return res
 }
 

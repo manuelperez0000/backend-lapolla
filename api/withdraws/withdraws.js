@@ -69,12 +69,12 @@ router.post('/', validateToken, async (req, res) => {
         validate.required(payMethod, "Metodo invalido ")
 
         const tipoDeCambio = (await getMethod(payMethod.adminMethodId)).tipoDeCambio
-       /*  console.log("tipoDeCambio:", tipoDeCambio) */
+        console.log("tipoDeCambio:", tipoDeCambio)
 
         const user = await getUser(userId)
         validate.required(user, "usuario invalido")
 
-        validate.required(user.balance >= amount*tipoDeCambio, "Usted no posee fondos")
+        validate.required(user.balance >= amount * tipoDeCambio, "Usted no posee fondos")
 
         //retirar el sado al usuario
         const respRestarSaldo = await icreaseUserBalance({ _id: userId, balance: -amount * tipoDeCambio })
@@ -94,6 +94,8 @@ router.post('/', validateToken, async (req, res) => {
                 email: user.email
             }
         }
+
+        dataToSave.payMethod.tipoDeCambio = tipoDeCambio
 
         const body = await saveWithdraw(dataToSave)
         validate.required(body, "No se pudo guardar en la base de datos")

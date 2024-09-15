@@ -37,8 +37,9 @@ router.post('/', validateToken, async (req, res) => {
         const hora = (new Date()).getHours()
 
         const activeQuiniela = await getLastActive({ tipoQuiniela: type })
-        required(activeQuiniela, "No esta activa ninguna quiniela")
 
+        required(activeQuiniela, "No esta activa ninguna quiniela")
+        
         const date = new Date()
         date.setHours(date.getHours() - 4)
 
