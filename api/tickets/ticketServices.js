@@ -2,8 +2,6 @@ const { compareTicketCode } = require("../../db/controllers/ticketController")
 
 
 exports.getTicketCode = async () => {
-
-
     const getComparedCode = async () => {
         const digits = "23456789ACDEFGHJKLMPQRTUX"
         const randomDigit = () => digits[Math.floor((Math.random() * digits.length))]
@@ -21,5 +19,5 @@ exports.getTicketCode = async () => {
     }
 
     return getComparedCode()
-
 }
+
