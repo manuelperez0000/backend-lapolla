@@ -1,9 +1,20 @@
 const { getConfig } = require("../../db/controllers/configController")
-const { countDocuments, getQuinielas, saveQuiniela, getAyerQuiniela, finalizarQuiniela } = require("../../db/controllers/quinielaController")
+const { countDocuments, getQuinielas, saveQuiniela, getAyerQuiniela, finalizarQuiniela,getHoyMiniQuiniela } = require("../../db/controllers/quinielaController")
 const { getAyerYhoy } = require("../utils")
 const config = require('../../config.json')
 /* const { required } = require("../../services/validate") */
 const { fechaHoy } = getAyerYhoy()
+
+exports.closeMiniQuiniela = async ()=>{
+
+    const miniQuiniela = getHoyMiniQuiniela()
+    
+    const resultCerrarMini = await finalizarQuiniela(miniQuiniela?._id)
+
+    console.log("Cerrar mini quiniela ultima")
+
+    return resultCerrarMini
+}
 
 exports.createNewMiniQuiniela2 = async () => {
 

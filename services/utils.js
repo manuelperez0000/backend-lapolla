@@ -30,15 +30,7 @@ function getFromTo() {
     return { from, to, fromMini, toMini }
 }
 
-function validateTokenParams(token, params) {
-
-    if (token != params.GQ_INIT && token != params.MIQ_END && token != params.MQ_INIT) {
-        return false
-    } else {
-        return true
-    }
-
-}
+const validateTokenParams = (token, params) => token === params.MQ_CLOSE || token === params.GQ_INIT || token === params.MIQ_END || token === params.MQ_INIT  
 
 module.exports = { getHoyCompletedString, getHour, getFromTo, getAyerCompletedString, validateTokenParams }
 

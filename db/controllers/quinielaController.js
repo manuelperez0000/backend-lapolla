@@ -80,6 +80,10 @@ const updateAnimals = async ({ _id, resultAnimals }) => {
     }
 }
 
+const getMiniQuinielaDeHoy = ()=>{
+
+}
+
 const quinielaController = {
     saveQuiniela,
     getQuinielas,
