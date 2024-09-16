@@ -1,5 +1,5 @@
 const quinielaModel = require('../models/quinielaModel')
-const { getAyerCompletedString, getFromTo, getFromToAyerYHoy,getFechasHoyMini } = require('../../services/utils')
+const { getAyerCompletedString, getFromTo, getFromToAyerYHoy, getFechasHoyMini } = require('../../services/utils')
 
 const saveQuiniela = async (quiniela) => await quinielaModel(quiniela).save()
 
@@ -14,20 +14,29 @@ const getLastActiveQuiniela = async () => {
 }
 
 const getLastActiveGranQuinielaAndMini = async () => {
-    const fechaQuiniela = getAyerCompletedString()
+    //const fechaQuiniela = getAyerCompletedString()
 
-    return await quinielaModel.find({ status: true, fechaQuiniela }).sort({ $natural: -1 })
+    const hoy = new Date();
+    const ayer = new Date();
+    ayer.setDate(hoy.getDate() - 1);
+
+    return await quinielaModel.find({
+        status: true, fechaQuiniela: {
+            $gte: ayer,
+            $lt: hoy
+        }
+    }).sort({ $natural: -1 })
 }
 
 const getLastActiveGranQuiniela = async () => {
     const { from, to } = getFromToAyerYHoy()
-    const result = await quinielaModel.findOne({ fechaQuiniela: { "$gte": from, "$lt": to }, status: true,tipoQuiniela:1 })
+    const result = await quinielaModel.findOne({ fechaQuiniela: { "$gte": from, "$lt": to }, status: true, tipoQuiniela: 1 })
     return result
 }
 
-const getLastActiveMiniQuiniela = async ()=>{
-    const {from,to} = getFechasHoyMini()
-    const result = await quinielaModel.findOne({ fechaQuiniela: { "$gte": from, "$lt": to }, status: true,tipoQuiniela:2 })
+const getLastActiveMiniQuiniela = async () => {
+    const { from, to } = getFechasHoyMini()
+    const result = await quinielaModel.findOne({ fechaQuiniela: { "$gte": from, "$lt": to }, status: true, tipoQuiniela: 2 })
     return result
 }
 

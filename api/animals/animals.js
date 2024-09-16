@@ -48,7 +48,7 @@ router.post('/', validateToken, onlyAdminAndMaster, async (req, res) => {
 
         //obtener el id de la gran quiniela que esta en juego y la mini quiniela
         const activeQuinielas = await getLastActiveGranQuinielaAndMini()
-        required(activeQuinielas?.length > 0, "quinielas finalizadas, proxima a partir de las 9:00 AM")
+        required(activeQuinielas?.length > 0, "quinielas finalizadas, proxima a partir de las 10:00 AM ...")
         const response = await saveAnimal(animalsToSave)
         required(response, "No se pudo guardar los animalitos")
 
