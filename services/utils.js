@@ -24,9 +24,8 @@ function getFromTo() {
     const newTo = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
     const from = newFrom + "T00:00:00.000+00:00";
     const to = newTo + "T23:59:59.000+00:00";
-    const fromMini = newFrom + "T15:00:00.000+00:00";
-    const toMini = newFrom + "T19:00:00.000+00:00";
-
+    const fromMini = newFrom + "T15:00:00.000+00:00"; ///aquiiiiiiiiiiiiiiiiiiii
+    const toMini = newFrom + "T20:00:00.000+00:00";
     return { from, to, fromMini, toMini }
 }
 

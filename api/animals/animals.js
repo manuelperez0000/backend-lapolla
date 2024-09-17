@@ -1,4 +1,4 @@
-/* const round = (num) => Math.round(num * 100) / 100 */
+const round = (num) => Math.round(num * 100) / 100
 const express = require('express')
 const router = express.Router()
 const { saveAnimal, getAnimals, deleteAnima } = require('../../db/controllers/animalsController')
@@ -13,7 +13,7 @@ const { getFilteredAnimals } = require('../../db/controllers/animalsController')
 const { getFromTo } = require('../../services/utils')
 const { from, to, fromMini, toMini } = getFromTo()
 const { findTicketsByIdQuiniela, setGanadores, setPerdedores, setTicketPagado } = require('../../db/controllers/ticketController')
-/* const { savePremio } = require('../../db/controllers/premioController') */
+const { savePremio } = require('../../db/controllers/premioController')
 const config = require('../../config.json')
 const { icreaseUserBalance } = require('../../db/controllers/userController')
 
@@ -43,13 +43,21 @@ router.post('/', validateToken, onlyAdminAndMaster, async (req, res) => {
 
         const newFecha = new Date(fecha)
         const _newFecha = newFecha.setHours(newFecha.getHours() - 4)
+        //const _newFecha = newFecha.setHours(newFecha.getHours() -4)
 
         const animalsToSave = getArrayAnimalsToSave({ owner, hora, animalRuletaActiva, _newFecha, animalGranjita, animalLotoActivo })
+        /*         const fechita = new Date(animalsToSave[0].fecha)
+                console.log("fechita: ", fechita.getHours()) */
+
+        const response = await saveAnimal(animalsToSave)
+        required(response, "No se pudo guardar los animalitos")
+
+        const activeQuinielas = await getLastActiveGranQuinielaAndMini()
+
+        console.log("activeQuinielas: ", activeQuinielas)
 
         //obtener el id de la gran quiniela que esta en juego y la mini quiniela
-        const activeQuinielas = await getLastActiveGranQuinielaAndMini()
         required(activeQuinielas?.length > 0, "quinielas finalizadas, proxima a partir de las 10:00 AM ...")
-        const response = await saveAnimal(animalsToSave)
         required(response, "No se pudo guardar los animalitos")
 
         //guardar este resultado en quiniela, agregar
@@ -87,13 +95,8 @@ router.post('/', validateToken, onlyAdminAndMaster, async (req, res) => {
 
         const ganadores6 = getGanadores({ aciertos: 6, animals, ticketsFinded: ticketsFindedGran })
         const ganadores5 = getGanadores({ aciertos: 5, animals, ticketsFinded: ticketsFindedGran })
+
         const ganadores4 = getGanadores({ aciertos: 4, animals: animalsMini, ticketsFinded: ticketsFindedMini })
-
-        console.log("ganadores 4:", ganadores4)
-        console.log("abnimalsMini:", animalsMini)
-        console.log("ticketsFindedMini:", ticketsFindedMini)
-
-        //mini quiniela
 
         const montoPremioGranQuiniela6 = getMontoGranQuiniela({
             ganadores: ganadores6,
@@ -124,20 +127,30 @@ router.post('/', validateToken, onlyAdminAndMaster, async (req, res) => {
             acumulado: acumuladoMiniQuiniela
         })
 
-        /*   console.log("montoPremioGranQuiniela5: ", montoPremioGranQuiniela5)
-          console.log("montoPremioGranQuiniela6: ", montoPremioGranQuiniela6)
-          console.log("montoPremioMiniQuiniela: ", montoPremioMiniQuiniela) */
+        console.log("montoPremioGranQuiniela5: ", montoPremioGranQuiniela5)
+        console.log("montoPremioGranQuiniela6: ", montoPremioGranQuiniela6)
+        console.log("montoPremioMiniQuiniela: ", montoPremioMiniQuiniela)
 
 
         //const montoPremioGranQuiniela5 = ganadores5?.length > 0 ? (ticketsFindedGran.length * precioGranQuiniela * porcentajePremio * premio5aciertos / ganadores5.length + (acumuladoGranQuiniela * premio5aciertos / ganadores5.length)).toFixed(2) : 0
 
-        const pagoPremio = ({ user, monto, ticket }) => {
-            /*   console.log("monto:", round(monto)) */
+        const pagoPremio = ({ user, monto, ticket, aciertos }) => {
+            console.log("monto:", round(monto))
             if (user.level === 4) {
+                console.log("pago a agencia")
                 setTicketPagado(ticket)
-                //savePremio({ ticket, amount: monto, aciertos })
+                const premio = {
+                    ticket,
+                    amount: monto,
+                    userData: {},
+                    agencia: user._id,
+                    aciertos
+                }
+                savePremio(premio)
             } else {
+                console.log("pago a cliente; " + round(monto))
                 icreaseUserBalance({ _id: user._id, balance: monto })
+                setTicketPagado(ticket)
             }
         }
 
@@ -176,17 +189,9 @@ router.post('/', validateToken, onlyAdminAndMaster, async (req, res) => {
         }
 
 
-
-        /*888888888888888888888888888888888888888888888****************************************/
-        /*888888888888888888888888888888888888888888888****************************************/
-
-        //error en balance
-
-        /*888888888888888888888888888888888888888888888****************************************/
-
         if (ganadores4.length > 0) {
 
-            console.log("GANADORES POSITIVOooooooooooooooooooooooooooooooo")
+            console.log("GANADORES mini POSITIVOooooooooooooooooooooooooooooooo")
 
             const estructuraDeGanadores = { ganadoresMiniQuiniela: [], perdedores: [] }
 

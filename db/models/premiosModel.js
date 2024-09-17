@@ -20,10 +20,6 @@ const Premio = new Schema({
         required: true
     },
     agencia: Schema.Types.ObjectId,
-    payerId: {
-        type: Schema.Types.ObjectId || String,
-        default:""
-    },
     status:{
         type: Boolean,
         default: false

@@ -5,14 +5,23 @@ const isWinner = (ticket, animals, aciertos) => {
     const idsAnimals = animals.map(i => i.animalId)
     let total = 0
     ticket.animals.forEach(animal => {
-        if (idsAnimals.includes(animal.id)) total += 1
+        if (idsAnimals.includes(animal.id)) {
+            total += 1
+           /*  console.log("aciertos : " + total) */
+        }
     })
 
     return total === aciertos
 }
 
 const getGanadores = ({ aciertos, animals, ticketsFinded }) => {
-    if (ticketsFinded.legth > 0) {
+
+    /*    console.log("animals getGanadores: " , animals)
+    console.log("tickets finded getGanadores: " , ticketsFinded)
+ console.log("ticketsFinded.length: " , ticketsFinded)
+    console.log("aciertos getGanadores: " , aciertos) */
+
+    if (ticketsFinded.length > 0) {
         const res = ticketsFinded?.filter(ticket => isWinner(ticket, animals, aciertos))
         return res
     } else {
@@ -51,7 +60,7 @@ const getMontoMiniQuiniela = ({ ganadores, premioMiniQuiniela, cantidadTickets, 
 
 }
 
-const getArrayAnimalsToSave = ({ owner,hora,animalRuletaActiva, _newFecha, animalGranjita, animalLotoActivo }) => {
+const getArrayAnimalsToSave = ({ owner, hora, animalRuletaActiva, _newFecha, animalGranjita, animalLotoActivo }) => {
     return [
         {
             name: animalRuletaActiva.name,

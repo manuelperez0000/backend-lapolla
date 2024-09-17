@@ -25,7 +25,7 @@ exports.repartirPremiosMiniQuiniela = async () => {
         const ticketsFindedMini = await findTicketsByIdQuiniela(miniQuinielaayer?._id)
 
         obj.ticketsFindedMini = ticketsFindedMini
-        //required(ticketsFindedMini.lenght !== 0, "No se encontraron tickets en esta mini quiniela")
+        //required(ticketsFindedMini.lengtt !== 0, "No se encontraron tickets en esta mini quiniela")
 
         const ganadores4 = getGanadores({ aciertos: 4, animals, ticketsFinded: ticketsFindedMini })
 

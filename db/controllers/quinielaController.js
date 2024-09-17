@@ -14,17 +14,19 @@ const getLastActiveQuiniela = async () => {
 }
 
 const getLastActiveGranQuinielaAndMini = async () => {
-    //const fechaQuiniela = getAyerCompletedString()
 
-    const hoy = new Date();
     const ayer = new Date();
+    const hoy = new Date();
     ayer.setDate(hoy.getDate() - 1);
+    const newAyer = ayer.getFullYear() + "-" + String(ayer.getMonth() + 1).padStart(2, '0') + "-" + String(ayer.getDate()).padStart(2, '0') + "T00:00:00.000+00:00"
+    const newHoy = hoy.getFullYear() + "-" + String(hoy.getMonth() + 1).padStart(2, '0') + "-" + String(hoy.getDate()).padStart(2, '0') + "T00:00:00.000+00:00"
+    const ayerFinal = ayer.getFullYear() + "-" + String(ayer.getMonth() + 1).padStart(2, '0') + "-" + String(ayer.getDate()).padStart(2, '0') + "T23:59:59.000+00:00"
 
     return await quinielaModel.find({
-        status: true, fechaQuiniela: {
-            $gte: ayer,
-            $lt: hoy
-        }
+        $or: [
+            { fechaQuiniela: { $gte: newAyer, $lt: ayerFinal }, status: true, tipoQuiniela: 1 },
+            { fechaQuiniela: { $gte: newHoy }, status: true, tipoQuiniela: 2 }
+        ]
     }).sort({ $natural: -1 })
 }
 
