@@ -162,6 +162,9 @@ router.post('/', validateToken, async (req, res) => {
             if (userLevel === 4) {
                 const increaseBalance = await icreaseUserBalance({ _id: ticket.user._id, balance: -precioMenosPorcentaje })
                 required(increaseBalance, "No se pudo completar la venta")
+            }else if (userLevel === 5) {
+                const increaseBalance = await icreaseUserBalance({ _id: ticket.user._id,balance: -precioQuiniela})
+                required(increaseBalance, "No se pudo completar la venta")
             }
 
             let admin = ""
