@@ -62,12 +62,18 @@ router.post('/', validateToken, async (req, res) => {
             required(userCurrent, "Usuario no encontrado al comprar el ticket")
             //const precioQuiniela = type === 1 ? precioGranQuiniela : precioMiniQuiniela
             const precioQuiniela = precioGranQuiniela
+
             //sera requerido solo si la agencia es prepagada >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
             /* console.log("user prepaid:", user.prepaid) */
             if (user.prepaid) required(userCurrent.balance > precioQuiniela, "Usuario no tiene fondos")
+
             const precioMenosPorcentaje = precioQuiniela - (userPercent * precioQuiniela / 100)
+
             if (userLevel === 4) {
                 const increaseBalance = await icreaseUserBalance({ _id: ticket.user._id, balance: -precioMenosPorcentaje })
+                required(increaseBalance, "No se pudo completar la venta en la agencia")
+            }else if (userLevel === 5) {
+                const increaseBalance = await icreaseUserBalance({ _id: ticket.user._id})
                 required(increaseBalance, "No se pudo completar la venta")
             }
 
@@ -113,6 +119,7 @@ router.post('/', validateToken, async (req, res) => {
                 },
                 premio: premioCasa * precioQuiniela / 100
             }
+
             const body = await saveTicket(ticket)
             if (!body) throw 'Error al guardar en ticket en la db'
 

@@ -42,7 +42,7 @@ const getObjectFormated = (ticketsFindedGran, animals, aciertos = 5) => {
     return obj
 }
 
-const getCalc = (quinielaType, percent) => quinielaType === "1" ? percent / 100 * config.precioGranQuiniela : percent / 100 * config.precioMiniQuiniela
+//const getCalc = (quinielaType, percent) => quinielaType === "1" ? percent / 100 * config.precioGranQuiniela : percent / 100 * config.precioMiniQuiniela
 
 const getMontoGranQuiniela = ({ ganadores, premioGranQuiniela, cantidadTickets, precioQuiniela, porcentajePremio, premio, acumulado }) => {
     if (ganadores.length === 0 || !ganadores) return 0
