@@ -5,15 +5,22 @@ const { setPrepaid, } = require('../../db/controllers/prepaidController')
 const responser = require('../../network/response')
 const { required, isMongoId } = require('../../services/validate')
 const validateToken = require('../../midelwares/validateToken')
-const onlyMaster = require('../../midelwares/onlyMaster')
 const { getUser } = require('../../db/controllers/userController')
+const { levelPermisions } = require('../../services/utils')
 
-router.post('/', validateToken, onlyMaster, async (req, res) => {
+
+
+router.post('/', validateToken, async (req, res) => {
     const _id = req.body._id
     try {
+
         required(_id, "Id es requerido")
-        isMongoId(_id, "Formato incorrecto")
+        isMongoId(_id, "Formato de id incorrecto")
         const user = await getUser(_id)
+        
+        const adminLevel = res.user.user.level
+        levelPermisions({adminLevel,userLevel:user.level})
+        
         const state = !user?.prepaid
         const response = await setPrepaid({_id, state})
         required(response, "Este usuario no existe")
@@ -24,5 +31,5 @@ router.post('/', validateToken, onlyMaster, async (req, res) => {
 
 })
 
-
+ 
 module.exports = router;

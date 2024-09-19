@@ -6,35 +6,43 @@ const router = express.Router()
 const responser = require('../../network/response')
 const { saveTicket, getTickets, getTicket, countDocuments } = require('../../db/controllers/ticketController')
 const { icreaseUserBalance, getUser } = require('../../db/controllers/userController')
-const { getConfig } = require('../../db/controllers/configController')
-const validate = require('../../services/validate')
 const { required } = require('../../services/validate')
 const { getLastActiveGranQuiniela, getLastActiveMiniQuiniela } = require('../../db/controllers/quinielaController')
 const validateToken = require('../../midelwares/validateToken')
-const { getTicketCode } = require('./ticketServices')
+const { getTicketCode, pagarTodos } = require('./ticketServices')
+const config = require('../../config.json')
 
 router.post('/', validateToken, async (req, res) => {
+
     try {
+        const { animals, type } = req.body
         const userId = res.user.user._id
         const user = await getUser(userId)
+        required([animals, user, type], "Error, falta algun dato")
         const userLevel = user.level
         const userPercent = user.percent
-
+        const { precioGranQuiniela, precioMiniQuiniela } = config
+        const userCurrent = user
+        required(userCurrent, "Usuario no encontrado al comprar el ticket")
+        const precioQuiniela = type === 1 ? precioGranQuiniela : precioMiniQuiniela
+        const agencia = user.level === 4 ? user : false
         required(!user.block, "Usuario Bloqueado")
-
         required(userLevel === 4 || userLevel === 5, "Tipo de usuario no autorizado para comprar tickets")
-
-        const { animals, type } = req.body
-        validate.required([animals, user, type], "Error, falta algun dato")
         const code = await getTicketCode()
-
         required(type === 1 || type === 2, "Tipo de quiniela incorrecto")
         required(type === 1 && animals.length === 6 || type === 2 && animals.length === 4, "Numero de animalitos incorrecto")
+
+        if (user.prepaid) required(userCurrent.balance > precioQuiniela, "Usuario no tiene fondos")
 
         const gran = 1
         const mini = 2
 
-        //separo las peticiones de mini y gran quiniela
+        let admin = ""
+        let grupero = ""
+
+        if (userCurrent.admin) admin = await getUser(userCurrent.admin)
+        if (userCurrent.grupero) grupero = await getUser(userCurrent.grupero)
+
         if (type === gran) {
             const activeGranQuiniela = await getLastActiveGranQuiniela()
             required(activeGranQuiniela, "Gran Quiniela a finalizado, la proxima inicia mañana a partir de las 10:00 AM")
@@ -42,6 +50,7 @@ router.post('/', validateToken, async (req, res) => {
             const date = new Date()
             date.setHours(date.getHours() - 4)
             const count = await countDocuments()
+
             const ticket = {
                 user,
                 userId: user._id,
@@ -54,77 +63,26 @@ router.post('/', validateToken, async (req, res) => {
                 date,
                 count
             }
-            //const { precioGranQuiniela, precioMiniQuiniela, premioCasa } = await getConfig()
-            const { precioGranQuiniela, premioCasa } = await getConfig()
-            //required([precioGranQuiniela, precioMiniQuiniela, premioCasa], "Error al obteber datos del config")
-            required([precioGranQuiniela, premioCasa], "Error al obteber datos del config")
-            const userCurrent = user
-            required(userCurrent, "Usuario no encontrado al comprar el ticket")
-            //const precioQuiniela = type === 1 ? precioGranQuiniela : precioMiniQuiniela
-            const precioQuiniela = precioGranQuiniela
+
+
 
             //sera requerido solo si la agencia es prepagada >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            /* console.log("user prepaid:", user.prepaid) */
-            if (user.prepaid) required(userCurrent.balance > precioQuiniela, "Usuario no tiene fondos")
-
             const precioMenosPorcentaje = precioQuiniela - (userPercent * precioQuiniela / 100)
-
             if (userLevel === 4) {
                 const increaseBalance = await icreaseUserBalance({ _id: ticket.user._id, balance: -precioMenosPorcentaje })
                 required(increaseBalance, "No se pudo completar la venta en la agencia")
-            }else if (userLevel === 5) {
-                const increaseBalance = await icreaseUserBalance({ _id: ticket.user._id,balance: -precioQuiniela})
+            } else if (userLevel === 5) {
+                const increaseBalance = await icreaseUserBalance({ _id: ticket.user._id, balance: -precioQuiniela })
                 required(increaseBalance, "No se pudo completar la venta")
             }
 
-            let admin = ""
-            let percentAdmin = 0
-            let grupero = ""
-            let percentGrupero = 0
-
-            if (userCurrent.admin) {
-                admin = await getUser(userCurrent.admin)
-                if (admin) percentAdmin = admin.percent
-            }
-            if (userCurrent.grupero) {
-                grupero = await getUser(userCurrent.grupero)
-                if (grupero) percentGrupero = grupero.percent
-            }
-
-            const adminAmount = percentAdmin * precioQuiniela / 100
-            const gruperoAmount = percentGrupero * precioQuiniela / 100
-            const userCurrentAmount = userCurrent.percent * precioQuiniela / 100
-            const masterAmount = (precioQuiniela - (precioQuiniela * premioCasa / 100)) - gruperoAmount - adminAmount - userCurrentAmount
-
-            ticket.report = {
-                precioQuiniela,
-                agencia: {
-                    amount: userCurrentAmount,
-                    percent: userCurrent.percent,
-                    _id: userCurrent._id
-                },
-                admin: {
-                    amount: adminAmount,
-                    percent: percentAdmin,
-                    _id: userCurrent.admin
-                },
-                grupero: {
-                    amount: gruperoAmount,
-                    percent: percentGrupero,
-                    _id: userCurrent.grupero
-                },
-                master: {
-                    amount: masterAmount,
-                    _id: process.env.ADMINID
-                },
-                premio: premioCasa * precioQuiniela / 100
-            }
+            ticket.report = await pagarTodos(precioQuiniela, userLevel, icreaseUserBalance, admin, grupero, agencia)
+            console.log("Ticket report gran: ", ticket.report)
 
             const body = await saveTicket(ticket)
             if (!body) throw 'Error al guardar en ticket en la db'
 
             responser.success({ res, message: "success", body })
-
 
 
         } else if (type === mini) {
@@ -147,68 +105,20 @@ router.post('/', validateToken, async (req, res) => {
                 date,
                 count
             }
-            //const { precioGranQuiniela, precioMiniQuiniela, premioCasa } = await getConfig()
-            const { precioMiniQuiniela, premioCasa } = await getConfig()
-            //required([precioGranQuiniela, precioMiniQuiniela, premioCasa], "Error al obteber datos del config")
-            required([precioMiniQuiniela, premioCasa], "Error al obteber datos del config")
-            const userCurrent = user
-            required(userCurrent, "Usuario no encontrado al comprar el ticket")
-            //const precioQuiniela = type === 1 ? precioGranQuiniela : precioMiniQuiniela
-            const precioQuiniela = precioMiniQuiniela
-            //sera requerido solo si la agencia es prepagada >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-            /* console.log("user prepaid:", user.prepaid) */
-            if (user.prepaid) required(userCurrent.balance > precioQuiniela, "Usuario no tiene fondos")
+
             const precioMenosPorcentaje = precioQuiniela - (userPercent * precioQuiniela / 100)
             if (userLevel === 4) {
                 const increaseBalance = await icreaseUserBalance({ _id: ticket.user._id, balance: -precioMenosPorcentaje })
                 required(increaseBalance, "No se pudo completar la venta")
-            }else if (userLevel === 5) {
-                const increaseBalance = await icreaseUserBalance({ _id: ticket.user._id,balance: -precioQuiniela})
+            } else if (userLevel === 5) {
+                const increaseBalance = await icreaseUserBalance({ _id: ticket.user._id, balance: -precioQuiniela })
                 required(increaseBalance, "No se pudo completar la venta")
             }
 
-            let admin = ""
-            let percentAdmin = 0
-            let grupero = ""
-            let percentGrupero = 0
+            ticket.report = await pagarTodos(precioQuiniela, userLevel, icreaseUserBalance, admin, grupero, agencia)
 
-            if (userCurrent.admin) {
-                admin = await getUser(userCurrent.admin)
-                if (admin) percentAdmin = admin.percent
-            }
-            if (userCurrent.grupero) {
-                grupero = await getUser(userCurrent.grupero)
-                if (grupero) percentGrupero = grupero.percent
-            }
+            console.log("Ticket report mini: ", ticket.report)
 
-            const adminAmount = percentAdmin * precioQuiniela / 100
-            const gruperoAmount = percentGrupero * precioQuiniela / 100
-            const userCurrentAmount = userCurrent.percent * precioQuiniela / 100
-            const masterAmount = (precioQuiniela - (precioQuiniela * premioCasa / 100)) - gruperoAmount - adminAmount - userCurrentAmount
-
-            ticket.report = {
-                precioQuiniela,
-                agencia: {
-                    amount: userCurrentAmount,
-                    percent: userCurrent.percent,
-                    _id: userCurrent._id
-                },
-                admin: {
-                    amount: adminAmount,
-                    percent: percentAdmin,
-                    _id: userCurrent.admin
-                },
-                grupero: {
-                    amount: gruperoAmount,
-                    percent: percentGrupero,
-                    _id: userCurrent.grupero
-                },
-                master: {
-                    amount: masterAmount,
-                    _id: process.env.ADMINID
-                },
-                premio: premioCasa * precioQuiniela / 100
-            }
             const body = await saveTicket(ticket)
             required(body, "Error al guardar en ticket en la db")
             responser.success({ res, message: "success", body })
@@ -217,7 +127,6 @@ router.post('/', validateToken, async (req, res) => {
         }
 
     } catch (error) {
-        /*  console.log(`del throw ${error}`) */
         responser.error({ res, message: error?.message || error })
     }
 })

@@ -30,33 +30,13 @@ const getLastActiveGranQuinielaAndMini = async () => {
     }).sort({ $natural: -1 })
 }
 
-const getLastActiveGranQuiniela = async () => {
-    const { from, to } = getFromToAyerYHoy()
-    const result = await quinielaModel.findOne({ fechaQuiniela: { "$gte": from, "$lt": to }, status: true, tipoQuiniela: 1 })
-    return result
-}
 
-const getLastActiveMiniQuiniela = async () => {
-    const { from, to } = getFechasHoyMini()
-    const result = await quinielaModel.findOne({ fechaQuiniela: { "$gte": from, "$lt": to }, status: true, tipoQuiniela: 2 })
-    return result
-}
 
 const finalizarQuiniela = async (_id) => await quinielaModel.findOneAndUpdate({ _id }, { $set: { status: false } })
 
 const countDocuments = async () => await quinielaModel.countDocuments()
 
-const getLastActive = async ({ tipoQuiniela }) => {
-    const fechaQuiniela = getAyerCompletedString()
-    //*************************************************************************************************** */
-    //**********************************MAL ************************************************************ */
-    //*************************************************************************************************** */
-    console.log("tipoQuiniela: ", tipoQuiniela)
-    console.log("fechaQuiniela: ", fechaQuiniela)
-    const res = await quinielaModel.findOne({ status: true, tipoQuiniela, fechaQuiniela }).sort({ $natural: -1 })
-    console.log("res: ", res)
-    return res
-}
+
 
 const getAyerQuiniela = async (tipo = 1) => {
     const fechaQuiniela = getAyerCompletedString()
@@ -102,6 +82,30 @@ const updateAnimals = async ({ _id, resultAnimals }) => {
         return await quinielaModel.findOneAndUpdate({ _id }, { resultAnimals })
     }
 }
+
+
+const getLastActive = async ({ tipoQuiniela }) => {
+    if (tipoQuiniela === 1) {
+        return await getLastActiveGranQuiniela()
+    } else if (tipoQuiniela === 2) {
+        return await getLastActiveMiniQuiniela()
+    } else {
+        return false
+    }
+}
+
+const getLastActiveGranQuiniela = async () => {
+    const { from, to } = getFromToAyerYHoy()
+    const result = await quinielaModel.findOne({ fechaQuiniela: { "$gte": from, "$lt": to }, status: true, tipoQuiniela: 1 })
+    return result
+}
+
+const getLastActiveMiniQuiniela = async () => {
+    const { from, to } = getFechasHoyMini()
+    const result = await quinielaModel.findOne({ fechaQuiniela: { "$gte": from, "$lt": to }, status: true, tipoQuiniela: 2 })
+    return result
+}
+
 
 const quinielaController = {
     saveQuiniela,

@@ -34,10 +34,10 @@ function getFromToAyerYHoy() {
     const hoy = new Date()
     ayer.setDate(ayer.getDate() - 1)
     const ayer00 = `${ayer.getFullYear()}-${String(ayer.getMonth() + 1).padStart(2, '0')}-${String(ayer.getDate()).padStart(2, '0')}T00:00:00.000+00:00`
-    return { from:ayer00, to:hoy }
+    return { from: ayer00, to: hoy }
 }
 
-function getFechasHoyMini(){
+function getFechasHoyMini() {
     const date = new Date()
     const newFrom = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
     const newTo = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
@@ -46,7 +46,11 @@ function getFechasHoyMini(){
     return { from, to }
 }
 
-const validateTokenParams = (token, params) => token === params.MQ_CLOSE || token === params.GQ_INIT || token === params.MIQ_END || token === params.MQ_INIT  
+function levelPermisions({ adminLevel, userLevel }) {
+    if (adminLevel >= userLevel) throw new Error("No posee permisos para esta acción")
+}
 
-module.exports = { getHoyCompletedString, getHour, getFromTo, getAyerCompletedString, validateTokenParams,getFromToAyerYHoy,getFechasHoyMini }
+const validateTokenParams = (token, params) => token === params.MQ_CLOSE || token === params.GQ_INIT || token === params.MIQ_END || token === params.MQ_INIT
+
+module.exports = { getHoyCompletedString, getHour, getFromTo, getAyerCompletedString, validateTokenParams, getFromToAyerYHoy, getFechasHoyMini, levelPermisions }
 

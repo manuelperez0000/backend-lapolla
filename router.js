@@ -32,6 +32,7 @@ const reportes = require('./api/reportes/reportes')
 const animals = require('./api/animals/animals')
 const scripts = require('./api/scripts/scripts')
 const config = require('./api/config/config')
+const percentTree = require('./api/percentTree/percentTree')
 const secrettoken = require('./api/secrettoken/secrettoken')
 const transaction = require('./api/transaction/transaction')
 const blockUser = require('./api/blockUser/blockUser')
@@ -74,6 +75,7 @@ const router = (app) => {
     route.use('/reports', reports)
     route.use('/reportUsers', reportUsers)
     route.use('/config', config)
+    route.use('/percentTree', percentTree)
 
 
     route.use('/user', getUser)
