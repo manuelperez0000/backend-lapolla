@@ -21,15 +21,14 @@ router.get('/:token', async (req, res) => {
 
     required(validateTokenParams(token, { GQ_INIT, MQ_INIT, MIQ_END, MQ_CLOSE }), "token invalido")
 
+    if (token === GQ_INIT) {
+      const objResult = await apagarGranQuinielaAnterior()
+      responser.success({ res, message: "Gran quiniela bot init", body: { token, GQ_INIT, objResult } })
+    }
 
     if (token === MQ_CLOSE) {
       const body = closeMiniQuiniela()
       responser.success({ res, message: "Mini quiniela cerrada", body })
-    }
-
-    if (token === GQ_INIT) {
-      const objResult = await apagarGranQuinielaAnterior()
-      responser.success({ res, message: "Gran quiniela bot init", body: { token, GQ_INIT, objResult } })
     }
 
     if (token === MQ_INIT) {

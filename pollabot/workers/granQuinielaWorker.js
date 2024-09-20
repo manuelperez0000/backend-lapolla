@@ -15,35 +15,42 @@ const apagarGranQuinielaAnterior = async () => {
     //obtener la granquiniela de ayer
     const granQuinielaAyer = await getAyerQuiniela(1)
 
-    if(granQuinielaAyer){
+    console.log("granQuinielaAyer: ", granQuinielaAyer)
+
+    if (granQuinielaAyer) {
         objResult.getGranQuinielaAyer = granQuinielaAyer
-    }else{
+    } else {
         objResult.getGranQuinielaAyer = false
     }
 
     //si esta apagada no hacer nada
     if (granQuinielaAyer?.status) {
+
         const resultDesactivar = await finalizarQuiniela(granQuinielaAyer._id)
-        if(resultDesactivar){
+
+        console.log("resultDesactivar: ", resultDesactivar)
+
+        if (resultDesactivar) {
             objResult.descativarQuiniela = true
-        }else{
+        } else {
             objResult.descativarQuiniela = false
         }
+
         /* console.log("resultDesactivar:", resultDesactivar) */
         //buscar ganadores
         const animals = await getFilteredAnimals({ from, to })
 
-        if(animals.length > 0){
+        if (animals.length > 0) {
             objResult.findedAnimals = animals
-        }else{
+        } else {
             objResult.findedAnimals = "No se encontraron animalitos"
         }
 
         const ticketsFindedGran = await findTicketsByIdQuiniela(granQuinielaAyer._id)
 
-        if(ticketsFindedGran > 0){
+        if (ticketsFindedGran > 0) {
             objResult.ticketsGranQuiniela = ticketsFindedGran
-        }else{
+        } else {
             objResult.ticketsGranQuiniela = "No se encontraron tickets"
         }
 
@@ -76,9 +83,9 @@ const apagarGranQuinielaAnterior = async () => {
     //iniciar nueva quiniela
     const createQuiniela = await createNewQuiniela(1)
 
-    if(createQuiniela){
+    if (createQuiniela) {
         objResult.createQuiniela = true
-    }else{
+    } else {
         objResult.createQuiniela = "Fallo al crear la nueva quiniela"
     }
 
