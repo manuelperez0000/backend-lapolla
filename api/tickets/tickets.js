@@ -28,6 +28,16 @@ router.post('/', validateToken, async (req, res) => {
         const agencia = user.level === 4 ? user : false
         required(!user.block, "Usuario Bloqueado")
         required(userLevel === 4 || userLevel === 5, "Tipo de usuario no autorizado para comprar tickets")
+
+        const __date = new Date()
+        const hora = __date.getHours()
+        const min = __date.getMinutes()
+        const horaMiniQuiniela = 15
+        required(hora < horaMiniQuiniela, "Mini quiniela finalizada a las 03:00 PM, nueva para mañana a las 10:00 AM")
+
+        if (hora === horaMiniQuiniela - 1) required(min < 51, "Mini quiniela finalizada a las 03:00 PM, nueva para mañana a las 10:00 AM.")
+        
+
         const code = await getTicketCode()
         required(type === 1 || type === 2, "Tipo de quiniela incorrecto")
         required(type === 1 && animals.length === 6 || type === 2 && animals.length === 4, "Numero de animalitos incorrecto")

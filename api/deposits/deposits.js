@@ -66,9 +66,9 @@ router.post('/update', validateToken, async (req, res) => {
         validate.number(status)
 
         const response = await updateDeposit({ _id, status })
-        const { userId, amount } = await getOneDeposit(_id)
+        const { userId, amount,adminMethod } = await getOneDeposit(_id)
         //sumar el balance al usuario
-        await icreaseUserBalance({ _id: userId, balance: amount })
+        await icreaseUserBalance({ _id: userId, balance: amount*adminMethod.tipoDeCambio })
 
         responser.success({ res, message: "success", body: response })
     } catch (error) {

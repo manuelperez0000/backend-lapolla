@@ -13,6 +13,7 @@ const { pagoDeClientes, pagoDeAgencias } = require('./workerServices')
 const apagarGranQuinielaAnterior = async () => {
     let objResult = {}
     //obtener la granquiniela de ayer
+
     const granQuinielaAyer = await getAyerQuiniela(1)
 
     console.log("granQuinielaAyer: ", granQuinielaAyer)
