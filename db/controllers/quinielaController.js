@@ -32,7 +32,11 @@ const getLastActiveGranQuinielaAndMini = async () => {
 
 
 
-const finalizarQuiniela = async (_id) => await quinielaModel.findOneAndUpdate({ _id }, { $set: { status: false } })
+const finalizarQuiniela = async (_id) => {
+
+    //return await quinielaModel.findOneAndUpdate({ _id }, { $set: { status: false } })
+    return quinielaModel.updateMany({}, { $set: { status: false } })
+}
 
 const countDocuments = async () => await quinielaModel.countDocuments()
 
